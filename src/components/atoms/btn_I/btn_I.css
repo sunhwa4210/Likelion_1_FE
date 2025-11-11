@@ -1,0 +1,37 @@
+.btnI{
+    align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 600;
+  width:307px;
+  height: 75px;
+  padding-top: 27px;
+  padding-bottom: 27px;
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+.btnI--default{
+    border: 0.5px solid #39A2A5;
+    border-radius: 6px;
+    background-color: #FFFFFF;
+    color: #39A2A5;
+}
+.btnI--selected{
+    border: none;
+    border-radius: 6px;
+    background-color: #39A2A5;
+    color: #FFFFFF;
+}
+.btnI--round_selected{
+    border: none;
+    border-radius: 100px;
+    background-color: #39A2A5;
+    color: #FFFFFF;
+}
+.btnI--round_default{
+    border: 0.5px solid #39A2A5;
+    border-radius:  100px;
+    background-color: #FFFFFF;
+    color:#39A2A5;
+}

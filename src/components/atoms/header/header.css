@@ -1,0 +1,76 @@
+.header {
+  position: relative;
+  width: 375px;
+  padding: 20px 24px;
+  box-sizing: border-box;
+  font-family: "Pretendard", sans-serif;
+  width: 375px;
+  height: 62px;
+}
+
+/* 상단 로고와 아이콘 배치 */
+.header__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header__logo {
+  font-size: 20px;
+  font-weight: 700;
+  color: #000;
+  margin: 0;
+}
+
+.header__logo span {
+  color: #59b7b5; /* X 색상 */
+}
+
+.header__icon {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #333;
+}
+
+/* 드롭다운 메뉴 */
+.header__menu {
+  position: absolute;
+  top: 60px;
+  left: 0;
+  width: 347px;
+  height: 262px;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 1), rgba(231, 244, 245, 0.8));
+  padding: 20px 24px;
+  z-index: 100;
+  animation: fadeIn 0.3s ease;
+}
+
+.header__menu ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.header__menu li {
+  font-weight: 600;
+  font-size: 18px;
+  margin-bottom: 16px;
+  color: #9c9c9c;
+  transition: color 0.2s ease;
+}
+
+.header__menu li:hover {
+  color: #000;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
