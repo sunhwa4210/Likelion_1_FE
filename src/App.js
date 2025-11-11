@@ -1,5 +1,5 @@
 import "./App.css";
-import Header from "./components/atoms/header/header";
+import Header from "./components/atoms/Header/header"
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Curation from "./pages/curation/curation";
 import BalanceGame from "./pages/balancegame/balancegame";
@@ -11,8 +11,7 @@ function App() {
   return (
     <BrowserRouter>
       <div className="App">
-        <Header />
-
+<Header></Header>
         <Routes>
           <Route path="/" element={<Curation />} />
           <Route path="/balance-game" element={<BalanceGame />} />
