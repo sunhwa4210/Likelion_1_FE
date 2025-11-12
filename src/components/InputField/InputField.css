@@ -1,0 +1,77 @@
+
+
+/* 입력컨테이너 */
+.input-wrap{
+box-sizing: border-box;
+display: flex;
+flex-direction: column;
+width: 347px;
+}
+
+/* 라벨 */
+.input-label{
+
+color: #000;
+font-feature-settings: 'liga' off, 'clig' off;
+
+font-family: 'Inter';
+font-size: 14px;
+font-style: normal;
+font-weight: 600;
+line-height: normal;
+align-self: stretch;
+
+height: 17px;
+width: 100%;
+}
+
+/* input 필드 */
+.input-field{
+
+width:100%;
+height: 45px;
+padding-left: 0px;
+
+border:none;
+background: var(--white, #FFF);
+
+font-feature-settings: 'liga' off, 'clig' off;
+/* inter bold/14 */
+font-family: 'Inter';
+font-size: 14px;
+font-style: normal;
+font-weight: 600;
+line-height: normal;
+}
+
+ /* 상태별 input 필드 */
+ /* default */
+.input-wrap.is-default  .input-field {  
+    color: var(--gray-20, #C6C8C6);
+    border-bottom: 1px solid var(--gray-10, #E6E6E6);}
+/* input */
+.input-wrap.is-input    .input-field {
+    color: var(--gray-50, #474747);
+    border-bottom: 1px solid var(--gray-10, #E6E6E6); } 
+/* success */
+.input-wrap.is-success  .input-field { 
+     color:#111;
+     border-bottom: 1px solid var(--primary-30, #39A2A5); }
+.input-wrap.is-error    .input-field { 
+   color: var(--sys-red, #D93D3E);
+   border-bottom: 1px solid var(--sys-red, #D93D3E);} 
+.helper {
+margin-top: 4px;
+color: var(--sys-red, #D93D3E);
+font-feature-settings: 'liga' off, 'clig' off;
+
+/* inter regular/10 */
+font-family: 'Inter';
+font-size: 10px;
+font-style: normal;
+font-weight: 400;
+line-height: normal;                 /* 에러 텍스트 색 */
+visibility: hidden;               /* 기본은 숨김 */
+}
+
+.input-wrap.is-error .helper { visibility: visible; }

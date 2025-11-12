@@ -1,0 +1,48 @@
+.header-wrapper{
+    box-sizing: border-box;
+}
+
+.app-header{
+    width: 375px;
+    height: 54px;
+    padding: 10px 10px 20px 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top:0;
+    z-index: 99;
+}
+
+/* 뒤로가기 버튼 */
+.back-btn{
+all: unset;  
+width: 24px;
+height: 24px;
+display: flex;
+align-items: center;
+justify-content: center;
+cursor: pointer;
+
+}
+ 
+.back-icon{
+width: 24px;
+height: 24px;
+display: block;
+object-fit: contain;
+}
+
+/* 헤더 제목 */
+.header-title{
+color: var(--gray-60, #191919);
+font-feature-settings: 'liga' off, 'clig' off;
+
+/* inter medium/18 */
+font-family: Inter;
+font-size: 18px;
+font-style: normal;
+font-weight: 500;
+text-align: center;
+
+}

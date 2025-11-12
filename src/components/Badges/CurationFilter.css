@@ -1,0 +1,40 @@
+.filterBox-wrapper{
+    box-sizing: border-box;
+    width: 260px; 
+    padding: 10px 13px 20px 13px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    
+    border-radius: 12px;
+    background: #FFF;   
+}
+
+.filter-box{
+    display:flex;
+    flex-direction: column;
+    gap:5px;
+    width: 100%;
+}
+
+.title-box{
+height: 20px;
+}
+
+.title-box p{
+color: var(--gray-30, #ACADAC);
+font-feature-settings: 'liga' off, 'clig' off;
+font-family: Inter;
+font-size: 10px;
+font-style: normal;
+font-weight: 600;
+line-height: 20px; /* 200% */
+}
+
+.category-box{
+    display: flex;
+    flex-direction: column;
+    gap:8px;
+}
