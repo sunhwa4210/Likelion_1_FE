@@ -1,0 +1,74 @@
+/* 임시로 위치 고정 - 페이지에 맞게 삭제 및 수정 */
+.app-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.dropdown-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+/* 드롭다운 버튼 (선택된 카테고리를 표시해주는 영역) */
+.dropdown-button {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0;
+    background-color: #ffffff;
+    color: var(--gray-60, #191919);
+    font-weight: 600;
+    font-size: 20px;
+    border: none;
+    outline: none;
+}
+
+/* 선택된 카테고리 텍스트 스타일 */
+.selected-category-text {
+    white-space: nowrap;
+    margin-right: 10px; /* 아이콘과의 간격 */
+}
+
+/* 드롭다운 아이콘 */
+.dropdown-icon {
+    width: 15px;
+    height: 15px;
+    flex-shrink: 0;
+    stroke-width: 2px;
+    stroke: var(--gray-60, #191919);
+}
+
+/* 드롭다운 목록 */
+.dropdown-list {
+    position: absolute;
+    z-index: 10;
+    margin-top: 0.5rem;
+
+    width: 110px;
+    background-color: var(--white, #FFF);
+    border-radius: 5px;
+    box-shadow: 0 4px 15px #F2F2F2;
+    overflow: hidden;
+    list-style: none;
+    padding: 0;
+}
+
+/* 드롭다운 항목 */
+.dropdown-item {
+    text-align: left;
+    padding: 6px;
+    color: var(--gray-40, #797A79);
+    font-family: Inter;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    white-space: normal; 
+    border-bottom: 1px solid var(--gray-0, #F2F2F2);
+}
+
+.dropdown-item:hover {
+    color: var(--gray-60, #191919);
+}
