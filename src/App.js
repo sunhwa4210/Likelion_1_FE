@@ -1,27 +1,17 @@
-import "./App.css";
-import Header from "./components/atoms/Header/header"
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Curation from "./pages/curation/curation";
-import BalanceGame from "./pages/balancegame/balancegame";
-import Column from "./pages/column/column";
-import Qna from "./pages/qna/qna";
-import MyPage from "./pages/mypage/mypage";
+// src/App.js
+import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { ModalProvider } from './components/Modal/ModalProvider';
+import SomePage from './pages/SomePage';
 
-function App() {
+export default function App() {
   return (
-    <BrowserRouter>
-      <div className="App">
-<Header></Header>
+    <ModalProvider>      {/* 전역 모달 컨텍스트 (그 자체는 어디 있어도 됨) */}
+      <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Curation />} />
-          <Route path="/balance-game" element={<BalanceGame />} />
-          <Route path="/column" element={<Column />} />
-          <Route path="/qna" element={<Qna />} />
-          <Route path="/mypage" element={<MyPage />} />
+          <Route path="/" element={<SomePage />} />
         </Routes>
-      </div>
-    </BrowserRouter>
+      </BrowserRouter>
+    </ModalProvider>
   );
 }
-
-export default App;

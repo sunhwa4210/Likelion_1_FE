@@ -1,0 +1,41 @@
+.c-filterBox-wrapper{
+    box-sizing: border-box;
+    width: 375px; 
+    padding: 28px 14px 28px 14px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    
+    border-radius: 12px;
+    background: #FFF;   
+}
+
+.c-filter-box{
+    display:flex;
+    flex-direction: column;
+    gap:10px;
+    width: 100%;
+}
+
+.c-title-box{
+height: 20px;
+}
+
+.c-title-box p{
+color: var(--gray-30, #ACADAC);
+font-feature-settings: 'liga' off, 'clig' off;
+font-family: Inter;
+font-size: 12px;
+font-style: normal;
+font-weight: 600;
+margin: 0px;
+line-height: 20px
+}
+
+.c-category-box{
+    display: flex;
+    flex-direction: column;
+    gap:8px;
+}
