@@ -4,7 +4,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useModal } from '../components/Modal/ModalProvider'; 
 import { presets } from '../components/Modal/presets';
-import Header from '../components/Header/Header';
+import Header from '../components/atoms/Header/header';
 
 export default function SomePage() {
   const { open } = useModal();
@@ -59,7 +59,7 @@ export default function SomePage() {
 
   return (
     <div className='app-wrapper'>
-        <Header title="모달 테스트 페이지"/>
+        <Header />
 
       {/* 버튼들은 예시 */}
       <button onClick={onHeaderBack}>뒤로가기(모달)</button>
