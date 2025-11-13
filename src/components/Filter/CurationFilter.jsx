@@ -1,7 +1,7 @@
 // 큐레이션 필터 (큐레이션 화면 내의 필터)
 import React from 'react';
-import { categories } from './CategoryData';
-import CategoryXselector from './CategoryXselector';
+import { categories } from '../Badges/CategoryData';
+import CategoryXselector from '../Badges/CategoryXselector';
 import './CurationFilter.css';
 
 export default function CurationFilter () {
@@ -17,15 +17,15 @@ export default function CurationFilter () {
     const science2= categories.filter((item) => item.colorKey === 'science'&& item.num >='4');
 
     const tech1 = categories.filter((item) => item.colorKey === 'tech'&& '3'>=item.num ); 
-    const tech2 = categories.filter((item) => item.colorKey === 'science'&& item.num >='4');
+    const tech2 = categories.filter((item) => item.colorKey === 'tech'&& item.num >='4');
 
     const economy = categories.filter((item) => item.colorKey === 'economy' ); 
 
     const art1 = categories.filter((item) => item.colorKey === 'art'&& '3'>=item.num );
     const art2 = categories.filter((item) => item.colorKey === 'art'&& item.num >='4');
 
-    const sport1 =categories.filter((item) => item.colorKey === 'art'&& '2'>=item.num);
-    const sport2 =categories.filter((item) => item.colorKey === 'art'&& item.num >='3');
+    const sport1 =categories.filter((item) => item.colorKey === 'sport'&& '2'>=item.num);
+    const sport2 =categories.filter((item) => item.colorKey === 'sport'&& item.num >='3');
 
     return (
 

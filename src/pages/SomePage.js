@@ -5,8 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import { useModal } from '../components/Modal/ModalProvider'; 
 import { presets } from '../components/Modal/presets';
 import Header from '../components/Header/Header';
-import CurationFilter from '../components/Badges/CurationFilter';
-import CategoryFilter from '../components/Badges/CategoryFilter';
+import CurationFilter from '../components/Filter/CurationFilter';
+import CategoryFilter from '../components/Filter/CategoryFilter';
 
 export default function SomePage() {
   const { open } = useModal();
@@ -72,7 +72,8 @@ export default function SomePage() {
       <button onClick={onDeleteArticle}>칼럼 삭제(모달)</button>
       <button onClick={onLogout}>로그아웃(모달)</button>
       <button onClick={onUnfollow}>팔로우 취소(모달)</button>
-      <CategoryFilter/>
+      <CategoryFilter/> 
+      <CategoryFilter variant='specialty'/>
       <CurationFilter/>
 
     </div>
