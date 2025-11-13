@@ -2,7 +2,7 @@
 // 버튼 클릭했을 때의 변화를 작성한 페이지입니다. 
 import React from "react";
 
-const CategoryButton = ({ label, isSelected, onClick, activeTheme, displayMode }) => {
+const CategoryButton = ({ label, isSelected, onClick, activeTheme, displayMode, fontSize='10px' }) => {
     
     // 기본 버튼 색깔 (선택되지 않았을 경우) 
     const defaultBg = 'var(--gray-0, #f7f7f7)'; // 배경색 
@@ -12,9 +12,6 @@ const CategoryButton = ({ label, isSelected, onClick, activeTheme, displayMode }
     const activeBG = activeTheme?.backgroundColor;
     const activeBorder = activeTheme?.borderColor;
     const activeBorderThick = activeTheme?.borderThick || '1px solid'; // 테두리 두께 추출 
-
-    // 폰트 크기 정의 (고정)
-    const fixedFontSize = '10px'; 
 
     // 조건부 패딩 정의 (클릭 전/후의 버튼 크기를 동일하게 하는 핵심 로직)
     const iconSpace = 5; // X 아이콘이 차지하는 공간
@@ -53,7 +50,7 @@ const CategoryButton = ({ label, isSelected, onClick, activeTheme, displayMode }
             ? paddingSelected // X 버튼이 나올 때 (비대칭)
             : paddingUnselected, // X 버튼이 안 나오거나 비활성화일 때 (대칭)
             
-        fontSize: fixedFontSize,
+        fontSize: fontSize,
 
         display: 'flex',
         justifyContent: 'center',

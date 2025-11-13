@@ -39,6 +39,7 @@ export default function CurationFilter () {
                         <CategoryXselector 
                         categoriesToDisplay={curationType} 
                         removableMode={true}S
+                        fontSize="8px"
                         />  
                     </dix> 
 
@@ -53,6 +54,7 @@ export default function CurationFilter () {
                         <CategoryXselector 
                         categoriesToDisplay={humanities1} 
                         removableMode={true}S
+                        fontSize="8px"
                         />  
                     </dix> 
 
@@ -60,6 +62,7 @@ export default function CurationFilter () {
                         <CategoryXselector 
                         categoriesToDisplay={humanities2} 
                         removableMode={true}S
+                        fontSize="8px"
                         />  
                     </dix> 
 
@@ -74,10 +77,12 @@ export default function CurationFilter () {
                         <CategoryXselector 
                         categoriesToDisplay={science1} 
                         removableMode={true}S
+                        fontSize="8px"
                         />       
                         <CategoryXselector 
                         categoriesToDisplay={science2} 
                         removableMode={true}S
+                        fontSize="8px"
                         />    
 
                     </dix>                    
@@ -92,10 +97,12 @@ export default function CurationFilter () {
                         <CategoryXselector 
                         categoriesToDisplay={tech1} 
                         removableMode={true}S
+                        fontSize="8px"
                         />      
                         <CategoryXselector 
                         categoriesToDisplay={tech2} 
                         removableMode={true}S
+                        fontSize="8px"
                         />      
                     </dix>               
               
@@ -109,6 +116,7 @@ export default function CurationFilter () {
                         <CategoryXselector 
                         categoriesToDisplay={economy} 
                         removableMode={true}S
+                        fontSize="8px"
                         />      
                     </dix>                                            
                 </div>
@@ -121,10 +129,12 @@ export default function CurationFilter () {
                         <CategoryXselector 
                         categoriesToDisplay={art1} 
                         removableMode={true}S
+                        fontSize="8px"
                         />      
                         <CategoryXselector 
                         categoriesToDisplay={art2} 
                         removableMode={true}S
+                        fontSize="8px"
                         />  
                 
                     </dix>                                                    
@@ -138,22 +148,18 @@ export default function CurationFilter () {
                         <CategoryXselector 
                         categoriesToDisplay={sport1} 
                         removableMode={true}S
+                        fontSize="8px"
                         />      
                         <CategoryXselector 
                         categoriesToDisplay={sport2} 
-                        removableMode={true}S
+                        removableMode={true}
+                        fontSize="8px"
                         />  
             
                     </dix>      
                                                          
                     </div>
             </div>
-
-            /* x 버튼이 있는 모든 카테고리 목록을 나열할 경우 */
-            /* <CategoryXselector
-                categoriesToDisplay={allCategories}
-                removableMode={true} // x 버튼이 있는 카테고리와 없는 카테고리가 따로 필요할 경우, 여기서 true 및 false로 선택해주시면 됩니다. 
-            /> */
 
     );
 }
