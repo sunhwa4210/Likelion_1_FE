@@ -537,12 +537,10 @@ export default function Signup() {
             </button>
             </div>
           </div>
-
-
-          
         )}  
       </div>
       )} 
+
 
     </div>
   );

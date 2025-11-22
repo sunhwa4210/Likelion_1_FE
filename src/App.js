@@ -2,6 +2,7 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ModalProvider } from './components/Modal/ModalProvider';
+
 import Login from './pages/login/login';
 import Signup from './pages/signup/signup';
 import PersonalCuration from './pages/curation/PersonalCuration';
