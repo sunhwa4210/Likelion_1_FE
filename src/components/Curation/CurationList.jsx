@@ -4,9 +4,9 @@ import CurationItem from "./CurationItem";
 import './CurationItem.css'
 import {DUMMY_CURATION_DATA} from './DummyData';
 
-const CurationList = () => {
+const CurationList = ( {curations, onItemClick, onBookmarkClick} ) => {
   // 1. 실제 애플리케이션에서는 useState와 useEffect를 사용하여 API에서 데이터를 비동기적으로 가져옵니다.
-  const curations = DUMMY_CURATION_DATA; 
+  //const curations = DUMMY_CURATION_DATA; 
 
   return (
     <div className="curation-list-container">
@@ -27,10 +27,13 @@ const CurationList = () => {
           content={item.content}
           likes={item.likes}
           isBookmarked={item.isBookmarked}
+
+          onItemClick={() => onItemClick(item.id)}
+          onBookmarkClick={() => onBookmarkClick(item.id)}
         />
       ))}
     </div>
   );
-};
+}; 
 
 export default CurationList;

@@ -1,0 +1,49 @@
+.questionListItem {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--gray-10, #E6E6E6);
+  
+}
+
+.itemTitle {
+    align-self: stretch;
+    color: var(--gray-50, #474747);
+    font-feature-settings: 'liga' off, 'clig' off;
+    font-family: Inter;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    margin-bottom: 5px;
+}
+
+.itemPreview {
+    /* 내용이 길어지면 ...으로 처리 */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    color: var(--gray-40, #797A79);
+    font-feature-settings: 'liga' off, 'clig' off;
+    font-family: Inter;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    margin-top: 0;
+    margin-bottom: 23px;
+}
+
+.itemFooter {
+  display: flex;
+  align-items: center;
+}
+
+.itemStats {
+  margin-right: 15px;
+  display: flex;
+  align-items: center;
+}
+
+.icon {
+  margin-right: 0px;
+}

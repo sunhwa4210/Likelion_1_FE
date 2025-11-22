@@ -7,10 +7,10 @@ import BestCalumBadge from "../icons/BestCalumBadge";
 import GoodCountIcon from "../icons/GoodCountIcon";
 import BookmarkIcon from "../icons/BookmarkIcon";
 
-import CategoryXselector from "../Badges/Category/CategoryXselector"
-import { categories } from "../Badges/Category/CategoryData";
+import CategoryXselector from "../Badges/CategoryXselector"
+import { categories } from "../Badges/CategoryData";
 
-import './CurationItem.css';
+import styles from './CurationItem.module.css';
 
 const findCategoryItem = (label) => {
     // 공백을 제거해 정확히 일치하는 카테고리 찾기 
@@ -33,8 +33,16 @@ const CurationItem = ({
     likes, // 좋아요 수 
     isBookmarked, // 북마크 
     cardWidth = DEFAULT_WIDTH, // 크기 
-    cardHeight = DEFAULT_HEIGHT // 크기 
+    cardHeight = DEFAULT_HEIGHT, // 크기
+    
+    // ********** 새로 추가된 Props **********
+    onItemClick, // 아이템 전체 클릭 이벤트 핸들러
+    onBookmarkClick // 북마크 아이콘 클릭 이벤트 핸들러
+    // ****************************************
+
 }) => {
+
+    console.log('CurationItem isBookmarked 값:', isBookmarked, typeof isBookmarked);
 
     // Props로 크기 가져오기 
     const cardStyle = { width: cardWidth, height: cardHeight, };
@@ -45,38 +53,43 @@ const CurationItem = ({
         .filter(item => item !== undefined); // 찾지 못한 항목 제외
 
     return (
-    <div className="curation-card" style={cardStyle}>
+    <div  
+      className={styles.curationCard} 
+      style={cardStyle}
+      onClick={onItemClick} // 전체를 클릭할 때 호출
+    >
 
       {/* -- 헤더 영역 --  */}
-      <div className="curation-image-placeholder">
+      <div className={styles.curationImagePlaceholder}>
         {/* 1. 썸네일 */}
         <img src={imageUrl} alt="큐레이션 이미지" />
 
         {/* 2. 카테고리 뱃지 컴포넌트 사용 */}
         {/* 각 prop이 true일 때만 해당 뱃지를 렌더링 */}
         {insightBadge && (
-          <div className="insight-badge"> 
+          <div className={styles.insightBadge}> 
             <InsightBadge type={insightBadge} />
           </div>
         )}
         {crossNoteBadge && (
-          <div className="cross-note-badge"> 
+          <div className={styles.crossNoteBadge}> 
             <CrossNoteBadge type={crossNoteBadge} />
           </div>
         )}
         {bestCalumBadge && (
-          <div className="best-calum-badge"> 
+          <div className={styles.bestCalumBadge}> 
             <BestCalumBadge type={bestCalumBadge} />
           </div>
         )}
       </div>
 
       {/* -- 바디 영역 -- */}
-      <div className="curation-content">
+      <div className={styles.curationContent}>
 
-        <div className="badge-group">
+        <div className={styles.badgeGroup}>
           {/* 3. 분야 뱃지 컴포넌트 사용 */}
           {categoriesToDisplay.length > 0 && (
+            // CategoryXselector가 styles.fieldBadgeList를 사용한다면 props로 전달 필요
             <CategoryXselector 
               categoriesToDisplay={categoriesToDisplay}
               removableMode={false} 
@@ -85,14 +98,21 @@ const CurationItem = ({
           )}
 
           {/* 4. 북마크 버튼 컴포넌트 사용 */}
-          <BookmarkIcon isMarked={isBookmarked} />
+          <div 
+            className={styles.bookmarkIconContainer} 
+            onClick={(e) => { 
+              e.stopPropagation(); 
+              onBookmarkClick(); 
+          }}>
+            <BookmarkIcon isMarked={isBookmarked} />
+          </div>
         </div>
 
         {/* 5. 요약본 (DB 불러와야 함) */}
-        <p className="content-text">{content}</p>
+        <p className={styles.contentText}>{content}</p>
 
         {/* -- 푸터 영역 -- */}
-        <div className="curation-footer">
+        <div className={styles.curationFooter}>
           {/* 6. 좋아요 버튼 컴포넌트 사용 */}
           <GoodCountIcon count={likes} />
         </div>

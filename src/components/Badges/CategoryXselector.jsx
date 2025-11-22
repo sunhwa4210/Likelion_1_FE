@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import CategoryButton from './CategoryButton';
 import { COLOR_THEMES } from './CategoryData';
 
@@ -15,14 +15,11 @@ const CategoryXselector = ({ categoriesToDisplay, removableMode, viewOnly, onCat
         return []; 
     });
     
-    // useEffect: viewOnly 모드일 때만 외부 prop 변경에 반응하여 상태를 업데이트
+    // useEffect: 외부 prop 변경에 반응하여 상태를 업데이트합니다.
     useEffect(() => {
-        if (viewOnly) {
-            const updatedCategories = (categoriesToDisplay || []).map(item => item.label);
-            setSelectedCategories(updatedCategories);
-        }
-        // viewOnly가 false일 때는 내부 상태(클릭 상태)를 유지
-    }, [categoriesToDisplay, viewOnly]);
+        const updatedCategories = (categoriesToDisplay || []).map(item => item.label);
+        setSelectedCategories(updatedCategories);
+    }, [categoriesToDisplay]);
 
 
     const handleCategoryClick = (clickedLabel) => {

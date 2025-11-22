@@ -1,46 +1,35 @@
-// 테스트용 더미 데이터 페이지입니다. 
- 
-// 더미 데이터용 이미지 
-import img1 from "./assets/apple.jpg";
-import img2 from "./assets/banana.jpg";
-import img3 from "./assets/beauty.jpg";
-
-// <-- 더미 데이터 --> 
-// 실제로는 API 호출을 통해 데이터 가져와야 합니다.
-export const DUMMY_CURATION_DATA = [
+// === 더미 데이터 ===
+import img from "./kiwi.jpg";
+// ✅ API 호출을 통해 데이터 가져와야 함 
+export const DUMMY_SCRAP_DATA = [
     {
         id: 1,
-        imageUrl: img1,
+        imageUrl: img,
         insightBadge: true,
-        fieldBadges: ['예술', '철학', '심리'],
+        fieldBadges: ['AI', '심리', '철학'],
         content: 'Lorem ipsum dolor sit amet consectetur. Id posuere fermentum duis pellentesque.',
         likes: 100,
         isBookmarked: true,
         detailContent: [
-            // 상세 페이지 본문을 배열로 분할하여 구성 (이미지처럼 단락별로)
-            'Lorem ipsum dolor sit amet consectetur. Id posuere fermentum duis pellentesque.',
-            'Faucibus eget ac vitae turpis faucibus cras sit amet. Nulla tellus id morbi duis condimentum. Sed purus elementum orci vestibulum pulvinar integer ultrices sed. Sapien imperdiet accumsan habitant in vestibulum nisi ante bibendum massa.',
+            'Lorem ipsum dolor sit amet consectetur. Id posuere fermentum duis pellentesque.Faucibus eget ac vitae turpis faucibus cras sit amet. Nulla tellus id morbi duis condimentum. Sed purus elementum orci vestibulum pulvinar integer ultrices sed. Sapien imperdiet accumsan habitant in vestibulum nisi ante bibendum massa.',
             'Lorem ipsum dolor sit amet consectetur. Faucibus eget ac vitae turpis faucibus cras sit amet. Nulla tellus id morbi duis condimentum. Sed purus elementum orci vestibulum pulvinar.'
         ]
     },
     {
         id: 2,
-        imageUrl: img2,
+        imageUrl: img,
         crossNoteBadge: true,
         fieldBadges: ['AI'],
         content: 'Lorem ipsum dolor sit amet consectetur. Id posuere fermentum duis pellentesque.',
         likes: 250,
         isBookmarked: true,
         detailContent: [
-            'Lorem ipsum dolor sit amet consectetur. Id posuere fermentum duis pellentesque.',
-            'Faucibus eget ac vitae turpis faucibus cras sit amet. Nulla tellus id morbi duis condimentum. Sed purus elementum orci vestibulum pulvinar integer ultrices sed. Sapien imperdiet accumsan habitant in vestibulum nisi ante bibendum massa.',
-            'Lorem ipsum dolor sit amet consectetur. Faucibus eget ac vitae turpis faucibus cras sit amet. Nulla tellus id morbi duis condimentum. Sed purus elementum orci vestibulum pulvinar.'
-
+            'Lorem ipsum dolor sit amet consectetur. Id posuere fermentum duis pellentesque.Faucibus eget ac vitae turpis faucibus cras sit amet. Nulla tellus id morbi duis condimentum. Sed purus elementum orci vestibulum pulvinar integer ultrices sed. Sapien imperdiet accumsan habitant in vestibulum nisi ante bibendum massa.Lorem ipsum dolor sit amet consectetur. Faucibus eget ac vitae turpis faucibus cras sit amet. Nulla tellus id morbi duis condimentum. Sed purus elementum orci vestibulum pulvinar.'
         ]
     },
     {
         id: 3,
-        imageUrl: img3,
+        imageUrl: img,
         bestCalumBadge: true,
         fieldBadges: ['경제', '기계'],
         content: 'Lorem ipsum dolor sit amet consectetur. Id posuere fermentum duis pellentesque.',

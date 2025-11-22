@@ -1,12 +1,12 @@
 /* 검색바 공통 css입니다. */
 
-.search-filter-container {
+.searchFilterContainer {
     width: 100%; /* 부모 너비에 맞게 꽉 채우도록 설정 */
     margin: 0 auto;
 }
 
 /* 1. 검색 입력 영역 */
-.search-input-wrapper {
+.searchInputWrapper {
     display: flex;
     align-items: center;
     width: 100%;
@@ -18,7 +18,7 @@
 }
 
 /* 검색 아이콘 이미지 */
-.search-input-wrapper > svg {
+.searchInputWrapper > svg {
     height: 25px;
     width: 25px;
     stroke-width: 2px;
@@ -28,7 +28,7 @@
 }
 
 /* 입력창 */
-.search-input {
+.searchInput {
     flex-grow: 1;
     border: none;
     outline: none;
@@ -38,24 +38,24 @@
 }
 
 /* 포커스(클릭)되었을 떄 */
-.search-input-wrapper.focused .search-input {
+.searchInputWrapper.focused .searchInput {
     color: var(--gray-50, #474747); 
 }
         
-.search-input::placeholder {
+.searchInput::placeholder {
     color: var(--gray-10, #E6E6E6);
 }
 
-.search-input-wrapper.focused .search-input::placeholder {
+.searchInputWrapper.focused .searchInput::placeholder {
     color: var(--gray-50, #474747);
 }
 
-.search-input-wrapper.focused {
+.searchInputWrapper.focused {
     border-color: #39A2A5; 
 }
 
 /* 2. 정렬 및 필터 영역 */
-.sort-filter-area {
+.sortFilterArea {
     margin-top: 5px;
     font-size: 12px;
 
@@ -65,7 +65,7 @@
 }
 
 /* 정렬 옵션 컨테이너 */
-.sort-options {
+.sortOptions {
     display: flex;
     gap: 15px; 
     padding: 0;
@@ -73,7 +73,7 @@
 }
 
 /* 포커스(클릭) 안되었을 때*/
-.sort-option-item {
+.sortOptionItem {
     display: flex;
     align-items: center;
     color: var(--gray-30, #ACADAC); /* 비활성화된 항목 색상 */
@@ -83,13 +83,13 @@
 }
 
 /* 포커스(클릭) 되었을 때*/
-.sort-option-item.active {
+.sortOptionItemActive {
     color: #39A2A5; /* 활성화된 항목 색상 (청록색) */
     font-weight: 600;
 }
 
 /* --- 3. 필터 버튼 영역 --- */
-.filter-button {
+.filterButton {
     display: flex;
     align-items: center;
     justify-content: space-between; 
@@ -100,7 +100,7 @@
 }
 
 /* 필터 아이콘 이미지 */
-.filter-button > svg {
+.filterButton > svg {
     margin-right: 0;
     height: 40px;
     width: 40px;
