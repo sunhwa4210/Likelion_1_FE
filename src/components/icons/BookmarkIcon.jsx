@@ -14,11 +14,10 @@ const BookmarkIcon = ({
     defaultColor = defaultProps.defaultColor,
     activeColor = defaultProps.activeColor,
     strokeWidth = defaultProps.strokeWidth,
-    initialState = false, // 외부에서 isClicked의 초기 상태를 제어할 수 있도록 추가  
+    isMarked, // ⭐ 외부에서 전달받는 현재 북마크 상태 (true/false)
+    onClick, // ⭐ 클릭 이벤트 핸들러 (상태 변경 요청) 
     ...restProps 
 }) => {
-    const [isClicked, setClicked] = useState(initialState);
-
     const finalStrokeColor = isClicked ? 'none' : defaultColor;
     const finalFillColor = isClicked ? activeColor : 'none';
 
@@ -34,7 +33,7 @@ const BookmarkIcon = ({
             height={size} 
             viewBox="0 0 20 20" 
             fill="none"
-            onClick={handleClick} 
+            onClick={onClick} 
             {...restProps} 
             style={{position: "relative", zIndex: 90,}}
         >

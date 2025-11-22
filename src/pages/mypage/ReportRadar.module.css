@@ -1,0 +1,89 @@
+/* 컨테이너 스타일 */
+.radarChartContainer {
+    width: 100%;
+    height: 390px;
+    margin: 20px 0;
+    border-radius: 12px;
+    background: #FFF;
+    box-shadow: 0 0 10px 4px var(--shadow10, rgba(121, 121, 121, 0.10));
+    padding: 22px 20px;
+}
+
+/* 헤더 스타일 */
+.radarHeader {
+    margin-top: 20px;
+}
+
+.radarTitle {
+    font-size: 18px;
+    margin: 0; 
+    color: var(--gray-60, #191919);
+    font-feature-settings: 'liga' off, 'clig' off;
+    font-family: Inter;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px; 
+    align-self: stretch;
+}
+
+.radarSubtitle {
+    margin: 5px 0 0 0; 
+    color: var(--gray-40, #797A79);
+    font-feature-settings: 'liga' off, 'clig' off;
+    font-family: Inter;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+/* 로딩/데이터 없음 상태 스타일 */
+.radarLoading, .radarNoData {
+    text-align: center;
+    padding: 100px;
+    font-size: 16px;
+    color: #999;
+}
+
+.radarAnalysisLine {
+    margin-top: 14px;
+    display: flex; 
+    align-items: baseline; /* 텍스트 기준선에 맞춰 정렬 (가장 자연스러움) */
+    align-items: center;
+}
+
+/* 분석 문구  */
+.primary {
+    color: var(--gray-40, #797A79);
+    font-feature-settings: 'liga' off, 'clig' off;
+    font-family: Inter;
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+/* 필터 있는 문구  */
+.tip {
+    color: var(--gray-40, #797A79);
+    font-feature-settings: 'liga' off, 'clig' off;
+    font-family: Inter;
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    margin-top: 0px;
+    margin-left: 15px;
+}
+
+.radarAnalysisLine .icon {
+    display: flex;
+    align-items: center;
+    margin-right: 3px;
+    flex-shrink: 0;
+}
+
+/* 극좌표 축의 눈금 값 (10, 20...) */
+.radarRadiusAxisTick {
+    font-size: 7px;
+}

@@ -1,0 +1,36 @@
+/* ReportMenu 컨테이너 */
+.reportMenuContainer {
+    margin-top: 0px;
+    margin-bottom: 30px;
+}
+
+/* MenuItem 기본 스타일*/
+.menuItem {
+    padding: 20px 0px;
+    border-bottom: 1px solid var(--gray-10, #E6E6E6);
+    background: #FFF;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    color: #000;
+    font-feature-settings: 'liga' off, 'clig' off;
+    font-family: Inter;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 18px;
+}
+
+.menuItemContent {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%; /* 내부 콘텐츠가 전체 너비를 차지하도록 설정 */
+    padding: 0 20px; /* ✨ 여기에 실제 좌우 패딩을 적용 */
+}
+
+/* 메뉴 항목 텍스트 */
+.menuItemLabel {
+    margin: 0;
+}

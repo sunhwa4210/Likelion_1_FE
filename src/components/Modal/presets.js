@@ -92,4 +92,25 @@ export const presets = {
       { label: '삭제', value: 'delete', tone:'danger' },
     ],
   }),
+
+  // [새로 추가] 알림 전체 읽음처리 확인
+  confirmReadAll: () => ({
+    title: '', 
+    message: '모든 알림을 읽음처리 할까요?',
+    buttons: [
+      { label: '취소', value: 'cancel', tone:'neutral', autoFocus:true },
+      { label: '확인', value: 'read-all', tone:'primary' }, // value: 'read-all'
+    ],
+  }),
+
+  // [새로 추가] 알림 전체 삭제 확인
+  confirmDeleteAll: () => ({
+    title: '', 
+    message: '모든 알림을 창에서 삭제할까요?',
+    variant: 'danger', // 삭제는 danger variant 사용
+    buttons: [
+      { label: '취소', value: 'cancel', tone:'neutral', autoFocus:true },
+      { label: '삭제', value: 'delete-all', tone:'danger' }, // value: 'delete-all'
+    ],
+  }),
 };
