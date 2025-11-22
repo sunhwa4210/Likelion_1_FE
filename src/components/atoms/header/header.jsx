@@ -2,9 +2,9 @@
 import React, { useState } from "react";
 import { Bell } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
-import styles from "./header.module.css"; // ★ CSS Module import
+import styles from "./header.module.css"; 
 
-export default function Header() {
+export default function header() {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -28,11 +28,9 @@ export default function Header() {
     <header className={styles.header}>
       <div className={styles.headerTop}>
         {/* 로고 클릭 시 메뉴 토글 */}
-        <h1
-          className={styles.headerLogo}
-          onClick={() => setOpen((v) => !v)}
-        >
-          {location.pathname === "/" ? (
+
+        <h1 className="header__logo" onClick={() => setOpen((v) => !v)}>
+          {location.pathname === "/"||"/curation" ? (
             <>
               CROSS<span>X</span>NOTE
             </>
@@ -49,7 +47,7 @@ export default function Header() {
       {open && (
         <nav className={styles.headerMenu} aria-label="주 메뉴">
           <ul>
-            <li onClick={() => handleNavigate("/")}>CROSSXNOTE</li>
+            <li onClick={() => handleNavigate("/curation")}>CROSSXNOTE</li>
             <li onClick={() => handleNavigate("/balance-game")}>
               BALANCE GAME
             </li>

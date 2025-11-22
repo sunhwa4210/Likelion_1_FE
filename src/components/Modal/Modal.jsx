@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
-import './Modal.css';
+import styles from './Modal.module.css';
 
 export default function Modal({
   isOpen,                     // 모달 열림/닫힘 상태
@@ -48,16 +48,21 @@ export default function Modal({
   if (!isOpen) return null;
 
   //app-wrapper 위에서만 랜더링 되도록 (app-wrapper 기준 정중앙)
-  const target=
-  typeof document !== 'undefined'
-  ? document.querySelector('.app-wrapper')
-  : null;
+  const target =
+    typeof document !== 'undefined'
+      ? document.querySelector('.app-wrapper')
+      : null;
   if (!target) return null;
 
-   const modalNode = (
-    <div className="modal-overlay" onClick={() => onClose?.('overlay')}>
+  const modalNode = (
+    <div
+      className={styles['modal-overlay']}
+      onClick={() => onClose?.('overlay')}
+    >
       <div
-        className={`modal-card modal-${variant}`}
+        className={`${styles['modal-card']} ${
+          styles[`modal-${variant}`] || ''
+        }`}
         role="dialog"
         aria-modal="true"
         aria-labelledby={title ? 'modal-title' : undefined}
@@ -65,15 +70,18 @@ export default function Modal({
         ref={cardRef}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="modal-textbox">
-        {title && (
-          <h3 id="modal-title" className="modal-title">
-            {title}
-          </h3>
-        )}
-        {message && <p className="modal-message">{message}</p>}
+        <div className={styles['modal-textbox']}>
+          {title && (
+            <h3 id="modal-title" className={styles['modal-title']}>
+              {title}
+            </h3>
+          )}
+          {message && (
+            <p className={styles['modal-message']}>{message}</p>
+          )}
         </div>
 
+<<<<<<< HEAD
         <div className="modal-actions">
         {buttons.length > 0 && (
           <div className="modal-actions">
@@ -82,16 +90,31 @@ export default function Modal({
                 key={i}
                 type="button"
                 className={`btn ${b.tone ? `btn-${b.tone}` : 'btn-primary'}`}
+=======
+        <div className={styles['modal-actions']}>
+          {buttons.map((b, i) => {
+            const toneClass = styles[b.tone ? `btn-${b.tone}` : 'btn-primary'];
+            return (
+              <button
+                key={i}
+                type="button"
+                className={`${styles['modal-btn']} ${toneClass || ''}`}
+>>>>>>> 46e7172cd8885afca036053b9cb7c84ae7d9c88c
                 onClick={() => onAction?.(b.value)}
                 data-autofocus={b.autoFocus ? 'true' : undefined}
                 autoFocus={b.autoFocus}
               >
                 {b.label}
               </button>
+<<<<<<< HEAD
             ))}
           </div>
         )}
 
+=======
+            );
+          })}
+>>>>>>> 46e7172cd8885afca036053b9cb7c84ae7d9c88c
         </div>
       </div>
     </div>
@@ -99,5 +122,3 @@ export default function Modal({
 
   return createPortal(modalNode, target);
 }
-
-

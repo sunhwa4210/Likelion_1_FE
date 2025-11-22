@@ -3,7 +3,7 @@ export const presets = {
   //로그인-회원가입에서 헤더 뒤로가기: “그만두기/계속하기”
   exitOrContinue: () => ({
     title: '',
-    message: '그만두시겠어요?',
+    message: '회원가입을 그만두시겠어요?',
     buttons: [
       { label: '그만두기', value: 'exit',    tone:'neutral' },
       { label: '계속하기', value: 'stay',    tone:'primary', autoFocus:true },
@@ -90,6 +90,27 @@ export const presets = {
     buttons: [
       { label: '취소', value: 'cancel', tone:'neutral', autoFocus:true },
       { label: '삭제', value: 'delete', tone:'danger' },
+    ],
+  }),
+
+  // [새로 추가] 알림 전체 읽음처리 확인
+  confirmReadAll: () => ({
+    title: '', 
+    message: '모든 알림을 읽음처리 할까요?',
+    buttons: [
+      { label: '취소', value: 'cancel', tone:'neutral', autoFocus:true },
+      { label: '확인', value: 'read-all', tone:'primary' }, // value: 'read-all'
+    ],
+  }),
+
+  // [새로 추가] 알림 전체 삭제 확인
+  confirmDeleteAll: () => ({
+    title: '', 
+    message: '모든 알림을 창에서 삭제할까요?',
+    variant: 'danger', // 삭제는 danger variant 사용
+    buttons: [
+      { label: '취소', value: 'cancel', tone:'neutral', autoFocus:true },
+      { label: '삭제', value: 'delete-all', tone:'danger' }, // value: 'delete-all'
     ],
   }),
 };

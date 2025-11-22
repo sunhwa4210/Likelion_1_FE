@@ -1,9 +1,13 @@
+<<<<<<< HEAD
 import React, { useState, useEffect } from "react";
+=======
+import React, { useState, useEffect } from 'react';
+>>>>>>> 46e7172cd8885afca036053b9cb7c84ae7d9c88c
 import CategoryButton from './CategoryButton';
 import { COLOR_THEMES } from './CategoryData';
 
 // !!! viewOnly Prop 추가: 뷰어 모드(활성화 고정, 클릭 비활성화) 여부를 결정합니다.
-const CategoryXselector = ({ categoriesToDisplay, removableMode, viewOnly, onCategoriesChange }) => { 
+const CategoryXselector = ({ categoriesToDisplay, removableMode, viewOnly, onCategoriesChange,fontSize }) => { 
     
     // 초기 상태 설정: viewOnly 모드가 아닐 때 (선택 모드일 때)만 빈 배열로 시작
     const [selectedCategories, setSelectedCategories] = useState(() => {
@@ -15,14 +19,11 @@ const CategoryXselector = ({ categoriesToDisplay, removableMode, viewOnly, onCat
         return []; 
     });
     
-    // useEffect: viewOnly 모드일 때만 외부 prop 변경에 반응하여 상태를 업데이트
+    // useEffect: 외부 prop 변경에 반응하여 상태를 업데이트합니다.
     useEffect(() => {
-        if (viewOnly) {
-            const updatedCategories = (categoriesToDisplay || []).map(item => item.label);
-            setSelectedCategories(updatedCategories);
-        }
-        // viewOnly가 false일 때는 내부 상태(클릭 상태)를 유지
-    }, [categoriesToDisplay, viewOnly]);
+        const updatedCategories = (categoriesToDisplay || []).map(item => item.label);
+        setSelectedCategories(updatedCategories);
+    }, [categoriesToDisplay]);
 
 
     const handleCategoryClick = (clickedLabel) => {
@@ -53,7 +54,7 @@ const CategoryXselector = ({ categoriesToDisplay, removableMode, viewOnly, onCat
 
     return (
         <div>
-            <div className="field-badge-list">
+            <div className="field-badge-list" style={{display:'flex', gap:'6px'}}>
             {(categoriesToDisplay || []).map((item) => (
                 <CategoryButton
                     key={item.label}
@@ -63,7 +64,8 @@ const CategoryXselector = ({ categoriesToDisplay, removableMode, viewOnly, onCat
                     activeTheme={COLOR_THEMES[item.colorKey]}
                     // !상위 컴포넌트에서 받은 removableMode 값이 추가됨 
                     // removableMode는 X 버튼 유무만 결정
-                    displayMode={removableMode ? "removable" : "default"} 
+                    displayMode={removableMode ? "removable" : "default"}
+                    fontSize={fontSize} 
                 />
             ))}
             </div>

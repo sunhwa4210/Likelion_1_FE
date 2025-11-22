@@ -1,0 +1,27 @@
+.modifyButton {
+    width: 355px;
+    height: 40px;
+    padding: 10px 14px;
+    display: block;
+    margin: 0 auto;
+    margin-top: 40px;
+    border: none;
+    border-radius: 6px;
+    text-align: center;
+    font-feature-settings: 'liga' off, 'clig' off;
+    font-family: Inter;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 20px; 
+
+    
+    /* 비활성화 기본 스타일 */
+    background: var(--gray-20, #C6C8C6);
+    color: var(--white, #FFF);
+}
+
+/* 활성화 (수정사항 있음) 스타일 */
+.modifyButton.isActive {
+    background: var(--primary-30, #39A2A5);
+}

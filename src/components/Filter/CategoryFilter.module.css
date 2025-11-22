@@ -1,0 +1,61 @@
+.cFilterBoxWrapper{
+    box-sizing: border-box;
+    width: 100%; 
+    padding: 28px 14px 28px 14px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    
+    border-radius: 12px;
+    background: #FFF;   
+}
+
+.cFilterBox{
+    display:flex;
+    flex-direction: column;
+    gap:10px;
+    width: 100%;
+}
+
+.cTitleBox{
+height: 20px;
+}
+
+.cTitleBox p{
+color: var(--gray-30, #ACADAC);
+font-feature-settings: 'liga' off, 'clig' off;
+font-family: Inter;
+font-size: 12px;
+font-style: normal;
+font-weight: 600;
+margin: 0px;
+line-height: 20px
+}
+
+.cCategoryBox{
+    display: flex;
+    flex-direction: column;
+    gap:8px;
+}
+
+.toastWrapper {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+.toast{ 
+  width: 239px;
+  height: 117px;
+  padding: 30px 29px;
+  border-radius: 12px;
+  box-shadow: 0 0 10px 4px #39A2A5;
+  background: var(--white, #FFF);
+  position: relative;}
+
+.toast p{color: var(--primary-30, #39A2A5); text-align: center; font-feature-settings: 'liga' off, 'clig' off; font-family: Inter;
+    font-size: 16px;font-style: normal;font-weight: 600;line-height: normal; margin: 0px;}

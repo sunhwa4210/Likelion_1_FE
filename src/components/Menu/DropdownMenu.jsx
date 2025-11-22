@@ -1,7 +1,7 @@
 // 드롭다운 컴포넌트 페이지입니다. 
 
 import React, { useState, useRef, useEffect } from 'react';
-import './DropdownMenu.css';
+import styles from './DropdownMenu.module.css';
 
 // SVG 아이콘 컴포넌트 
 const ChevronDown = ({ className }) => (
@@ -64,25 +64,25 @@ const DropdownMenu = ({ width, fontSize, listWidth }) => {
 
   // 렌더링
   return (
-    <div className="app-container">
+    <div className={styles.appContainer}>
       {/* 드롭다운 */}
       <div 
         ref={dropdownRef} // 외부 클릭 감지를 위해 Ref 연결
-        className="dropdown-wrapper"
+        className={styles.dropdownWrapper}
         style={{ width: width }} 
       >
         {/* 드롭다운 메뉴 버튼 (보여지는 부분) */}
         <button
           type="button"
-          className="dropdown-button"
+          className={styles.dropdownButton}
           onClick={handleToggle} // 클릭 시 토글 실행
           aria-expanded={isOpen} // 현재 드롭다운이 열려있는지 여부
           aria-haspopup="listbox" 
           style={fontSize ? { fontSize: fontSize } : {}} // 폰트 크기 제어 
         >
-          <span className="selected-category-text">{selectedCategory}</span>
+          <span className={styles.selectedCategoryText}>{selectedCategory}</span>
           <ChevronDown 
-            className="dropdown-icon" 
+            className={styles.dropdownIcon} 
             aria-hidden="true"
           />
         </button>
@@ -90,19 +90,17 @@ const DropdownMenu = ({ width, fontSize, listWidth }) => {
         {/* 드롭다운 메뉴의 서브메뉴 리스트 보여주기 (isOpen 상태가 true일 때만 렌더링) */}
         {isOpen && (
           <ul
-            className="dropdown-list"
+            className={styles.dropdownList}
             role="listbox"
             style={listWidth ? { width: listWidth } : {}}
           >
             {categories.map((category) => (
               <li
                 key={category}
-                // 현재 선택된 항목에 'selected' 클래스 추가
-                // '스포츠·라이프스타일' 항목에 'small-text' 클래스 추가 -> 줄바꿈 처리 대비
                 className={`
-                  dropdown-item 
-                  ${selectedCategory === category ? 'selected' : ''} 
-                  ${category.includes('라이프스타일') ? 'small-text' : ''}
+                  ${styles.dropdownItem} 
+                  ${selectedCategory === category ? styles.selected : ''} 
+                  ${category.includes('라이프스타일') ? styles.smallText : ''}
                 `}
                 onClick={() => handleSelect(category)}
                 role="option"

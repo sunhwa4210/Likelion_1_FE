@@ -19,6 +19,5 @@ export default function Column() {
          <Card/>
          <Pen/>
          </div>
-    </div>
-  );
+         </div> );
 }
