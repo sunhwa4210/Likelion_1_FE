@@ -19,9 +19,11 @@ const GoodCountIcon = ({
     
     const textColor = isClicked ? activeColor : defaultColor;
 
-    const handleClick = () => {
+    const handleClick = (e) => {
         const nextIsClicked = !isClicked;
         setClicked(nextIsClicked);
+        e.stopPropagation()
+
 
         // 좋아요 로직
         if (nextIsClicked) {
@@ -38,9 +40,12 @@ const GoodCountIcon = ({
                 display: 'flex', 
                 alignItems: 'center', 
                 gap: '4px',
+                position:"relative",
+                zIndex:"90",
             }}
             onClick={handleClick} 
             {...restProps} 
+
         >
             <GoodIcon
                 size={iconSize}

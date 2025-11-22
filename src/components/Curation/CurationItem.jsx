@@ -7,9 +7,9 @@ import BestCalumBadge from "../icons/BestCalumBadge";
 import GoodCountIcon from "../icons/GoodCountIcon";
 import BookmarkIcon from "../icons/BookmarkIcon";
 
-import CategoryXselector from "../Badges/Category/CategoryXselector"
-import { categories } from "../Badges/Category/CategoryData";
-
+import CategoryXselector from "../Badges/CategoryXselector";
+import { categories} from "../Badges/CategoryData";
+import { useNavigate } from "react-router-dom";
 import './CurationItem.css';
 
 const findCategoryItem = (label) => {
@@ -33,8 +33,12 @@ const CurationItem = ({
     likes, // 좋아요 수 
     isBookmarked, // 북마크 
     cardWidth = DEFAULT_WIDTH, // 크기 
-    cardHeight = DEFAULT_HEIGHT // 크기 
+    cardHeight = DEFAULT_HEIGHT, // 크기
+    onClick, 
+    
 }) => {
+
+    const navigate = useNavigate();
 
     // Props로 크기 가져오기 
     const cardStyle = { width: cardWidth, height: cardHeight, };
@@ -45,7 +49,7 @@ const CurationItem = ({
         .filter(item => item !== undefined); // 찾지 못한 항목 제외
 
     return (
-    <div className="curation-card" style={cardStyle}>
+    <div className="curation-card" style={cardStyle} onClick={onClick}>
 
       {/* -- 헤더 영역 --  */}
       <div className="curation-image-placeholder">

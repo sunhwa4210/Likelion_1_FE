@@ -1,0 +1,83 @@
+.app-wrapper{ box-sizing: border-box;}
+
+.logo-wrapper{
+    width: 100%;
+    padding: 28px 58px; 
+    display: flex; flex-direction: column; gap:6px;
+    align-items: center; justify-content: center;
+}
+.logo-wrapper>p{
+color: var(--gray-40, #797A79);
+font-family: Inter;
+font-size: 10px;
+font-style: normal;
+font-weight: 500;
+line-height: normal;
+margin:0;
+}
+button {
+  all: unset;
+  cursor: pointer;
+}
+.login-wrapper{
+    width: 100%; margin-top: 6px;
+    padding: 20px 14px;
+}
+.social-wrapper>h1{
+color: #000;
+font-feature-settings: 'liga' off, 'clig' off;
+
+/* inter bold/22 */
+font-family: Inter;
+font-size: 22px;
+font-style: normal;
+font-weight: 600;
+line-height: normal;
+margin: 0;
+}
+.social-wrapper>p{
+color: #000;
+font-feature-settings: 'liga' off, 'clig' off;
+
+/* inter regular/14 */
+font-family: Inter;
+font-size: 14px;
+font-style: normal;
+font-weight: 400;
+line-height: 18px; /* 128.571% */
+margin:0px;
+margin-top: 10px;
+}
+.google{margin-top: 19px; margin-bottom: 20px; }
+.kakao{margin-bottom: 68px;}
+
+.line-wrapper{ width: 100%; display: flex; gap:10px; align-items:center; justify-content: center; }
+.line{width: 152px; height: 1px; background-color: #E6E6E6;}
+.line-wrapper>p{color: var(--gray-30, #ACADAC);
+font-feature-settings: 'liga' off, 'clig' off;
+/* inter regular/12 */
+font-family: Inter;
+font-size: 12px;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
+margin: 0px;}
+
+
+.local-wrapper{width:100%; text-align: right;}
+.localLogin{width: 100%; display: flex; flex-direction: column; align-items: center;} 
+#loginId{margin-top:68px;}
+#loginPassword{margin-top: 19px;}
+.local{margin-top:22px;}
+.sign-btn{
+color: var(--gray-20, #C6C8C6);
+font-feature-settings: 'liga' off, 'clig' off;
+/* inter medium/12 */
+font-family: Inter;
+font-size: 12px;
+font-style: normal;
+font-weight: 500;
+line-height: normal;
+margin-top: 19px;}
+
+.login-btn-box{width:100%;display: flex; flex-direction: column; align-items: center;}

@@ -70,7 +70,7 @@ const CategoryButton = ({ label, isSelected, onClick, activeTheme, displayMode, 
     );
 
     return (
-        <button style={style} onClick={onClick}>
+        <button type="button" style={style} onClick={onClick}>
         {/* displayMode가 'removable'일 때 아이콘 렌더링 */}
         {displayMode === 'removable' && (
             <div 

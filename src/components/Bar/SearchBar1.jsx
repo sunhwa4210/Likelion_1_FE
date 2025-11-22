@@ -9,7 +9,7 @@ import SearchIcon from './SearchIcon';
 import './SearchBar.css';
 
 // 컴포넌트 최대 너비 설정 (값 전달 없을 시, 기본값을 347px로 정의)
-function SearchBar1({ maxWidth = '347px' }) {
+function SearchBar1({ maxWidth = '347px', onFilterClick, onSearchChange, onSortChange }) {
   const [searchTerm, setSearchTerm] = useState(''); // 검색 입력창의 현재 텍스트를 저장하는 상태
   const [activeSort, setActiveSort] = useState('latest'); // 현재 활성화된 정렬 기준
   const [isFocused, setIsFocused] = useState(false); // 검색 입력창이 활성화되었는지의 여부
@@ -18,12 +18,14 @@ function SearchBar1({ maxWidth = '347px' }) {
   const handleSortClick = (key) => {
     setActiveSort(key);
     console.log(`정렬 기준 변경: ${key}`);
+    if (onSortChange) onSortChange(key);
+
   };
 
   // 필터 버튼 클릭을 처리하는 함수
   const handleFilterClick = () => {
     console.log('필터 버튼 클릭');
-    // !!!!! 추후 필터 모달을 띄우는 로직이 추가되어야 함 !!!!!!
+    if (onFilterClick) onFilterClick();
   };
 
   // 검색 입력창을 클릭했을 때 (UI 변화)
@@ -35,6 +37,13 @@ function SearchBar1({ maxWidth = '347px' }) {
   const handleBlur = () => {
     setIsFocused(false);
   };
+
+  const handleSearchInputChange = (e) => {
+    const value = e.target.value;
+    setSearchTerm(value);
+    if (onSearchChange) onSearchChange(value);
+  };
+
 
   return (
       <div className="search-filter-container"
@@ -48,7 +57,7 @@ function SearchBar1({ maxWidth = '347px' }) {
             type="text"
             placeholder="검색어를 입력하거나, 필터로 원하는 조건을 선택하세요"
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={handleSearchInputChange}
             className="search-input"
 
             onFocus={handleFocus}
