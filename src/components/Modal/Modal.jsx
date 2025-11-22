@@ -75,18 +75,23 @@ export default function Modal({
         </div>
 
         <div className="modal-actions">
-          {buttons.map((b, i) => (
-            <button
-              key={i}
-              type="button"
-              className={`btn ${b.tone ? `btn-${b.tone}` : 'btn-primary'}`}
-              onClick={() => onAction?.(b.value)}
-              data-autofocus={b.autoFocus ? 'true' : undefined}
-              autoFocus={b.autoFocus}
-            >
-              {b.label}
-            </button>
-          ))}
+        {buttons.length > 0 && (
+          <div className="modal-actions">
+            {buttons.map((b, i) => (
+              <button
+                key={i}
+                type="button"
+                className={`btn ${b.tone ? `btn-${b.tone}` : 'btn-primary'}`}
+                onClick={() => onAction?.(b.value)}
+                data-autofocus={b.autoFocus ? 'true' : undefined}
+                autoFocus={b.autoFocus}
+              >
+                {b.label}
+              </button>
+            ))}
+          </div>
+        )}
+
         </div>
       </div>
     </div>

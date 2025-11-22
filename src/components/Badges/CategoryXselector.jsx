@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from "react";
 import CategoryButton from './CategoryButton';
 import { COLOR_THEMES } from './CategoryData';
 
