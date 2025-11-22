@@ -1,0 +1,43 @@
+.embed-box {
+  width: 100%;
+  height: 323px;              /* Figma 기준 고정 높이 */
+  background-color: #e5e5e5;  /* 회색 플레이스홀더 배경 */
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 유튜브 iframe이 영역 꽉 채우도록 */
+.embed-box iframe {
+  width: 100%;
+  height: 100%;
+}
+
+/* 링크 임베드일 때 */
+.link-embed {
+  text-decoration: none;
+  color: inherit;
+}
+
+.link-embed-inner {
+  padding: 16px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 8px;
+}
+
+.link-embed-label {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.link-embed-url {
+  font-size: 12px;
+  color: #666;
+  word-break: break-all;
+}

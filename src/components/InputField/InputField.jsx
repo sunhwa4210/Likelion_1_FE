@@ -1,16 +1,15 @@
 import { useState } from 'react';
-import './InputField.css';
+import styles from './InputField.module.css';
 
 //사용하는 input의 id만을 props로 받음 
-//id 목록: loginId, loginPassword, name, email, signPassword, passwordCheck, birth
-export default function InputField({id}) {
+//id 목록: loginId, password, name, email, signPassword, passwordCheck, birthdate
+export default function InputField({id, value:externalValue, onChangeValue, compareValue,}) {
     const [birthValue, setBirthValue] = useState(''); //생년월일 필드 입력 제어를 위함
 
     //입력 필드 상태 제어를 위함
     const [value,setValue]=useState('');
     const [focused,setFocused]=useState(false);
     const [error, setError]=useState('');
-    const [signPasswordValue, setSignPasswordValue] = useState('');
 
     const fieldData={
         name:'',
@@ -21,34 +20,36 @@ export default function InputField({id}) {
 
     //id에 따라 fieldData의 값이 달라짐
     switch(id){
+        //로그인
         case 'loginId':
-            fieldData.name ='userId';
+            fieldData.name ='email';
             fieldData.placeholder='아이디';
             fieldData.type='text';
             break;
-        case 'loginPassword':
-            fieldData.name ='userPassword';
+        //로그인 비밀번호
+        case 'password':
+            fieldData.name ='password';
             fieldData.placeholder='비밀번호';
             fieldData.type='password';
             break;
+        //회원가입
+        case 'signPassword':
+            fieldData.name ='password';
+            fieldData.placeholder='영문, 숫자 포함 6자리 이상';
+            fieldData.type='password';
+            fieldData.label='비밀번호';
+            break;    
         case 'name':
-            fieldData.name ='userName';
+            fieldData.name ='name';
             fieldData.placeholder='김슈니';
             fieldData.type='text';
             fieldData.label='이름';
             break;
         case 'email':
-            fieldData.name ='userEmail';
+            fieldData.name ='email';
             fieldData.placeholder='crossnote@gmail.com';
             fieldData.type='email';            
             fieldData.label='이메일';
-
-            break;
-        case 'signPassword':
-            fieldData.name ='signPassword';
-            fieldData.placeholder='영문, 숫자 포함 6자리 이상';
-            fieldData.type='password';                        
-            fieldData.label='비밀번호';
 
             break;
         case 'passwordCheck':
@@ -58,8 +59,8 @@ export default function InputField({id}) {
             fieldData.label='비밀번호 재확인';
 
             break;
-        case 'birth':
-            fieldData.name ='birth';
+        case 'birthdate':
+            fieldData.name ='birthdate';
             fieldData.placeholder='2001-03-17';
             fieldData.type='text';            
             fieldData.label='생년월일';
@@ -71,8 +72,10 @@ export default function InputField({id}) {
             return null;
     }
 
-    //입력값 검증 함수 (추후 기획측에서 검증 조건 나오면 그에 따라 수정할 예정)
-    const validate= (fieldId,v) => {
+    //입력값 검증 함수 
+
+    const currentValue = externalValue !==undefined?externalValue:value;
+    const validate= (fieldId,v,compare) => {
         if(fieldId === 'email' && v) {
             if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) return '올바른 이메일 형식이 아닙니다';
         }
@@ -80,11 +83,10 @@ export default function InputField({id}) {
             const ok = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/.test(v);
             if (!ok) return '비밀번호는 영문과 숫자를 포함한 6자리 이상이어야 합니다'; 
         }
-        if (fieldId === 'passwordCheck' && v) {
-        if (v !== signPasswordValue)
-            return '비밀번호가 일치하지 않습니다';
+        if (fieldId === 'passwordCheck' && v && compare !== undefined) {
+        if (v !== compare) return '비밀번호가 일치하지 않습니다';
         }
-        if (fieldId === 'birth' && v) {
+        if (fieldId === 'birthdate' && v) {
         if (!/^\d{4}-\d{2}-\d{2}$/.test(v))
             return 'YYYY-MM-DD 형식으로 입력하세요';
         }
@@ -97,11 +99,14 @@ export default function InputField({id}) {
         const v = e.target.value;
         setValue(v);
 
-        if (id==='signPassword'){
-            setSignPasswordValue(v);
+        if (onChangeValue) {
+        onChangeValue(v);            // 부모에 알려줌
+        } else {
+        setValue(v);                 // 자기 혼자 쓸 때
         }
-        setError(validate(id,v));
-    }
+
+        setError(validate(id, v, compareValue));
+    };
 
     //상태
     const hasValue = id === 'birth' ? !!birthValue : !!value;
@@ -125,28 +130,28 @@ export default function InputField({id}) {
         }
         input = input.slice(0, 10);
         setBirthValue(input);
-        setError(validate('birth', input));
+        setError(validate('birthdate', input));
     }
 
   return (
-    <div className= {`input-wrap ${status}`}>
+    <div className={`${styles["input-wrap"]} ${styles[status]}`}>
         {fieldData.label && (
-        <label htmlFor={id} className="input-label">
+        <label htmlFor={id} className={styles["input-label"]}>
           {fieldData.label}
         </label>
       )}
 
         {/* birth 전용 input */}
-        {id === 'birth' ? (
+        {id === 'birthdate' ? (
             <input id={id} name={fieldData.name} placeholder={fieldData.placeholder} type={fieldData.type}
-                className="input-field" value={birthValue} onInput={handleBirthInput} maxLength="10"
+                className={styles["input-field"]} value={birthValue} onInput={handleBirthInput} maxLength="10"
                 onFocus={()=>setFocused(true)} onBlur={()=>setFocused(false)}/> )
                 :(<input id={id} name={fieldData.name} placeholder={fieldData.placeholder} type={fieldData.type} 
-                  className="input-field" value={value} onChange={handleChange} onFocus={() => setFocused(true)}
+                  className={styles["input-field"]} value={value} onChange={handleChange} onFocus={() => setFocused(true)}
                   onBlur={() => setFocused(false)} autoComplete="on"/> )
             }
 
-        <div className='helper'>{error||''}</div>
+        <div className={styles['helper']}>{error||''}</div>
     </div>
    );
 }

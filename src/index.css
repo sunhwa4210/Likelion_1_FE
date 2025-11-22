@@ -2,7 +2,7 @@
 
 :root{
   --app-width: 375px;
-  --app-height: 812px;
+  --app-height: 755px;
 
 
   --white:#fff;
@@ -44,8 +44,8 @@
 /* reset & base */
 html, body { height: 100%; margin: 0; padding: 0; }
 body {
-  font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-  color: var(--text);
+  font-family: "Inter", sans-serif;
+  font-feature-settings: "liga" off, "clig" off;
   background: var(--black);
   -webkit-font-smoothing: antialiased;
 }

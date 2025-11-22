@@ -9,7 +9,6 @@
     background-color: #FFFFFF;
     border-radius: 12px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08); /* 카드 그림자 */
-    margin-bottom: 26px; /* 각 카드 사이 간격 */
     overflow: hidden; /* 이미지 둥근 모서리 적용을 위해 */
     position: relative;
 }

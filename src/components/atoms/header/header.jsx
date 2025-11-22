@@ -28,7 +28,7 @@ export default function Header() {
       <div className="header__top">
         {/* 로고 클릭 시 메뉴 토글 */}
         <h1 className="header__logo" onClick={() => setOpen((v) => !v)}>
-          {location.pathname === "/" ? (
+          {location.pathname === "/"||"/all_quration" ? (
             <>
               CROSS<span>X</span>NOTE
             </>

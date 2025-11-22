@@ -3,7 +3,7 @@ export const presets = {
   //로그인-회원가입에서 헤더 뒤로가기: “그만두기/계속하기”
   exitOrContinue: () => ({
     title: '',
-    message: '그만두시겠어요?',
+    message: '회원가입을 그만두시겠어요?',
     buttons: [
       { label: '그만두기', value: 'exit',    tone:'neutral' },
       { label: '계속하기', value: 'stay',    tone:'primary', autoFocus:true },
