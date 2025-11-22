@@ -1,6 +1,6 @@
 import React from "react";
 import NotifyList from './NotifyList';
-import Header from "../../components/Header/Header";
+import Header from "../../components/atoms/Header/header";
 
 export default function Notification() {
   return (

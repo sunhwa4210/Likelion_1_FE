@@ -3,7 +3,7 @@ import "./header.css";
 import { Bell } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 
-export default function Header() {
+export default function header() {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -28,7 +28,7 @@ export default function Header() {
       <div className="header__top">
         {/* 로고 클릭 시 메뉴 토글 */}
         <h1 className="header__logo" onClick={() => setOpen((v) => !v)}>
-          {location.pathname === "/" ? (
+          {location.pathname === "/"||"/all_quration" ? (
             <>
               CROSS<span>X</span>NOTE
             </>

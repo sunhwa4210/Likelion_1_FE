@@ -2,16 +2,26 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ModalProvider } from './components/Modal/ModalProvider';
-import Mypage from './pages/mypage/mypage';
+
+import Login from './pages/login/login';
+import Signup from './pages/signup/signup';
+import PersonalCuration from './pages/curation/PersonalCuration';
+import AllCuration from './pages/curation/AllCuration';
+import CurationDetail from './pages/curation/CurationDetail';
+import SocialRedirect from './pages/social/socialRedirect';
 
 export default function App() {
   return (
-    <ModalProvider>      {/* 전역 모달 컨텍스트 (그 자체는 어디 있어도 됨) */}
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Mypage />} />
-        </Routes>
-      </BrowserRouter>
+    <ModalProvider>
+      <Routes>
+        <Route path="/signup" element={<Signup />} /> 
+        <Route path="/login" element={<Login />} />
+        <Route path="/curation/personal" element={<PersonalCuration />} />
+        <Route path="/curation" element={<AllCuration />} />
+        <Route path="/curation/:id" element={<CurationDetail />} />
+        <Route path="/social" element={<SocialRedirect />} />
+      </Routes>
     </ModalProvider>
   );
 }
+    

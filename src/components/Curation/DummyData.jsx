@@ -10,7 +10,7 @@ import img3 from "./assets/beauty.jpg";
 export const DUMMY_CURATION_DATA = [
     {
         id: 1,
-        imageUrl: img1,
+        imageUrl: "",
         insightBadge: true,
         fieldBadges: ['예술', '철학', '심리'],
         content: 'Lorem ipsum dolor sit amet consectetur. Id posuere fermentum duis pellentesque.',
@@ -21,11 +21,13 @@ export const DUMMY_CURATION_DATA = [
             'Lorem ipsum dolor sit amet consectetur. Id posuere fermentum duis pellentesque.',
             'Faucibus eget ac vitae turpis faucibus cras sit amet. Nulla tellus id morbi duis condimentum. Sed purus elementum orci vestibulum pulvinar integer ultrices sed. Sapien imperdiet accumsan habitant in vestibulum nisi ante bibendum massa.',
             'Lorem ipsum dolor sit amet consectetur. Faucibus eget ac vitae turpis faucibus cras sit amet. Nulla tellus id morbi duis condimentum. Sed purus elementum orci vestibulum pulvinar.'
-        ]
+        ],
+        embedType: "youtube",         // 'youtube' | 'link' | null
+        embedUrl: "https://youtu.be/SbJqR-S25vs?si=txB9HszqGvqImXep",
     },
     {
         id: 2,
-        imageUrl: img2,
+        imageUrl: "",
         crossNoteBadge: true,
         fieldBadges: ['AI'],
         content: 'Lorem ipsum dolor sit amet consectetur. Id posuere fermentum duis pellentesque.',
@@ -40,7 +42,7 @@ export const DUMMY_CURATION_DATA = [
     },
     {
         id: 3,
-        imageUrl: img3,
+        imageUrl: "",
         bestCalumBadge: true,
         fieldBadges: ['경제', '기계'],
         content: 'Lorem ipsum dolor sit amet consectetur. Id posuere fermentum duis pellentesque.',

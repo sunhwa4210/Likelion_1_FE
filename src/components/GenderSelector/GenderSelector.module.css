@@ -1,0 +1,76 @@
+.genderWrapper {
+  width: 100%;
+}
+
+/* 라벨 */
+.genderTitle {
+color: #000;
+font-feature-settings: 'liga' off, 'clig' off;
+
+font-family: 'Inter';
+font-size: 14px;
+font-style: normal;
+font-weight: 600;
+line-height: normal;
+align-self: stretch;
+
+height: 17px;
+width: 100%;
+}
+
+/* 옵션 전체 라인 */
+.genderOptions {
+  display: flex;
+  gap: 40px;
+  align-items: center;
+}
+
+/* 각각의 "□ 남성", "□ 여성" */
+.genderItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+
+  border: none;
+  background: transparent;
+  padding: 0;
+}
+
+/* 체크박스 네모 */
+.genderCheckbox {
+width: 16px;
+height: 16px;
+aspect-ratio: 1/1;
+border-radius: 4px;
+border: 2px solid var(--primary-30, #39A2A5);
+box-sizing: border-box;
+position: relative;
+}
+
+/* 텍스트 */
+.genderLabel {
+color: var(--gray-60, #191919);
+text-align: center;
+font-feature-settings: 'liga' off, 'clig' off;
+
+font-family: Inter;
+font-size: 14px;
+font-style: normal;
+font-weight: 600;
+line-height: normal;
+}
+
+/* 활성 상태 (CSS Modules 방식으로 바꿈) */
+.active .genderCheckbox {
+  border: 2px solid var(--primary-30, #39A2A5);
+  background: var(--primary-30, #39A2A5);
+}
+
+.active .genderCheckbox::after {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border-radius: 3px;
+  background-color: var(--primary-30, #39a2a5);
+}

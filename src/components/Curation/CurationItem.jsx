@@ -11,6 +11,7 @@ import CategoryXselector from "../Badges/CategoryXselector"
 import { categories } from "../Badges/CategoryData";
 
 import styles from './CurationItem.module.css';
+import { useNavigate } from "react-router-dom";
 
 const findCategoryItem = (label) => {
     // 공백을 제거해 정확히 일치하는 카테고리 찾기 
@@ -34,15 +35,12 @@ const CurationItem = ({
     isBookmarked, // 북마크 
     cardWidth = DEFAULT_WIDTH, // 크기 
     cardHeight = DEFAULT_HEIGHT, // 크기
+    onBookmarkClick,
+    onClick, 
     
-    // ********** 새로 추가된 Props **********
-    onItemClick, // 아이템 전체 클릭 이벤트 핸들러
-    onBookmarkClick // 북마크 아이콘 클릭 이벤트 핸들러
-    // ****************************************
-
 }) => {
 
-    console.log('CurationItem isBookmarked 값:', isBookmarked, typeof isBookmarked);
+    const navigate = useNavigate();
 
     // Props로 크기 가져오기 
     const cardStyle = { width: cardWidth, height: cardHeight, };
@@ -56,7 +54,7 @@ const CurationItem = ({
     <div  
       className={styles.curationCard} 
       style={cardStyle}
-      onClick={onItemClick} // 전체를 클릭할 때 호출
+      onClick={onClick} // 전체를 클릭할 때 호출
     >
 
       {/* -- 헤더 영역 --  */}

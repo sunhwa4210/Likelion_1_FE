@@ -3,7 +3,7 @@ export const presets = {
   //로그인-회원가입에서 헤더 뒤로가기: “그만두기/계속하기”
   exitOrContinue: () => ({
     title: '',
-    message: '그만두시겠어요?',
+    message: '회원가입을 그만두시겠어요?',
     buttons: [
       { label: '그만두기', value: 'exit',    tone:'neutral' },
       { label: '계속하기', value: 'stay',    tone:'primary', autoFocus:true },
@@ -93,7 +93,7 @@ export const presets = {
     ],
   }),
 
-  // 🚨 [새로 추가] 알림 전체 읽음처리 확인
+  // [새로 추가] 알림 전체 읽음처리 확인
   confirmReadAll: () => ({
     title: '', 
     message: '모든 알림을 읽음처리 할까요?',
@@ -103,7 +103,7 @@ export const presets = {
     ],
   }),
 
-  // 🚨 [새로 추가] 알림 전체 삭제 확인
+  // [새로 추가] 알림 전체 삭제 확인
   confirmDeleteAll: () => ({
     title: '', 
     message: '모든 알림을 창에서 삭제할까요?',

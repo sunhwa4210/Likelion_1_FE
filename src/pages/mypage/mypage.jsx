@@ -2,7 +2,7 @@ import React from "react";
 import UserProfile from "./UserProfile";
 import ReportRadar from "./ReportRadar";
 import MenuReport from "./MenuReport";
-// import Globalheader from "../../components/atoms/header/header";
+import Header from "../../components/atoms/Header/header";
 
 export default function Mypage() {
   return (
