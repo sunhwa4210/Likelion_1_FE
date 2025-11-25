@@ -1,4 +1,8 @@
+<<<<<<< HEAD
+import React, { useState, useEffect } from "react";
+=======
 import React, { useState, useEffect } from 'react';
+>>>>>>> 46e7172cd8885afca036053b9cb7c84ae7d9c88c
 import CategoryButton from './CategoryButton';
 import { COLOR_THEMES } from './CategoryData';
 
