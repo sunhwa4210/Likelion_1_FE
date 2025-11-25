@@ -3,7 +3,7 @@ import "./header.css";
 import { Bell } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 
-export default function header() {
+export default function Globalheader() {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();

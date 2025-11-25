@@ -16,8 +16,8 @@ import styles from "./signup.module.css";
 
 
 export default function Signup() {
-  //const API_BASE = process.env.REACT_APP_API_URL || "";
-  const API_BASE="";
+  const API_BASE = process.env.REACT_APP_API_URL || "";
+  //const API_BASE="";
 
   //현재 단계
   const [step,setStep]=useState(1);

@@ -18,13 +18,14 @@ const BookmarkIcon = ({
     onClick, // ⭐ 클릭 이벤트 핸들러 (상태 변경 요청) 
     ...restProps 
 }) => {
-    const finalStrokeColor = isClicked ? 'none' : defaultColor;
-    const finalFillColor = isClicked ? activeColor : 'none';
 
-    const handleClick = (e) => {
+    const finalStrokeColor = isMarked ? 'none' : defaultColor;
+    const finalFillColor = isMarked ? activeColor : 'none';
+
+    /*const handleClick = (e) => {
         setClicked(prev => !prev);
         e.stopPropagation()
-    };
+    };*/
 
     return (
         <svg 
