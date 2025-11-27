@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom'; // ✅ Router 제거
 import { ModalProvider } from './components/Modal/ModalProvider';
 
 // Curation 관련 페이지
@@ -33,39 +33,38 @@ import SocialRedirect from './pages/social/socialRedirect';
 export default function App() {
   return (
     <ModalProvider>
-      <BrowserRouter>
-        <Routes>
-          {/* 메인 / 큐레이션 영역 */}
-          <Route path="/" element={<CurationPage />} />
-          <Route path="/curation" element={<AllCuration />} />
-          <Route path="/curation/personal" element={<PersonalCuration />} />
-          <Route path="/curation/:id" element={<CurationDetail />} />
+      {/* ✅ 여기서 더 이상 Router를 쓰지 않습니다 */}
+      <Routes>
+        {/* 메인 / 큐레이션 영역 */}
+        <Route path="/" element={<CurationPage />} />
+        <Route path="/curation" element={<AllCuration />} />
+        <Route path="/curation/personal" element={<PersonalCuration />} />
+        <Route path="/curation/:id" element={<CurationDetail />} />
 
-          {/* 밸런스 게임 */}
-          <Route path="/balance-game" element={<BalanceGamePage />} />
+        {/* 밸런스 게임 */}
+        <Route path="/balance-game" element={<BalanceGamePage />} />
 
-          {/* 컬럼 */}
-          <Route path="/column" element={<ColumnPage />} />
-          <Route path="/columnwrite" element={<ColumnWrite />} />
-          <Route path="/columnread" element={<ColumnRead />} />
+        {/* 컬럼 */}
+        <Route path="/column" element={<ColumnPage />} />
+        <Route path="/columnwrite" element={<ColumnWrite />} />
+        <Route path="/columnread" element={<ColumnRead />} />
 
-          {/* QnA */}
-          <Route path="/qna" element={<QnaPage />} />
-          <Route path="/qnawrite" element={<QnaWrite />} />
-          <Route path="/qnadetail" element={<QnaDetail />} />
+        {/* QnA */}
+        <Route path="/qna" element={<QnaPage />} />
+        <Route path="/qnawrite" element={<QnaWrite />} />
+        <Route path="/qnadetail" element={<QnaDetail />} />
 
-          {/* 유저 / 마이페이지 / 알림 */}
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/mypage" element={<MyPage />} />
-          <Route path="/notification" element={<NotificationPage />} />
+        {/* 유저 / 마이페이지 / 알림 */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/mypage" element={<MyPage />} />
+        <Route path="/notification" element={<NotificationPage />} />
 
-          {/* 기타 */}
-          <Route path="/modal-test" element={<SomePage />} />
-          <Route path="/api-test" element={<ApiTestPage />} />
-          <Route path="/social" element={<SocialRedirect />} />
-        </Routes>
-      </BrowserRouter>
+        {/* 기타 */}
+        <Route path="/modal-test" element={<SomePage />} />
+        <Route path="/api-test" element={<ApiTestPage />} />
+        <Route path="/social" element={<SocialRedirect />} />
+      </Routes>
     </ModalProvider>
   );
 }
