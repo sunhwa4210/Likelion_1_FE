@@ -29,10 +29,6 @@ export default function ContentEmbed({ type, url }) {
         target="_blank"
         rel="noreferrer"
       >
-        <div className="link-embed-inner">
-          <p className="link-embed-label">원문에서 보기</p>
-          <p className="link-embed-url">{url}</p>
-        </div>
       </a>
     );
   }

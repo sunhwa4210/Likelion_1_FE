@@ -1,5 +1,6 @@
 import React,{useState, useEffect} from "react";
 import { useNavigate } from 'react-router-dom';
+import axios from "axios";
 import styles from './PersonalCuration.module.css';
 import Header from "../../components/atoms/header/header";
 import CurationItem from "../../components/Curation/CurationItem"
@@ -7,16 +8,68 @@ import { useAuth } from "../../contexts/AuthContext";
 
 import {DUMMY_CURATION_DATA} from '../../components/Curation/DummyData';
 
+const API_BASE = process.env.REACT_APP_API_BASE_URL || "";
+
 export default function PersonalCuration() {
   // 사용자 정보 가져오기 
-  const { user } = useAuth();
-
+  const { user,accessToken } = useAuth();
   const navigate = useNavigate();
 
-  //(임시): 더미데이터 가져오기
-  const curations=DUMMY_CURATION_DATA;
+  //(임시): 더미데이터 가져오기 (나중에 주석 처리)
+  const [curations, setCurations] = useState(DUMMY_CURATION_DATA);
+  //const [curations,setCurations] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  //실제 API 연동 코드
+  //API 연동
+  useEffect(()=>{
+    const fetchPersonalCurations = async () => {
+      try{
+        setLoading(true);
+        setError("");
+
+        const headers = accessToken
+        ?{Authorization:`Bearer ${accessToken}`}
+        :{};
+
+        const res = await axios.get(`${API_BASE}/curation/personal`,{
+          headers,
+        });
+        
+        const data = res.data || [];
+        
+        const mapped = data.map((item)=>({
+          
+          id: item.curationId,
+          
+          imageUrl: item.imageUrl || "",
+          fieldBadges: item.crossCategoryName
+            ? [item.categoryName, item.crossCategoryName]
+            : [item.categoryName],
+          insightBadge: item.curationType ==="INSIGHT",
+          crossNoteBadge: item.curationType ==="CROSSNOTE",
+          bestColumnBadge: item.bestColumn === true,
+          content: {
+            title: item.title,
+            description: item.description,
+            sourceUrl: item.sourceUrl,
+            },
+            likes: item.likeCount ?? 0,
+            isBookmarked: item.scraped ?? false,
+        }));
+
+        setCurations(mapped);
+      } catch (err) {
+        console.error(err);
+        setError("개인화 큐레이션을 불러오지 못했어요.");
+      }
+      finally { setLoading(false);}
+    };
+
+    //로그인 상태에서만 호출 (accessToken 없으면 나감)
+    if (!accessToken) return;
+    fetchPersonalCurations();
+  },[accessToken]);
 
   //큐레이션 세부정보 보기
   const handleCurationClick = (item) => {

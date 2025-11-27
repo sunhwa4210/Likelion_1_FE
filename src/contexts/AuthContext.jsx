@@ -11,7 +11,8 @@ export function AuthProvider({ children }) {
   const [authLoading, setAuthLoading] = useState(true); 
 
   // 백엔드 주소 (나중에 const API_BASE = process.env.REACT_APP_API_URL || ""; 로 변경)
-  const API_BASE = "";
+  const API_BASE = process.env.REACT_APP_API_BASE_URL || "";
+
   // 내 정보 조회
   const fetchMe = async (token = accessToken) => {
     if (!token) return;

@@ -14,7 +14,7 @@ export default function Header() {
   };
 
   const titleMap = {
-    "/": "CROSSXNOTE",
+    "/curation": "CROSSXNOTE",
     "/balance-game": "BALANCE GAME",
     "/column": "COLUMN",
     "/qna": "QnA",
@@ -28,7 +28,7 @@ export default function Header() {
       <div className="header__top">
         {/* 로고 클릭 시 메뉴 토글 */}
         <h1 className="header__logo" onClick={() => setOpen((v) => !v)}>
-          {location.pathname === "/"||"/all_quration" ? (
+          {location.pathname === "/"||"/curation" ? (
             <>
               CROSS<span>X</span>NOTE
             </>
@@ -45,7 +45,7 @@ export default function Header() {
       {open && (
         <nav className="header__menu" aria-label="주 메뉴">
           <ul>
-            <li onClick={() => handleNavigate("/")}>CROSSXNOTE</li>
+            <li onClick={() => handleNavigate("/curation")}>CROSSXNOTE</li>
             <li onClick={() => handleNavigate("/balance-game")}>BALANCE GAME</li>
             <li onClick={() => handleNavigate("/column")}>COLUMN</li>
             <li onClick={() => handleNavigate("/qna")}>QnA</li>

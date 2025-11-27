@@ -98,7 +98,7 @@ export default function CurationFilter ({value, onChange, isOpen}) {
                         <p>유형</p>
                     </div>
                     
-                    <dix className={styles.categoryBox}>
+                    <div className={styles.categoryBox}>
                         <CategoryXselector 
                         categoriesToDisplay={curationType} 
                         removableMode={true}S
@@ -107,7 +107,7 @@ export default function CurationFilter ({value, onChange, isOpen}) {
                         updateInternal('types', selectedLabels)
                         }
                         />  
-                    </dix> 
+                    </div> 
 
                 </div>
 

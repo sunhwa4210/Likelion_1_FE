@@ -16,8 +16,7 @@ import styles from "./signup.module.css";
 
 
 export default function Signup() {
-  //const API_BASE = process.env.REACT_APP_API_URL || "";
-  const API_BASE="";
+  const API_BASE = process.env.REACT_APP_API_BASE_URL || "";
 
   //현재 단계
   const [step,setStep]=useState(1);
@@ -163,7 +162,7 @@ export default function Signup() {
       };
 
       //2.추가정보
-      await axios.post('/onboarding/basic',
+      await axios.post(`${API_BASE}/onboarding/basic`,
         { gender: basic.gender, birthdate: basic.birthdate },
         authConfig
       );

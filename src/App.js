@@ -18,8 +18,10 @@ export default function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/curation/personal" element={<PersonalCuration />} />
         <Route path="/curation" element={<AllCuration />} />
-        <Route path="/curation/:id" element={<CurationDetail />} />
+        <Route path="/curation/:curationId" element={<CurationDetail />} />
         <Route path="/social" element={<SocialRedirect />} />
+        <Route path="/auth/kakao/callback" element={<SocialRedirect />} />
+
       </Routes>
     </ModalProvider>
   );
