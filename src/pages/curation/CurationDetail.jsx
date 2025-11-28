@@ -12,51 +12,24 @@ import BookmarkIcon from "../../components/icons/BookmarkIcon";
 import ContentEmbed from "../../components/Curation/ContentEmbed";
 import CategoryXselector from "../../components/Badges/CategoryXselector";
 import { categories } from "../../components/Badges/CategoryData";
-//import { useAuth } from "../../contexts/AuthContext"; API 연결 시 살리기
+import { useAuth} from "../../contexts/AuthContext";
+ 
 
 import styles from './CurationDetail.module.css';
 
 const API_BASE = process.env.REACT_APP_API_BASE_URL || "";
 
-//임시 더미데이터 (API 연결후 삭제)
-const DUMMY_DETAIL = {
-  curationId: 30,
-  title: "궤도가 들려주는 화학 이야기!",
-  description:
-    "Lorem ipsum dolor sit amet consectetur. Id posuere fermentum duis pellentesque.\n\n" +
-    "Lorem ipsum dolor sit amet consectetur. Faucibus eget ac vitae turpis faucibus cras sit amet. Nulla tellus id morbi duis condimentum. Sed purus elementum orci vestibulum pulvinar integer ultrices sed.",
-  imageUrl: "https://via.placeholder.com/600x300?text=Thumbnail",
-  sourceUrl: "https://www.youtube.com/watch?v=dummy",
-  curationType: "CROSSNOTE", // INSIGHT | CROSSNOTE | BEST_COLUMN
-  categoryName: "화학",
-  crossCategoryName: "경제",
-  likeCount: 100,
-  scrapCount: 12,
-};
 
 export default function CurationDetail() {
   const { curationId } = useParams();        
-  //const {accessToken} = useAuth();
+  const {accessToken} = useAuth();
 
   const [data, setData] = useState(null);   // 서버에서 받은 원본 데이터
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   // 상세 데이터 조회
-  useEffect(() => {
-    //더미데이터용 임시 코드 (나중에 지우기)
-    try {
-      setLoading(true);
-      setError("");
-      setData(DUMMY_DETAIL);
-    } catch (e) {
-      setError("큐레이션 상세 데이터를 불러오지 못했습니다. (더미)");
-    } finally {
-      setLoading(false);
-    }
-
-
-    /*
+  useEffect(() => {  
     if (!accessToken || !curationId) return;
 
     const fetchDetail = async () => {
@@ -79,7 +52,7 @@ export default function CurationDetail() {
       }
     };
 
-    fetchDetail();*/
+    fetchDetail();
   }, [curationId]);
 
   //로딩, 에러, 데이터 없음 시

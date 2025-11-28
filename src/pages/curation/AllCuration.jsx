@@ -10,8 +10,6 @@ import CurationFilter from "../../components/Filter/CurationFilter";
 import CurationItem from "../../components/Curation/CurationItem";
 import { useAuth } from "../../contexts/AuthContext";
 
-//임시 더미데이터 (API 연결 후 삭제 예정)
-import { DUMMY_CURATION_DATA } from "../../components/Curation/DummyData";
 
 //Category Name -> Id 매핑
 const CATEGORY_NAME_TO_ID = {
@@ -96,10 +94,8 @@ export default function AllCuration() {
     sport: [],        // 스포츠·라이프스타일
   });
   
-  //큐레이션 (일단 더미데이터 사용)
-  const [curations, setCurations] = useState(DUMMY_CURATION_DATA);
-  //const [curations,setCurations] = useState([]); (API 연결 시 주석 해제)
 
+  const [curations,setCurations] = useState([]);
    
     //SearchBar에서 넘어오는 핸들러들
     const handleFilterToggle = () => {

@@ -6,7 +6,6 @@ import Header from "../../components/atoms/header/header";
 import CurationItem from "../../components/Curation/CurationItem"
 import { useAuth } from "../../contexts/AuthContext";
 
-import {DUMMY_CURATION_DATA} from '../../components/Curation/DummyData';
 
 const API_BASE = process.env.REACT_APP_API_BASE_URL || "";
 
@@ -15,9 +14,9 @@ export default function PersonalCuration() {
   const { user,accessToken } = useAuth();
   const navigate = useNavigate();
 
-  //(임시): 더미데이터 가져오기 (나중에 주석 처리)
-  const [curations, setCurations] = useState(DUMMY_CURATION_DATA);
-  //const [curations,setCurations] = useState([]);
+  const userName = user?.name ?? "사용자";
+
+  const [curations,setCurations] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -25,6 +24,7 @@ export default function PersonalCuration() {
   useEffect(()=>{
     const fetchPersonalCurations = async () => {
       try{
+        console.log("개인화 큐레이션 불러오기");
         setLoading(true);
         setError("");
 
@@ -35,6 +35,7 @@ export default function PersonalCuration() {
         const res = await axios.get(`${API_BASE}/curation/personal`,{
           headers,
         });
+        console.log("[DEBUG] raw personal data:", res.data)
         
         const data = res.data || [];
         
@@ -57,8 +58,10 @@ export default function PersonalCuration() {
             likes: item.likeCount ?? 0,
             isBookmarked: item.scraped ?? false,
         }));
+        console.log("[DEBUG] mapped curations:", mapped);
 
         setCurations(mapped);
+        console.log("개인화 큐레이션 불러오기 끝");
       } catch (err) {
         console.error(err);
         setError("개인화 큐레이션을 불러오지 못했어요.");
@@ -88,8 +91,7 @@ export default function PersonalCuration() {
       <Header/>
       <div className={styles["title-box"]}>
         <h1>오늘의 큐레이션</h1>
-        <p>슈니님이 선택한 관심/전문 분야의 최신 큐레이션으로 가져왔어요</p>
-        {/* <p>{user.name}님이 선택한 관심/전문 분야의 최신 큐레이션으로 가져왔어요</p> */}
+        <p>{userName}님이 선택한 관심/전문 분야의 최신 큐레이션으로 가져왔어요</p> 
       </div>
       
       <div className={styles["curation-box"]}>

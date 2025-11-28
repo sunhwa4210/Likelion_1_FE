@@ -152,9 +152,15 @@ export default function Signup() {
       setLoading(true);
       
       //1.회원가입
+      console.log("[STEP] 1. signup 요청 시작");
       await axios.post(`${API_BASE}/auth/local/signup`, signup);
+      console.log("[STEP] 1. signup 성공");
+
       //1-1. 자동 회원가입
+      console.log("[STEP] 2. loginLocal 요청 시작");
       const loginRes = await loginLocal(signup.email, signup.password);
+      console.log("[STEP] 2. loginLocal 성공", loginRes);
+
       const {accessToken} = loginRes;
 
       const authConfig={
@@ -162,29 +168,42 @@ export default function Signup() {
       };
 
       //2.추가정보
+      console.log("[STEP] 3. basic 요청 시작");
       await axios.post(`${API_BASE}/onboarding/basic`,
         { gender: basic.gender, birthdate: basic.birthdate },
         authConfig
       );
+      console.log("[STEP] 3. basic 요청 완료");
+
       //3.관심분야
+      console.log("[STEP] 4. 관심분야 요청 시작");
       await axios.post(
        `${API_BASE}/onboarding/interests`,
         { interestNames: interests },
         authConfig
       );
+      console.log("[STEP] 4. 관심분야 요청 완료");
+
       //4.전문분야
+      console.log("[STEP] 5. 전문분야 요청 시작");
       await axios.post(
         `${API_BASE}/onboarding/expertise`,
         { expertiseNames: expertise },
         authConfig
       );
+      console.log("[STEP] 5. 전문분야 요청 완료");
+
       //5.큐레이션 수준
+      console.log("[STEP] 6. 큐레이션 수준 요청 시작");
       await axios.post(
       `${API_BASE}/onboarding/curation`,
       { curationLevel },
       authConfig
      );
-    } catch (err) {setError(err.response?.data?.message||err.message);}
+     console.log("[STEP] 6. 관심분야 요청 완료");
+    } catch (err) {
+      console.error("[ERROR expertise]", err.response?.data || err.message);
+      setError(err.response?.data?.message||err.message);}
     finally{setLoading(false);
       console.log(formData);
     }
@@ -205,7 +224,7 @@ export default function Signup() {
   //step1, step2, step3의 경우 백버튼 누르면, '회원가입을 그만두시겠어요?' 모달 뜨고, 모달의 취소 버튼 누르면 진입화면으로 이동
   const onBackLogin = async () => {
     const res = await open(presets.exitOrContinue());
-    if (res === 'exit') nav('/Login');          
+    if (res === 'exit') nav('/login');          
     // 'stay'면 아무 것도 안 함
   };
 
