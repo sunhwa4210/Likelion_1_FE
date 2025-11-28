@@ -1,0 +1,107 @@
+
+.app-wrapper {
+  width: 100%;
+}
+
+.contentWrapper {
+  margin-bottom: 40px;
+  padding: 40px 14px;
+}
+
+.quizStyle2 {
+  margin-top: 60px;
+}
+
+.titleContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: 20px;
+}
+
+.title {
+  font-weight: 500;
+  font-size: 18px;
+}
+
+.subTitle {
+  font-weight: 500;
+  font-size: 12px;
+  color: #797a79;
+}
+
+.card {
+  padding: 30px 30px 40px 30px;
+  border-radius: 12px;
+  box-shadow: 0 0 10px 4px rgba(0, 0, 0, 0.05);
+}
+
+.categoryDescription {
+  font-size: 12px;
+}
+
+.dropdown {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.dropdownArrow {
+  border: none;
+  background-color: white;
+}
+
+.dropdownList {
+  font-size: 12px;
+}
+
+.badgeLarge {
+  width: 58px;
+  height: 27px;
+  padding: 6px 12px;
+  border-radius: 24px;
+  border: solid 1px #2986e6;
+  background-color: #2986e61a;
+  font-size: 12px;
+  color: #2986e6;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.question {
+  font-size: 16px;
+  font-weight: 500;
+  margin-top: 20px;
+  margin-bottom: 30px;
+}
+
+.select {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.buttonO {
+  width: 287px;
+  height: 50px;
+  border-radius: 12px;
+  border: solid 1px #39a2a5;
+  background-color: white;
+  color: #39a2a5;
+  font-size: 20px;
+}
+
+.buttonX {
+  width: 287px;
+  height: 50px;
+  border-radius: 12px;
+  border: solid 1px #d93d3e;
+  background-color: white;
+  color: #d93d3e;
+  font-size: 20px;
+}

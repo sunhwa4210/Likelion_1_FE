@@ -2,7 +2,7 @@ import React,{useState, useEffect} from "react";
 import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 import styles from './PersonalCuration.module.css';
-import Header from "../../components/atoms/header/header";
+import Header from "../../components/atoms/Header/header";
 import CurationItem from "../../components/Curation/CurationItem"
 import { useAuth } from "../../contexts/AuthContext";
 

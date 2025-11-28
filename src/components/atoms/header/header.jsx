@@ -1,9 +1,10 @@
+
 import React, { useState } from "react";
-import "./header.css";
 import { Bell } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
+import styles from "./header.module.css"; 
 
-export default function Header() {
+export default function header() {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -24,9 +25,10 @@ export default function Header() {
   const currentTitle = titleMap[location.pathname] || "CROSSXNOTE";
 
   return (
-    <header className="header">
-      <div className="header__top">
+    <header className={styles.header}>
+      <div className={styles.headerTop}>
         {/* 로고 클릭 시 메뉴 토글 */}
+
         <h1 className="header__logo" onClick={() => setOpen((v) => !v)}>
           {location.pathname === "/"||"/curation" ? (
             <>
@@ -37,16 +39,22 @@ export default function Header() {
           )}
         </h1>
 
-        <button className="header__icon" aria-label="알림">
+        <button className={styles.headerIcon} aria-label="알림">
           <Bell size={20} />
         </button>
       </div>
 
       {open && (
-        <nav className="header__menu" aria-label="주 메뉴">
+        <nav className={styles.headerMenu} aria-label="주 메뉴">
           <ul>
             <li onClick={() => handleNavigate("/curation")}>CROSSXNOTE</li>
+<<<<<<< HEAD
             <li onClick={() => handleNavigate("/balance-game")}>BALANCE GAME</li>
+=======
+            <li onClick={() => handleNavigate("/balance-game")}>
+              BALANCE GAME
+            </li>
+>>>>>>> main
             <li onClick={() => handleNavigate("/column")}>COLUMN</li>
             <li onClick={() => handleNavigate("/qna")}>QnA</li>
             <li onClick={() => handleNavigate("/mypage")}>MY PAGE</li>

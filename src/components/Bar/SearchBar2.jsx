@@ -5,7 +5,7 @@ import FilterIcon from '../icons/FilterIcon';
 import SortLatest from './SortLatest';
 import SortPopular from './SortPopular';
 import SearchIcon from './SearchIcon';
-import './SearchBar.css'
+import styles from './SearchBar.module.css'
 
 // 컴포넌트 최대 너비 설정 (값 전달 없을 시, 기본값을 347px로 정의)
 function SearchBar2({ maxWidth = '347px' }) {
@@ -36,19 +36,18 @@ function SearchBar2({ maxWidth = '347px' }) {
   };
 
   return (
-      <div className="search-filter-container"
+      <div className={styles.searchFilterContainer}
         style={{ maxWidth: maxWidth }} // maxWidth Props로 받아오기 
       > 
       {/* 1. 검색 입력 영역 */}
-      {/* isFocused 상태에 따라 스타일 변경 */}
-        <div className={`search-input-wrapper ${isFocused ? 'focused' : ''}`}>
+        <div className={`${styles.searchInputWrapper} ${isFocused ? styles.focused : ''}`}>
           <SearchIcon color={isFocused ? '#39A2A5' : '#ACADAC'} />
           <input
             type="text"
             placeholder="검색어를 입력하거나, 필터로 원하는 조건을 선택하세요"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="search-input"
+            className={styles.searchInput}
 
             onFocus={handleFocus}
             onBlur={handleBlur}
@@ -56,24 +55,27 @@ function SearchBar2({ maxWidth = '347px' }) {
         </div>
 
         {/* 2. 정렬 버튼 */}
-        <div className="sort-filter-area">
+        <div className={styles.sortFilterArea}>
           
-          <div className="sort-options">
+          <div className={styles.sortOptions}>
             <SortLatest 
               isActive={activeSort === 'latest'}
               onClick={() => handleSortClick('latest')}
+              styles={styles} // 스타일 객체 전달
             />
 
             <SortPopular 
               isActive={activeSort === 'popular'}
               onClick={() => handleSortClick('popular')}
+              styles={styles} // 스타일 객체 전달
             />
+            {/* SortComments 컴포넌트가 제거되었습니다. */}
           </div>
 
           {/* 3. 필터 버튼 */}
           <button
             onClick={handleFilterClick}
-            className="filter-button"
+            className={styles.filterButton}
           >
           <FilterIcon /> 
           </button>

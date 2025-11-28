@@ -1,3 +1,5 @@
+
+
 .header {
   position: relative;
   width: 100%;
@@ -8,25 +10,26 @@
 }
 
 /* 상단 로고와 아이콘 배치 */
-.header__top {
+.headerTop {
   display: flex;
   align-items: center;
   justify-content: space-between;
 
 }
 
-.header__logo {
+
+.headerLogo {
   font-size: 28px;
   font-weight: 700;
   color: #000;
   margin: 0;
 }
 
-.header__logo span {
+.headerLogo span {
   color: #59b7b5; /* X 색상 */
 }
 
-.header__icon {
+.headerIcon {
   background: none;
   border: none;
   cursor: pointer;
@@ -34,33 +37,38 @@
 }
 
 /* 드롭다운 메뉴 */
-.header__menu {
+.headerMenu {
   position: absolute;
   top: 60px;
   left: 0;
   width: 100%;
   height: 262px;
-  background: linear-gradient(to bottom, rgba(255, 255, 255, 1), rgba(231, 244, 245, 0.8));
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 1),
+    rgba(231, 244, 245, 0.8)
+  );
   padding: 20px 24px;
   z-index: 100;
   animation: fadeIn 0.3s ease;
 }
 
-.header__menu ul {
+.headerMenu ul {
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
-.header__menu li {
+.headerMenu li {
   font-weight: 600;
   font-size: 18px;
   margin-bottom: 16px;
   color: #9c9c9c;
   transition: color 0.2s ease;
+  cursor: pointer;
 }
 
-.header__menu li:hover {
+.headerMenu li:hover {
   color: #000;
 }
 

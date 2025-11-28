@@ -3,8 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import styles from "./AllCuration.module.css";
 
-//컴포넌트
-import Header from "../../components/atoms/header/header";
+import Header from "../../components/atoms/Header/header";
 import SearchBar1 from "../../components/Bar/SearchBar1";
 import CurationFilter from "../../components/Filter/CurationFilter";
 import CurationItem from "../../components/Curation/CurationItem";
