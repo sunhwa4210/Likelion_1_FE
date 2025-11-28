@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import styles from "./AllCuration.module.css";
 
-import Header from "../../components/atoms/Header/header";
+import GlobalHeader from "../../components/atoms/header/GlobalHeader";
 import SearchBar1 from "../../components/Bar/SearchBar1";
 import CurationFilter from "../../components/Filter/CurationFilter";
 import CurationItem from "../../components/Curation/CurationItem";
@@ -218,7 +218,7 @@ export default function AllCuration() {
 
     //전체 큐레이션 피드
     <div className="app-wrapper">
-        <Header/>
+        <GlobalHeader/>
         <SearchBar1         
           onFilterClick={handleFilterToggle}
           onSearchChange={handleSearchChange}

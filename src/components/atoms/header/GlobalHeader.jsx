@@ -2,9 +2,9 @@
 import React, { useState } from "react";
 import { Bell } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
-import styles from "./header.module.css"; 
+import styles from "./GlobalHeader.module.css"; 
 
-export default function header() {
+export default function GlobalHeader() {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -48,13 +48,7 @@ export default function header() {
         <nav className={styles.headerMenu} aria-label="주 메뉴">
           <ul>
             <li onClick={() => handleNavigate("/curation")}>CROSSXNOTE</li>
-<<<<<<< HEAD
             <li onClick={() => handleNavigate("/balance-game")}>BALANCE GAME</li>
-=======
-            <li onClick={() => handleNavigate("/balance-game")}>
-              BALANCE GAME
-            </li>
->>>>>>> main
             <li onClick={() => handleNavigate("/column")}>COLUMN</li>
             <li onClick={() => handleNavigate("/qna")}>QnA</li>
             <li onClick={() => handleNavigate("/mypage")}>MY PAGE</li>

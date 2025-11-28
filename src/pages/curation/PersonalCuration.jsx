@@ -2,7 +2,7 @@ import React,{useState, useEffect} from "react";
 import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 import styles from './PersonalCuration.module.css';
-import Header from "../../components/atoms/Header/header";
+import GlobalHeader from "../../components/atoms/header/GlobalHeader";
 import CurationItem from "../../components/Curation/CurationItem"
 import { useAuth } from "../../contexts/AuthContext";
 
@@ -88,7 +88,7 @@ export default function PersonalCuration() {
     //일단 개인화 큐레이션 피드 먼저
     <div className="app-wrapper">
     <div className={styles["personalCuration-wrapper"]}>
-      <Header/>
+      <GlobalHeader/>
       <div className={styles["title-box"]}>
         <h1>오늘의 큐레이션</h1>
         <p>{userName}님이 선택한 관심/전문 분야의 최신 큐레이션으로 가져왔어요</p> 

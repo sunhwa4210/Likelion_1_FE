@@ -4,7 +4,6 @@ import { Routes, Route } from 'react-router-dom';
 import { ModalProvider } from './components/Modal/ModalProvider';
 
 // Curation 관련 페이지
-import CurationPage from './pages/curation/curation';
 import PersonalCuration from './pages/curation/PersonalCuration';
 import AllCuration from './pages/curation/AllCuration';
 import CurationDetail from './pages/curation/CurationDetail';
@@ -27,7 +26,6 @@ import NotificationPage from './pages/notification/notification';
 
 // 기타 페이지들
 import BalanceGamePage from './pages/balancegame/balancegame';
-import SomePage from './pages/SomePage';
 import ApiTestPage from './pages/apiTest/ApiTestPage';
 import SocialRedirect from './pages/social/socialRedirect';
 
@@ -63,7 +61,6 @@ export default function App() {
           <Route path="/notification" element={<NotificationPage />} />
 
           {/* 기타 */}
-          <Route path="/modal-test" element={<SomePage />} />
           <Route path="/api-test" element={<ApiTestPage />} />
           <Route path="/auth/google/callback" element={<SocialRedirect/>}/>
           <Route path="/auth/kakao/callback" element={<SocialRedirect />} />
