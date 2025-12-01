@@ -1,29 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { fetchUserProfile } from './mock/testApi';
 import styles from './UserProfile.module.css';
 import DefalutProfileImg from './component/DefalutProfileImg';
 
-const UserProfile = () => {
-    const [profile, setProfile] = useState(null);
-    const [loading, setLoading] = useState(true);
+const UserProfile = ({data: profile, onFollowListClick}) => {
 
-    useEffect(() => {
-        const loadProfile = async () => {
-            try {
-                const data = await fetchUserProfile();
-                setProfile(data);
-            } catch (error) {
-                console.error("프로필 정보를 불러오는 데 실패했습니다. ")
-            } finally {
-                setLoading(false);
-            }
-        };
-        loadProfile();
-    }, []);
-
-    if (loading) {
-        return <p>로딩 중 .. </p>;
-    }
+    const handleListClick = onFollowListClick || (() => console.log('onFollowListClick prop이 전달되지 않았습니다.'));
 
     if(!profile) {
         return <p>포로필 정보를 찾을 수 없습니다.</p>;
@@ -51,13 +32,17 @@ const UserProfile = () => {
 
             <div className={styles.item}>
                 {/* 팔로워 */}
-                <div className={styles.statItem}>
+                <div className={styles.statItem}
+                    onClick={() => handleListClick('followers')}
+                >
                     <span className={styles.statLabel}>팔로워</span>
                     <span className={styles.statValue}>{profile.followers}</span>
                 </div>
 
                 {/* 팔로잉 */}
-                <div className={styles.statItem}>
+                <div className={styles.statItem}
+                    onClick={() => handleListClick('followings')}
+                >
                     <span className={styles.statLabel}>팔로잉</span>
                     <span className={styles.statValue}>{profile.following}</span>
                 </div>

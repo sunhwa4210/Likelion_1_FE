@@ -1,6 +1,9 @@
+// === 알림 페이지 === 
+// 상위 컴포넌트에서 렌더링 중 
+
 import React from "react";
 import NotifyList from './NotifyList';
-import Header from "../../components/atoms/Header/header";
+import Header from "../../components/Header/Header";
 
 export default function Notification() {
   return (

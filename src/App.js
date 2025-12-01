@@ -30,10 +30,21 @@ import SomePage from './pages/SomePage';
 import ApiTestPage from './pages/apiTest/ApiTestPage';
 import SocialRedirect from './pages/social/socialRedirect';
 
+// 마이페이지 - 정보 수정 / 스크랩한 큐레이션 / 내가 작성한 칼럼 / 내가 작성한 QnA
+import InformModify from './pages/mypage/location/modify/informModify';
+import Scrap from './pages/mypage/location/scrap/scrap';
+import WriteCalum from './pages/mypage/location/calum/writeCalum';
+import WriteQnA from './pages/mypage/location/qna/writeQnA';
+
+// 타 사용자 프로필 페이지 
+import UserprofileFollow from './pages/userprofile/userprofileFollow';
+import UserFollow from './pages/userprofile/userfollow/userfollow';
+
+
 export default function App() {
   return (
     <ModalProvider>
-      <BrowserRouter>
+      <div className='app'>
         <Routes>
           {/* 메인 / 큐레이션 영역 */}
           <Route path="/" element={<CurationPage />} />
@@ -58,14 +69,25 @@ export default function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/mypage" element={<MyPage />} />
-          <Route path="/notification" element={<NotificationPage />} />
+          <Route path="/notification" element={<NotificationPage />} /> 
+
+
+          {/* 정보 수정 / 스크랩한 큐레이션 / 내가 작성한 칼럼 / 내가 작성한 QnA */}
+          <Route path="/mypage/location/modify" element={<InformModify />} />
+          <Route path="/mypage/location/scrap" element={<Scrap />} />
+          <Route path="/mypage/location/calum" element={<WriteCalum />} />
+          <Route path="/mypage/location/qna" element={<WriteQnA />} />
+
+          {/* 타사용자 프로필 */}
+          <Route path="/users/:userId" element={<UserprofileFollow />} /> 
+          <Route path="/user/:userId/:type" element={<UserFollow />} />  
 
           {/* 기타 */}
           <Route path="/modal-test" element={<SomePage />} />
           <Route path="/api-test" element={<ApiTestPage />} />
           <Route path="/social" element={<SocialRedirect />} />
         </Routes>
-      </BrowserRouter>
+        </div>
     </ModalProvider>
   );
 }

@@ -14,6 +14,7 @@ export const uploadProfileImage = async (file) => {
     console.log(`[API Mock] 파일 업로드 요청: ${file.name}`);
 
     // ✅ 여기에 axios 또는 fetch를 이용한 POST 요청 코드가 들어가야 할 듯 
+
     
     // 3초 대기 후 성공 응답을 반환하는 Mockup (실제 네트워크 지연 시뮬레이션)
     await new Promise(resolve => setTimeout(resolve, 3000));

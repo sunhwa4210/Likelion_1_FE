@@ -1,7 +1,6 @@
 // 3개의 개별 큐레이션을 나열한 페이지입니다. (테스트용)
 import React from "react";
 import CurationItem from "./CurationItem";
-import styles from './CurationItem.module.css'
 import {DUMMY_CURATION_DATA} from './DummyData';
 
 const CurationList = ( {curations, onClick, onBookmarkClick} ) => {

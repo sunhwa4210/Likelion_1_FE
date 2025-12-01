@@ -2,9 +2,9 @@
 import React from 'react';
 import DotIcon from './DotIcon';
 
-function SortLatest({ isActive, onClick }) {
+function SortLatest({ isActive, onClick, styles }) {
     // SearchBar1.js에 정의된 .sort-option-item 및 .active 클래스를 활용
-    const className = `sort-option-item ${isActive ? 'active' : ''}`;
+    const className = `${styles.sortOptionItem} ${isActive ? styles.sortOptionItemActive : ''}`;
 
     const dotColor = isActive ? '#39A2A5' : '#ACADAC';
 

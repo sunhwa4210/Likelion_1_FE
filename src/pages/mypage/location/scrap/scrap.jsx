@@ -1,5 +1,5 @@
 import React from "react";
-import ScrapCurationDetail from "./ScrapCurationDetail";
+import ScrapCuration from "./ScrapCuration";
 
 export default function Scrap() {
   return (
@@ -8,7 +8,7 @@ export default function Scrap() {
 
       {/* 본문 */}
       <main className="content">
-        <ScrapCurationDetail />
+        <ScrapCuration />
       </main>
 
       {/* 푸터가 필요한 화면에서만 렌더 */}

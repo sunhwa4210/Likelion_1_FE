@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import CheckIcon from './component/checkIcon';
 import FilterIcon from '../../components/icons/FilterIcon';
 import LogoIcon from './component/logoIcon';
@@ -14,31 +14,6 @@ import {
   ResponsiveContainer,
   Text,
 } from 'recharts';
-
-// === 더미 API 호출 함수 ===
-const fetchChartDataFromAPI = () => {
-  return new Promise(resolve => {
-    setTimeout(() => {
-      resolve({
-        radarData: [
-          { subject: '인문사회', value: 35, fullMark: 50, color: '#2986E6' },
-          { subject: '공학·기술', value: 10, fullMark: 50, color: '#C36839' },
-          { subject: '예술·문화', value: 32, fullMark: 50, color: '#73C62F' },
-          { subject: '스포츠·\n라이프스타일', value: 15, fullMark: 50, color: '#FD88D9' },
-          { subject: '경제·경영', value: 20, fullMark: 50, color: '#9582FF' },
-          { subject: '자연과학', value: 50, fullMark: 50, color: '#FE817B' },
-        ],
-        analysisResults: [
-          '자연과학 분야를 가장 많이 공부했어요!',
-          '공학·기술과 경제·경영 분야는 많이 보지 못했어요.',
-          '에서 해당 분야를 골라 다양한 지식을 접해보세요!'
-        ],
-        userName: '슈니',
-        maxScore: 50,
-      });
-    }, 1000);
-  });
-};
 
 // 커스텀 축 제목 컴포넌트 
 const CustomPolarAngleAxisTick = ({ x, y, payload, data }) => {
@@ -98,39 +73,79 @@ const CustomPolarAngleAxisTick = ({ x, y, payload, data }) => {
 };
 
 // 메인 컴포넌트
-const ReportRadar = () => {
-  const [chartData, setChartData] = useState([]);
-  const [analysis, setAnalysis] = useState([]);
-  const [userName, setUserName] = useState('사용자');
-  const [maxScore, setMaxScore] = useState(50);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    // 데이터 로딩 로직
-    const loadData = async () => {
-      try {
-        const result = await fetchChartDataFromAPI();
-        setChartData(result.radarData);
-        setAnalysis(result.analysisResults);
-        setUserName(result.userName);
-        setMaxScore(result.maxScore);
-        setIsLoading(false);
-      } catch (error) {
-        console.error("데이터를 불러오는 데 실패했습니다:", error);
-        setIsLoading(false);
-      }
-    };
-    loadData();
-  }, []);
-
-  if (isLoading) {
-    return <div className={styles.radarLoading}>데이터를 불러오는 중입니다...</div>;
-  }
-  
-  if (!chartData || chartData.length === 0) {
+const ReportRadar = ({chartData: scores, userName}) => {
+  if (!scores || Object.keys(scores).length === 0) {
       return <div className={styles.radarNoData}>표시할 데이터가 없습니다.</div>;
   }
 
+  // Prop으로 받은 scores 데이터를 Recharts 형식에 맞게 변환
+  const radarData = Object.keys(scores).map(subject => ({
+      subject: subject,
+      value: scores[subject],
+      fullMark: 50, // API 명세가 없으므로 50으로 임시 고정
+      // 색상 로직은 필요시 추가
+  }));
+    
+  // 1. 점수와 과목명(subject) 배열 생성
+const scoreEntries = Object.entries(scores).map(([subject, value]) => ({ subject, value }));
+
+// 2. 최대 점수 찾기
+const maxValue = scoreEntries.reduce((max, current) => 
+    Math.max(max, current.value), -1
+);
+
+// 3. 최소 점수 찾기 (0점 제외)
+const nonZeroScores = scoreEntries.filter(item => item.value > 0);
+const minValue = nonZeroScores.length > 0 
+    ? nonZeroScores.reduce((min, current) => 
+        Math.min(min, current.value), Infinity
+      )
+    : null;
+
+// 4. 동점 분야 목록 추출
+const mostStudiedItems = scoreEntries.filter(item => item.value === maxValue);
+const leastStudiedItems = nonZeroScores.filter(item => item.value === minValue);
+
+// 5. 나열된 분야 이름 문자열 생성 함수
+const formatSubjectList = (items) => {
+    const subjects = items.map(item => item.subject);
+    if (subjects.length === 0) return null;
+    if (subjects.length === 1) return subjects[0];
+    
+    // 마지막 항목에만 '과' 또는 '와'를 붙여 자연스럽게 연결합니다.
+    const lastSubject = subjects.pop();
+    const prefix = lastSubject.slice(-1).match(/[가-힣]/) && (lastSubject.charCodeAt(lastSubject.length - 1) - 0xac00) % 28 !== 0 ? '와' : '과';
+
+    return `${subjects.join(', ')} ${prefix} ${lastSubject}`;
+};
+
+const mostStudiedList = formatSubjectList(mostStudiedItems);
+const leastStudiedList = formatSubjectList(leastStudiedItems);
+
+// 6. 동적 텍스트 생성
+let analysis = [
+    `${userName} 님의 지식 선호도를 분석했어요!`,
+];
+
+// 모든 점수가 동일한지 확인
+const allScoresEqual = maxValue === minValue && mostStudiedItems.length === scoreEntries.length;
+
+if (allScoresEqual) {
+    analysis.push(`모든 분야에서 균형 있게 지식을 탐색했어요!`);
+} else {
+    // 가장 많이 공부한 분야 (2번째 줄)
+    analysis.push(`${mostStudiedList} 분야를 가장 많이 공부했어요!`);
+
+    // 가장 적게 공부한 분야 (3번째 줄)
+    // 최대 분야 리스트와 최소 분야 리스트가 동일하지 않을 경우에만 출력 (예: 점수 50, 50, 10일 때 10만 출력)
+    const isDifferent = mostStudiedList !== leastStudiedList;
+
+    if (leastStudiedList && isDifferent) {
+        analysis.push(`${leastStudiedList} 분야는 조금 더 탐색해 볼 수 있어요.`);
+    }
+}
+
+  const maxScore = 50;
   // 10, 20, 30, 40, 50을 명시하는 ticks 배열 정의
   const customTicks = [0, 10, 20, 30, 40, 50];
 
@@ -161,14 +176,14 @@ const ReportRadar = () => {
           cx="50%" 
           cy="50%" 
           outerRadius="80%" 
-          data={chartData}
+          data={radarData}
           margin={{ top: 10, right: 30, bottom: 20, left: 30 }}
         >
           <PolarGrid stroke="#E6E6E6" stroke-width="1px" radialLines={false} />
           
           <PolarAngleAxis 
             dataKey="subject" 
-            tick={<CustomPolarAngleAxisTick data={chartData} />}
+            tick={<CustomPolarAngleAxisTick data={radarData} />}
           />
 
           <PolarRadiusAxis 

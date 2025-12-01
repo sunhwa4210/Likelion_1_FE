@@ -80,17 +80,6 @@ export default function Modal({
             <p className={styles['modal-message']}>{message}</p>
           )}
         </div>
-
-<<<<<<< HEAD
-        <div className="modal-actions">
-        {buttons.length > 0 && (
-          <div className="modal-actions">
-            {buttons.map((b, i) => (
-              <button
-                key={i}
-                type="button"
-                className={`btn ${b.tone ? `btn-${b.tone}` : 'btn-primary'}`}
-=======
         <div className={styles['modal-actions']}>
           {buttons.map((b, i) => {
             const toneClass = styles[b.tone ? `btn-${b.tone}` : 'btn-primary'];
@@ -99,22 +88,14 @@ export default function Modal({
                 key={i}
                 type="button"
                 className={`${styles['modal-btn']} ${toneClass || ''}`}
->>>>>>> 46e7172cd8885afca036053b9cb7c84ae7d9c88c
                 onClick={() => onAction?.(b.value)}
                 data-autofocus={b.autoFocus ? 'true' : undefined}
                 autoFocus={b.autoFocus}
               >
                 {b.label}
               </button>
-<<<<<<< HEAD
-            ))}
-          </div>
-        )}
-
-=======
             );
           })}
->>>>>>> 46e7172cd8885afca036053b9cb7c84ae7d9c88c
         </div>
       </div>
     </div>

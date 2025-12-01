@@ -2,8 +2,8 @@
 import React from 'react';
 import DotIcon from './DotIcon';
 
-function SortComments({ isActive, onClick }) {
-    const className = `sort-option-item ${isActive ? 'active' : ''}`;
+function SortComments({ isActive, onClick, styles }) {
+    const className = `${styles.sortOptionItem} ${isActive ? styles.sortOptionItemActive : ''}`;
 
     const dotColor = isActive ? '#39A2A5' : '#ACADAC';
 

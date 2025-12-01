@@ -163,7 +163,7 @@ export default function Signup() {
       };
 
       //2.추가정보
-      await axios.post('/onboarding/basic',
+      await axios.post(`${API_BASE}/onboarding/basic`,
         { gender: basic.gender, birthdate: basic.birthdate },
         authConfig
       );

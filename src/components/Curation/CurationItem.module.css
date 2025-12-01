@@ -33,9 +33,9 @@
 }
 
 /* 뱃지 위치 (Insight, CrossNote, BestCalum) */
-.curationImagePlaceholder .insight-badge,
-.curationImagePlaceholder .cross-note-badge,
-.curationImagePlaceholder .best-calum-badge {
+.curationImagePlaceholder .insightBadge,
+.curationImagePlaceholder .crossNoteBadge,
+.curationImagePlaceholder .bestCalumBadge {
     position: absolute;
     bottom: -10px; 
     left: 0px;

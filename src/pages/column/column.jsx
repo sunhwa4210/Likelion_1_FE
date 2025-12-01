@@ -1,6 +1,6 @@
 
 import React from "react";
-import Header from "../../components/atoms/Header/header";
+import Globalheader from "../../components/atoms/Header/header";
 import Search from "../qna/components/QnaSearchBar";
 import Filter from "../qna/components/qnafilter";
 import Card from "./components/card";
@@ -10,7 +10,7 @@ export default function Column() {
   return (
     <div className="app-wrapper">
       <div className={sytles.container}>
-      <Header />
+      <Globalheader />
       <Search/>
       <Filter/>
       <Card/>

@@ -98,7 +98,7 @@ export default function CurationFilter ({value, onChange, isOpen}) {
                         <p>유형</p>
                     </div>
                     
-                    <dix className={styles.categoryBox}>
+                    <div className={styles.categoryBox}>
                         <CategoryXselector 
                         categoriesToDisplay={curationType} 
                         removableMode={true}S
@@ -107,7 +107,7 @@ export default function CurationFilter ({value, onChange, isOpen}) {
                         updateInternal('types', selectedLabels)
                         }
                         />  
-                    </dix> 
+                    </div> 
 
                 </div>
 
@@ -116,7 +116,7 @@ export default function CurationFilter ({value, onChange, isOpen}) {
                         <p>인문사회</p>
                     </div>
                     
-                    <dix className={styles.categoryBox}>
+                    <div className={styles.categoryBox}>
                         <CategoryXselector 
                         categoriesToDisplay={humanities1} 
                         removableMode={true}S
@@ -125,9 +125,9 @@ export default function CurationFilter ({value, onChange, isOpen}) {
                             updateInternal('humanities1', selectedLabels)
                         }
                         />  
-                    </dix> 
+                    </div> 
 
-                    <dix className={styles.categoryBox}>
+                    <div className={styles.categoryBox}>
                         <CategoryXselector 
                         categoriesToDisplay={humanities2} 
                         removableMode={true}S
@@ -136,7 +136,7 @@ export default function CurationFilter ({value, onChange, isOpen}) {
                             updateInternal('humanities2', selectedLabels)
                         }
                         />  
-                    </dix> 
+                    </div> 
 
                 </div>
 
@@ -144,7 +144,7 @@ export default function CurationFilter ({value, onChange, isOpen}) {
                     <div className={styles.titleBox}>
                         <p>자연과학</p>
                     </div>
-                    <dix className={styles.categoryBox}>
+                    <div className={styles.categoryBox}>
                     
                         <CategoryXselector 
                         categoriesToDisplay={science1} 
@@ -163,14 +163,14 @@ export default function CurationFilter ({value, onChange, isOpen}) {
                         }
                         />    
 
-                    </dix>                    
+                    </div>                    
                 </div>
                 
                 <div className={styles.filterBox}>
                     <div className={styles.titleBox}>
                         <p>공학·기술</p>
                     </div>      
-                    <dix className={styles.categoryBox}>
+                    <div className={styles.categoryBox}>
                     
                         <CategoryXselector 
                         categoriesToDisplay={tech1} 
@@ -188,7 +188,7 @@ export default function CurationFilter ({value, onChange, isOpen}) {
                             updateInternal('tech2', selectedLabels)
                         }
                         />      
-                    </dix>               
+                    </div>               
               
                 </div>
                 
@@ -196,7 +196,7 @@ export default function CurationFilter ({value, onChange, isOpen}) {
                     <div className={styles.titleBox}>
                         <p>경제·경영</p>
                     </div> 
-                    <dix className={styles.categoryBox}>
+                    <div className={styles.categoryBox}>
                         <CategoryXselector 
                         categoriesToDisplay={economy} 
                         removableMode={true}S
@@ -205,14 +205,14 @@ export default function CurationFilter ({value, onChange, isOpen}) {
                             updateInternal('economy', selectedLabels)
                         }
                         />      
-                    </dix>                                            
+                    </div>                                            
                 </div>
 
                 <div className={styles.filterBox}>
                     <div className={styles.titleBox}>
                         <p>예술·문화</p>
                     </div>
-                    <dix className={styles.categoryBox}>
+                    <div className={styles.categoryBox}>
                         <CategoryXselector 
                         categoriesToDisplay={art1} 
                         removableMode={true}S
@@ -230,7 +230,7 @@ export default function CurationFilter ({value, onChange, isOpen}) {
                         }
                         />  
                 
-                    </dix>                                                    
+                    </div>                                                    
                 </div>
 
                 <div className={styles.filterBox}>

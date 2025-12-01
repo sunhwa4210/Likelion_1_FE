@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import styles from "./AllCuration.module.css";
-import Header from "../../components/atoms/header/header";
+import Header from "../../components/atoms/Header/header";
 import SearchBar1 from "../../components/Bar/SearchBar1";
 import CurationFilter from "../../components/Filter/CurationFilter";
 import { DUMMY_CURATION_DATA } from "../../components/Curation/DummyData";
