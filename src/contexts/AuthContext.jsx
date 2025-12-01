@@ -1,5 +1,6 @@
 // src/contexts/AuthContext.jsx
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState} from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const AuthContext = createContext(null);
@@ -8,14 +9,25 @@ export function AuthProvider({ children }) {
   const [accessToken, setAccessToken] = useState(null);
   const [refreshToken, setRefreshToken] = useState(null);
   const [user, setUser] = useState(null);
-  const [authLoading, setAuthLoading] = useState(true); 
+  const [authLoading, setAuthLoading] = useState(false); 
+
+  const nav=useNavigate();
 
   // 백엔드 주소 (나중에 const API_BASE = process.env.REACT_APP_API_URL || ""; 로 변경)
   const API_BASE = process.env.REACT_APP_API_BASE_URL || "";
 
   // 내 정보 조회
-  const fetchMe = async (token = accessToken) => {
-    if (!token) return;
+  const fetchMe = async (tokenParam) => {
+    const token = tokenParam ?? accessToken;
+
+    // 토큰 없으면 그냥 로그인 안 된 상태로 처리
+    if (!token) {
+      setUser(null);
+      setAuthLoading(false);
+      nav('/login');
+      return;
+    }
+
     try {
       const res = await axios.get(`${API_BASE}/auth/me`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -23,7 +35,20 @@ export function AuthProvider({ children }) {
       // 이름, 이메일 유저 정보 저장
       setUser(res.data);
     } catch (err) {
-      console.error("GET /auth/me 실패", err);
+      // 401이면 "로그아웃 상태"라고 보고 토큰/유저 정보 정리
+      if (err.response?.status === 401) {
+        setUser(null);
+        setAccessToken(null);
+        setRefreshToken(null);
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
+        localStorage.removeItem("tokenType");
+        // 굳이 콘솔에 에러 안 찍어도 됨 (원하면 아래 한 줄 삭제 가능)
+        console.warn("토큰이 만료되었거나 유효하지 않습니다. 로그아웃 상태로 전환합니다.");
+        nav('/login');
+      } else {
+        console.error("GET /auth/me 실패", err);
+      }
     } finally {
       setAuthLoading(false);
     }
@@ -37,9 +62,11 @@ export function AuthProvider({ children }) {
     if (storedAccess && storedRefresh) {
       setAccessToken(storedAccess);
       setRefreshToken(storedRefresh);
+      nav('/curation/personal')
       fetchMe(storedAccess);
     } else {
       setAuthLoading(false);
+      nav('login');
     }
   }, []);
 

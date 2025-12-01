@@ -9,6 +9,14 @@ import CurationFilter from "../../components/Filter/CurationFilter";
 import CurationItem from "../../components/Curation/CurationItem";
 import { useAuth } from "../../contexts/AuthContext";
 
+const LABEL_TO_BACKEND_CATEGORY = {
+  "인문사회 전체": "인문사회",
+  "자연과학 전체": "자연과학",
+  "공학·기술 전체": "공학·기술",
+  "경제·경영 전체": "경제·경영",
+  "예술·문화 전체": "예술·문화",
+  "스포츠·라이프스타일 전체": "스포츠·라이프스타일",
+};
 
 //Category Name -> Id 매핑
 const CATEGORY_NAME_TO_ID = {
@@ -62,6 +70,16 @@ const CATEGORY_NAME_TO_ID = {
   "환경": 35,
 };
 
+const TYPE_LABEL_TO_VALUE = {
+  "베스트칼럼": "BEST_COLUMN",
+  "BEST_COLUMN": "BEST_COLUMN",
+
+  "인사이트": "INSIGHT",
+  "INSIGHT": "INSIGHT",
+
+  "크로스노트": "CROSSNOTE",
+  "CROSSNOTE": "CROSSNOTE",
+};
 
 
 //API
@@ -73,7 +91,7 @@ export default function AllCuration() {
 
   //큐레이션 클릭 시 큐레이션 세부보기 페이지로 이동
   const handleCurationClick = (item) => {
-    navigate(`/curation/${item.id}`,{state:{item},});
+    navigate(`/curation/${item.id}`,{state:{from: "/curation",item},});
     console.log(item.id);
   };
  
@@ -143,31 +161,33 @@ export default function AllCuration() {
         ...economy,
         ...art,
         ...sport,];
-      
-      if (selectedCategoryNames.length>0){
-        //id로 변환
-        const categoryIds = selectedCategoryNames
-        .map((name)=>CATEGORY_NAME_TO_ID[name])
+
+
+      //분야
+      const backendCategoryNames = selectedCategoryNames.map((label) => {
+        return LABEL_TO_BACKEND_CATEGORY[label] || label;  // 매핑 없으면 그대로 사용
+      });
+
+      if (backendCategoryNames.length > 0) {
+      const categoryIds = backendCategoryNames
+        .map((name) => CATEGORY_NAME_TO_ID[name])
         .filter(Boolean);
 
-        if(categoryIds.length>0){
-          //일단 단일 categoryId만 받는다고 가정 (나중에 수정 예정)
-          params.categoryId = categoryIds[0];
-        }
+      if (categoryIds.length > 0) {
+        params.categoryId = categoryIds.join(",");
+      }
       }
 
       //큐레이션 유형
       if (types && types.length > 0) {
-        const allowedTypes = ["BEST_COLUMN", "INSIGHT", "CROSSNOTE"];
-        const selectedType = types.find((t) => allowedTypes.includes(t));
+        const mappedTypes = types
+          .map((label) => TYPE_LABEL_TO_VALUE[label])
+          .filter(Boolean);
 
-        if (selectedType) {
-          params.curationType = selectedType;
+        if (mappedTypes.length > 0) {
+          params.curationType = mappedTypes[0];
         }
       }
-
-      
-
 
       // 요청 보내기
       const res = await axios.get(`${API_BASE}/curation`, {
@@ -177,6 +197,9 @@ export default function AllCuration() {
         params,
       });
 
+      console.log("📌 실제 요청 URL:", res.config.url);
+      console.log("📌 실제 요청 params:", res.config.params);
+      console.log("📌 최종 Request:", res.request.responseURL)
       const data = res.data?.content ?? [];
 
       // 응답 → CurationItem에서 쓰기 좋은 형태로 매핑
@@ -199,7 +222,7 @@ export default function AllCuration() {
         },
 
         likes: item.likeCount ?? 0,
-        isBookmarked: item.scraped ?? false,
+        isBookmarked: item.scrapped ?? false,
       }));
 
       setCurations(mapped);

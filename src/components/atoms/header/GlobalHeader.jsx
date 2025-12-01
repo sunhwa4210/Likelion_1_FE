@@ -1,10 +1,10 @@
 
-import React, { useState } from "react";
+import React, { useState, forwardRef } from "react";
 import { Bell } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import styles from "./GlobalHeader.module.css"; 
 
-export default function GlobalHeader() {
+function GlobalHeader(_, ref) {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -29,7 +29,7 @@ export default function GlobalHeader() {
       <div className={styles.headerTop}>
         {/* 로고 클릭 시 메뉴 토글 */}
 
-        <h1 className="header__logo" onClick={() => setOpen((v) => !v)}>
+        <h1 ref={ref} className={styles.headerLogo} onClick={() => setOpen((v) => !v)}>
           {location.pathname === "/"||"/curation" ? (
             <>
               CROSS<span>X</span>NOTE
@@ -58,3 +58,4 @@ export default function GlobalHeader() {
     </header>
   );
 }
+export default forwardRef(GlobalHeader);

@@ -43,7 +43,7 @@ export const COLOR_THEMES = {
 };
 
 export const categories = [
-    { label: '인사이트 ', colorKey: 'type' },
+    { label: '인사이트', colorKey: 'type' },
     { label: '크로스노트', colorKey: 'type' },
     { label: '베스트칼럼', colorKey: 'type' },
 

@@ -1,9 +1,10 @@
-import React,{useState, useEffect} from "react";
+import React,{useState, useEffect, useRef} from "react";
 import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 import styles from './PersonalCuration.module.css';
 import GlobalHeader from "../../components/atoms/header/GlobalHeader";
 import CurationItem from "../../components/Curation/CurationItem"
+import Coachmark from "../../components/Coachmark/Coachmark";
 import { useAuth } from "../../contexts/AuthContext";
 
 
@@ -19,6 +20,16 @@ export default function PersonalCuration() {
   const [curations,setCurations] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  //코치마크 관련
+  const targetRef =useRef(null);
+  const [showCoachmark,setShowCoachmark] = useState(false);
+  //최초 로드시, 로컬스토리지에서 hidden 값 확인하기.
+  useEffect(()=>{
+    const hidden = localStorage.getItem("coachmark_personal_hidden") === "true";
+    if (!hidden) setShowCoachmark(true);
+  },[])
+
 
   //API 연동
   useEffect(()=>{
@@ -49,7 +60,7 @@ export default function PersonalCuration() {
             : [item.categoryName],
           insightBadge: item.curationType ==="INSIGHT",
           crossNoteBadge: item.curationType ==="CROSSNOTE",
-          bestColumnBadge: item.bestColumn === true,
+          bestCalumBadge: item.bestColumn === true,
           content: {
             title: item.title,
             description: item.description,
@@ -76,7 +87,7 @@ export default function PersonalCuration() {
 
   //큐레이션 세부정보 보기
   const handleCurationClick = (item) => {
-    navigate(`/curation/${item.id}`,{state:{item},});
+    navigate(`/curation/${item.id}`,{state:{item,from: "/curation/personal", },});
     console.log(item.id);
 
   };
@@ -87,8 +98,19 @@ export default function PersonalCuration() {
 
     //일단 개인화 큐레이션 피드 먼저
     <div className="app-wrapper">
+    {/* 코치마크 */}
+    {showCoachmark && (
+      <Coachmark
+      targetRef={targetRef}
+      onNeverShowAgain={()=>{
+        localStorage.setItem("coachmark_personal_hidden","true");
+        setShowCoachmark(false);
+      }}
+      />
+    )}
+    {/* 개인화 큐레이션 페이지 */}
     <div className={styles["personalCuration-wrapper"]}>
-      <GlobalHeader/>
+      <GlobalHeader ref={targetRef}/>
       <div className={styles["title-box"]}>
         <h1>오늘의 큐레이션</h1>
         <p>{userName}님이 선택한 관심/전문 분야의 최신 큐레이션으로 가져왔어요</p> 

@@ -62,7 +62,7 @@ export default function App() {
 
           {/* 기타 */}
           <Route path="/api-test" element={<ApiTestPage />} />
-          <Route path="/auth/google/callback" element={<SocialRedirect/>}/>
+          <Route path="/login/oauth2/code/google" element={<SocialRedirect/>}/> 
           <Route path="/auth/kakao/callback" element={<SocialRedirect />} />
         </Routes>
       </div>

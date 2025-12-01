@@ -1,0 +1,125 @@
+/* 코지마크 화면에서는 스크롤 불가능 하게 해줘. (원래 app-wrapper은 스크롤 가능) */
+.coachmark-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: auto;
+  width: var(--app-width);
+  height: var(--app-height);
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.coachmark-hole {
+  position: absolute;
+  z-index: 1;
+  background: transparent;
+  border-radius: 4px;
+  box-shadow: 0 0 0 9999px rgba(0,0,0,0.55);
+}
+
+.menu-description{
+  position: absolute;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  gap:8px;
+}
+
+.menu-description svg{
+width: 16px;
+height: 16px;
+aspect-ratio: 1/1;}
+
+.menu-description p{color: #FFF;
+font-feature-settings: 'liga' off, 'clig' off;
+font-family: 'Inter';
+font-size: 14px;
+font-style: normal;
+font-weight: 500;
+line-height: normal;
+margin: 0;}
+
+.coachmark-description-wrapper {
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+text-align: center;
+gap:38.5px;
+z-index: 9999;
+}
+
+.p-wrapper{
+  display: flex;
+  flex-direction: column;
+  gap:12px;
+}
+
+.p-wrapper h2{
+color: #FFF;
+font-feature-settings: 'liga' off, 'clig' off;
+font-family: 'Inter';
+font-size: 16px;
+font-style: normal;
+font-weight: 600;
+line-height: normal;
+margin: 0;
+}
+.p-wrapper h2 span{
+color: var(--primary-30, #39A2A5);
+font-feature-settings: 'liga' off, 'clig' off;
+font-family: 'Inter';
+font-size: 16px;
+font-style: normal;
+font-weight: 600;
+line-height: normal;
+background-color: #FFF;
+}
+.p-wrapper p{
+color: #FFF;
+text-align: center;
+font-feature-settings: 'liga' off, 'clig' off;
+font-family: 'Inter';
+font-size: 12px;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
+margin: 0;
+}
+.p-wrapper p span{
+color: #FFF;
+font-feature-settings: 'liga' off, 'clig' off;
+font-family: 'Inter';
+font-size: 12px;
+font-style: normal;
+font-weight: 600;
+line-height: normal;
+}
+
+.coachmark-description-wrapper button{
+  border-bottom: 1px solid var(--white, #FFF);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.coachmark-description-wrapper button p{
+color: var(--white, #FFF);
+font-feature-settings: 'liga' off, 'clig' off;
+font-family: 'Inter';
+font-size: 14px;
+font-style: normal;
+font-weight: 500;
+line-height: normal;
+margin: 0;}
+
+.coachmark-description-wrapper button .X{
+width: 18px;
+height: 18px;
+aspect-ratio: 1/1;
+
+}

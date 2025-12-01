@@ -30,7 +30,7 @@ const CurationItem = ({
     crossNoteBadge, // 크로스 노트 뱃지 
     bestCalumBadge, // 베스트칼럼 뱃지 (3개 중 하나의 변수를 true로 설정해 사용)
     fieldBadges, // 선택한 카테고리 -> 배열로 
-    content, // 요약 
+    content,           // { title, description, sourceUrl }
     likes, // 좋아요 수 
     isBookmarked, // 북마크 
     cardWidth = DEFAULT_WIDTH, // 크기 
@@ -49,9 +49,20 @@ const CurationItem = ({
     const categoriesToDisplay = (fieldBadges || [])
         .map(label => findCategoryItem(label))
         .filter(item => item !== undefined); // 찾지 못한 항목 제외
+    
+    const title = content?.title??"";
+    const description = content?.description??"";
+    const sourceUrl = content?.sourceUrl??"";
+
+    const handleBookmarkClick = (e) => {
+      e.stopPropagation();
+      if (onBookmarkClick) {
+        onBookmarkClick();
+      }
+    };
 
     return (
-    <div  
+    <div   
       className={styles.curationCard} 
       style={cardStyle}
       onClick={onClick} // 전체를 클릭할 때 호출
@@ -60,7 +71,7 @@ const CurationItem = ({
       {/* -- 헤더 영역 --  */}
       <div className={styles.curationImagePlaceholder}>
         {/* 1. 썸네일 */}
-        <img src={imageUrl} alt="큐레이션 이미지" />
+        <img src={imageUrl || null} alt="큐레이션 이미지" />
 
         {/* 2. 카테고리 뱃지 컴포넌트 사용 */}
         {/* 각 prop이 true일 때만 해당 뱃지를 렌더링 */}
@@ -107,7 +118,7 @@ const CurationItem = ({
         </div>
 
         {/* 5. 요약본 (DB 불러와야 함) */}
-        <p className={styles.contentText}>{content}</p>
+        <p className={styles.contentText}>{title}</p>
 
         {/* -- 푸터 영역 -- */}
         <div className={styles.curationFooter}>

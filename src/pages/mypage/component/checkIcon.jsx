@@ -24,7 +24,7 @@ const CheckIcon = ({
         <rect width="14" height="14" rx="7" fill="#39A2A5"/>
         <path 
             d="M9.66683 5L6.00016 8.66667L4.3335 7" 
-            stroke="#F7FCF8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            stroke="#F7FCF8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
         />
     </svg>
 );

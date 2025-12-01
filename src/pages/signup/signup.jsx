@@ -14,6 +14,14 @@ import GenderSelector from "../../components/GenderSelector/GenderSelector";
 import CategoryFilter from "../../components/Filter/CategoryFilter";
 import styles from "./signup.module.css";
 
+//라벨 -> 서버용 이름 변환 함수
+const normalizeCategoryLabel = (label) => {
+  // "인문사회 전체" -> "인문사회"
+  if (typeof label === "string" && label.endsWith(" 전체")) {
+    return label.replace(" 전체", "");
+  }
+  return label;
+};
 
 export default function Signup() {
   const API_BASE = process.env.REACT_APP_API_BASE_URL || "";
@@ -156,7 +164,7 @@ export default function Signup() {
       await axios.post(`${API_BASE}/auth/local/signup`, signup);
       console.log("[STEP] 1. signup 성공");
 
-      //1-1. 자동 회원가입
+      //2. 자동 회원가입
       console.log("[STEP] 2. loginLocal 요청 시작");
       const loginRes = await loginLocal(signup.email, signup.password);
       console.log("[STEP] 2. loginLocal 성공", loginRes);
@@ -167,7 +175,7 @@ export default function Signup() {
         headers:{Authorization: `Bearer ${accessToken}`},
       };
 
-      //2.추가정보
+      //3.추가정보
       console.log("[STEP] 3. basic 요청 시작");
       await axios.post(`${API_BASE}/onboarding/basic`,
         { gender: basic.gender, birthdate: basic.birthdate },
@@ -175,7 +183,7 @@ export default function Signup() {
       );
       console.log("[STEP] 3. basic 요청 완료");
 
-      //3.관심분야
+      //4.관심분야
       console.log("[STEP] 4. 관심분야 요청 시작");
       await axios.post(
        `${API_BASE}/onboarding/interests`,
@@ -184,16 +192,18 @@ export default function Signup() {
       );
       console.log("[STEP] 4. 관심분야 요청 완료");
 
-      //4.전문분야
+      // 5.전문분야
       console.log("[STEP] 5. 전문분야 요청 시작");
+
       await axios.post(
         `${API_BASE}/onboarding/expertise`,
-        { expertiseNames: expertise },
-        authConfig
+        { expertiseNames: expertise },   
+        authConfig                      
       );
+
       console.log("[STEP] 5. 전문분야 요청 완료");
 
-      //5.큐레이션 수준
+      //6.큐레이션 수준
       console.log("[STEP] 6. 큐레이션 수준 요청 시작");
       await axios.post(
       `${API_BASE}/onboarding/curation`,
@@ -338,9 +348,14 @@ export default function Signup() {
           <form onSubmit={handleStep3}>
             <CategoryFilter
               variant="interest"
-              onChange={({selectedList, selectedCount}) => {
-                setFormData(prev => ({ ...prev, interests: selectedList }));
-                setIsStep3Complete(selectedCount>0);
+              onChange={({ selectedList, selectedCount }) => {
+                const normalized = selectedList.map(normalizeCategoryLabel);
+
+                setFormData(prev => ({
+                  ...prev,
+                  interests: normalized,  
+                }));
+                setIsStep3Complete(selectedCount > 0);
               }}
             />
 
