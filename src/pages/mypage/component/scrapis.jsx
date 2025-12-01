@@ -31,13 +31,13 @@ const Scrapis = ({
         {...restProps} 
     >
     <g filter="url(#filter0_d_788_14629)">
-        <rect x="14" y="14" width="80" height="80" rx="40" fill="#39A2A5" shape-rendering="crispEdges"/>
+        <rect x="14" y="14" width="80" height="80" rx="40" fill="#39A2A5" shapeRendering="crispEdges"/>
         <path d="M63.3334 66L54.0001 59.3333L44.6667 66V44.6667C44.6667 43.9594 44.9477 43.2811 45.4478 42.781C45.9479 42.281 46.6262 42 47.3334 42H60.6667C61.374 42 62.0523 42.281 62.5524 42.781C63.0525 43.2811 63.3334 43.9594 63.3334 44.6667V66Z" 
             {...bookmarkStyleProps}
     />
     </g>
     <defs>
-    <filter id="filter0_d_788_14629" x="0" y="0" width="108" height="108" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+    <filter id="filter0_d_788_14629" x="0" y="0" width="108" height="108" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
         <feFlood flood-opacity="0" result="BackgroundImageFix"/>
         <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
         <feMorphology radius="4" operator="dilate" in="SourceAlpha" result="effect1_dropShadow_788_14629"/>

@@ -33,7 +33,7 @@ const CrossNoteBadge = ({
                 height="18" 
                 rx="2" 
                 fill={badgeColor} // 동적 색상
-                shape-rendering="crispEdges"
+                shapeRendering="crispEdges"
             />
             {/* path의 fill을 textColor prop으로 설정 */}
             <path 
@@ -42,8 +42,8 @@ const CrossNoteBadge = ({
             />
         </g>
         <defs>
-            <filter id="filter0_d_788_14700" x="0" y="0" width="85" height="46" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-                <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+            <filter id="filter0_d_788_14700" x="0" y="0" width="85" height="46" filterUnits="userSpaceOnUse" colorInterpolation-filters="sRGB">
+                <feFlood floodOpacity="0" result="BackgroundImageFix"/>
                 <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
                 <feMorphology radius="4" operator="dilate" in="SourceAlpha" result="effect1_dropShadow_788_14700"/>
                 <feOffset/>

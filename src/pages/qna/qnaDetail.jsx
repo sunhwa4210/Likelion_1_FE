@@ -1,5 +1,5 @@
 import React from 'react'
-import Header from "../../components/atoms/Header/header"
+import Header from "../../components/atoms/header/GlobalHeader"
 export default function QnaDetail(){
     return(
         <div> 

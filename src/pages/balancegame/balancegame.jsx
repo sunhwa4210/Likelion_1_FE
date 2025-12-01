@@ -1,5 +1,5 @@
 import React from "react";
-import Header from "../../components/atoms/Header/header";
+import GlobalHeader from "../../components/atoms/header/GlobalHeader";
 import styles from "./balancegame.module.css";
 
 import { useModal } from "../../components/Modal/ModalProvider";
@@ -32,7 +32,7 @@ export default function Balancegame() {
 
   return (
     <div className="app-wrapper">
-          <Header />
+          <GlobalHeader />
       <div className={styles.contentWrapper}>
     
 

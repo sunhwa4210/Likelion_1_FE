@@ -1,23 +1,28 @@
 // 좋아요 + 숫자 컴포넌트 (최종 로직) 
 // 컴포넌트 사용하실 때 해당 파일을 렌더링해주시면 됩니다. 
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import GoodIcon from './GoodIcon';
 
 const defaultTextSize = '12px';
 
 const GoodCountIcon = ({ 
     initialLikes = 0,
+    initiallyLiked = false,
     iconSize = 12,
     activeColor = '#D93D3E', 
     defaultColor = '#797A79',
     textSize = defaultTextSize, // 텍스트 크기 제어
     ...restProps 
 }) => {
-    const [isClicked, setClicked] = useState(false);
+    const [isClicked, setClicked] = useState(initiallyLiked);
     const [likeCount, setLikeCount] = useState(initialLikes);
     
     const textColor = isClicked ? activeColor : defaultColor;
+
+    useEffect(() => {
+        setClicked(initiallyLiked);
+    }, [initiallyLiked]);
 
     const handleClick = (e) => {
         const nextIsClicked = !isClicked;

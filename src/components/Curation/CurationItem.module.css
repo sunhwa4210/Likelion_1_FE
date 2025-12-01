@@ -25,7 +25,7 @@
     overflow: hidden; /* 이미지 넘치는 부분 숨김 */
 }
 
-.curationImagePlaceholder img {
+.curationImagePlaceholder img{
     width: 100%;
     height: 100%;
     object-fit: cover; /* 이미지가 컨테이너를 꽉 채우도록 */
@@ -33,9 +33,9 @@
 }
 
 /* 뱃지 위치 (Insight, CrossNote, BestCalum) */
-.curationImagePlaceholder .insight-badge,
-.curationImagePlaceholder .cross-note-badge,
-.curationImagePlaceholder .best-calum-badge {
+.curationImagePlaceholder .insightBadge,
+.curationImagePlaceholder .crossNoteBadge,
+.curationImagePlaceholder .bestCalumBadge {
     position: absolute;
     bottom: -10px; 
     left: 0px;

@@ -4,7 +4,6 @@ import { Routes, Route } from 'react-router-dom';
 import { ModalProvider } from './components/Modal/ModalProvider';
 
 // Curation 관련 페이지
-import CurationPage from './pages/curation/curation';
 import PersonalCuration from './pages/curation/PersonalCuration';
 import AllCuration from './pages/curation/AllCuration';
 import CurationDetail from './pages/curation/CurationDetail';
@@ -27,21 +26,20 @@ import NotificationPage from './pages/notification/notification';
 
 // 기타 페이지들
 import BalanceGamePage from './pages/balancegame/balancegame';
-import SomePage from './pages/SomePage';
 import ApiTestPage from './pages/apiTest/ApiTestPage';
 import SocialRedirect from './pages/social/socialRedirect';
 
 export default function App() {
   return (
     <ModalProvider>
+
       {/* 레이아웃 기준이 될 최상단 래퍼 */}
       <div className="app">
         <Routes>
           {/* 메인 / 큐레이션 영역 */}
-          <Route path="/" element={<CurationPage />} />
           <Route path="/curation" element={<AllCuration />} />
           <Route path="/curation/personal" element={<PersonalCuration />} />
-          <Route path="/curation/:id" element={<CurationDetail />} />
+          <Route path="/curation/:curationId" element={<CurationDetail />} />
 
           {/* 밸런스 게임 */}
           <Route path="/balance-game" element={<BalanceGamePage />} />
@@ -63,11 +61,12 @@ export default function App() {
           <Route path="/notification" element={<NotificationPage />} />
 
           {/* 기타 */}
-          <Route path="/modal-test" element={<SomePage />} />
           <Route path="/api-test" element={<ApiTestPage />} />
-          <Route path="/social" element={<SocialRedirect />} />
+          <Route path="/login/oauth2/code/google" element={<SocialRedirect/>}/> 
+          <Route path="/auth/kakao/callback" element={<SocialRedirect />} />
         </Routes>
       </div>
+
     </ModalProvider>
   );
 }

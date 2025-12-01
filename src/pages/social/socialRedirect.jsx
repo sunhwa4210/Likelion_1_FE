@@ -15,6 +15,7 @@ export default function SocialRedirect() {
 
         if (!accessToken||!refreshToken||!type) {
             nav("/login",{replace:true});
+            return;
         }
 
         (async () => {
