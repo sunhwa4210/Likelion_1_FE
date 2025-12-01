@@ -1,10 +1,10 @@
 
-import React, { useState } from "react";
+import React, { useState, forwardRef } from "react";
 import { Bell } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
-import styles from "./header.module.css"; 
+import styles from "./GlobalHeader.module.css"; 
 
-export default function Globalheader() {
+function GlobalHeader(_, ref) {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -15,7 +15,7 @@ export default function Globalheader() {
   };
 
   const titleMap = {
-    "/": "CROSSXNOTE",
+    "/curation": "CROSSXNOTE",
     "/balance-game": "BALANCE GAME",
     "/column": "COLUMN",
     "/qna": "QnA",
@@ -29,7 +29,7 @@ export default function Globalheader() {
       <div className={styles.headerTop}>
         {/* 로고 클릭 시 메뉴 토글 */}
 
-        <h1 className="header__logo" onClick={() => setOpen((v) => !v)}>
+        <h1 ref={ref} className={styles.headerLogo} onClick={() => setOpen((v) => !v)}>
           {location.pathname === "/"||"/curation" ? (
             <>
               CROSS<span>X</span>NOTE
@@ -48,9 +48,7 @@ export default function Globalheader() {
         <nav className={styles.headerMenu} aria-label="주 메뉴">
           <ul>
             <li onClick={() => handleNavigate("/curation")}>CROSSXNOTE</li>
-            <li onClick={() => handleNavigate("/balance-game")}>
-              BALANCE GAME
-            </li>
+            <li onClick={() => handleNavigate("/balance-game")}>BALANCE GAME</li>
             <li onClick={() => handleNavigate("/column")}>COLUMN</li>
             <li onClick={() => handleNavigate("/qna")}>QnA</li>
             <li onClick={() => handleNavigate("/mypage")}>MY PAGE</li>
@@ -60,3 +58,4 @@ export default function Globalheader() {
     </header>
   );
 }
+export default forwardRef(GlobalHeader);

@@ -3,13 +3,13 @@
 
 import React from "react";
 import NotifyList from './NotifyList';
-import Header from "../../components/Header/Header";
+import GlobalHeader from "../../components/atoms/header/GlobalHeader";
 
 export default function Notification() {
   return (
     <div className="app-wrapper">
       {/* 헤더 컴포넌트 */}   
-      <Header title="알림"/>    
+      <GlobalHeader title="알림"/>    
 
       {/* 본문 */}
       <main className="content">

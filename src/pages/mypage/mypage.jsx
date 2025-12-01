@@ -9,10 +9,9 @@ import React, {useState, useEffect} from "react";
 import UserProfile from "./UserProfile";
 import ReportRadar from "./ReportRadar";
 import MenuReport from "./MenuReport";
-import Globalheader from "../../components/atoms/Header/header";
 import { fetchMypageData } from './myPageAPI';
-// 💡 추가: AuthContext에서 useAuth 훅 임포트 (경로 수정 필요)
 import { useAuth } from '../../contexts/AuthContext'; 
+import GlobalHeader from "../../components/atoms/header/GlobalHeader";
 
 export default function Mypage() {
     // 🔑 수정: useAuth 훅을 사용하여 accessToken, logout, authLoading 상태를 가져옵니다.
@@ -76,7 +75,7 @@ export default function Mypage() {
 
     return (
         <div className="app-wrapper">
-            <Globalheader/>
+            <GlobalHeader/>
             <main className="content">
                 <UserProfile data={userProfileProps} />
                 <ReportRadar {...radarChartProps} />

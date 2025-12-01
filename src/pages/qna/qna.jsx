@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Header from "../../components/atoms/Header/header";
+import Header from "../../components/atoms/header/GlobalHeader";
 import styles from "./qna.module.css";
 
 import QnaSearchBar from "./components/QnaSearchBar";
