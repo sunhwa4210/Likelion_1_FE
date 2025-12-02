@@ -151,6 +151,7 @@ export default function PersonalCuration() {
     {showCoachmark && (
       <Coachmark
       targetRef={targetRef}
+      onCloseCoachmark={()=>setShowCoachmark(false)}
       onNeverShowAgain={()=>{
         localStorage.setItem("coachmark_personal_hidden","true");
         setShowCoachmark(false);

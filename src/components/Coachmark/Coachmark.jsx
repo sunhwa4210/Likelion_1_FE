@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./Coachmark.css";
 
-export default function Coachmark({ targetRef, onNeverShowAgain }) {
+export default function Coachmark({ targetRef, onCloseCoachmark, onNeverShowAgain }) {
   const [rect, setRect] = useState(null);
   const [menudescriptionTop,setMenudescriptionTop]=useState(null);
 
@@ -62,7 +62,7 @@ export default function Coachmark({ targetRef, onNeverShowAgain }) {
 
 
       {/* 설명 wapper */}
-      <div className="coachmark-description-wrapper">
+      <div className="coachmark-description-wrapper" onClick={onCloseCoachmark}>
         <div className="p-wrapper">
           <h2>현재는 <span>사용자 맞춤 큐레이션 피드</span> 입니다.</h2>
           <p>더 많은 큐레이션을 보고 싶다면,<br/>
