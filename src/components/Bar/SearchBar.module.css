@@ -24,7 +24,6 @@
     stroke-width: 2px;
     stroke: var(--gray-30, #ACADAC);
     margin-right: 10px;
-    margin-bottom: 10px;
 }
 
 /* 입력창 */
@@ -58,7 +57,6 @@
 .sortFilterArea {
     margin-top: 5px;
     font-size: 12px;
-
     display: flex; 
     justify-content: space-between; 
     align-items: center;
@@ -77,15 +75,16 @@
     display: flex;
     align-items: center;
     color: var(--gray-30, #ACADAC); /* 비활성화된 항목 색상 */
-    padding: 4px 0;
     user-select: none;
     font-weight: 600;
+    padding: 4px 0;
 }
 
 /* 포커스(클릭) 되었을 때*/
 .sortOptionItemActive {
     color: #39A2A5; /* 활성화된 항목 색상 (청록색) */
     font-weight: 600;
+    padding: 4px 0;
 }
 
 /* --- 3. 필터 버튼 영역 --- */

@@ -2,9 +2,8 @@
 import React from 'react';
 import DotIcon from './DotIcon';
 
-function SortQn({ isActive, onClick }) {
-    const className = `sort-option-item ${isActive ? 'active' : ''}`;
-
+function SortQn({ isActive, onClick, styles }) {
+    const className = isActive ? styles.sortOptionItemActive : styles.sortOptionItem;
     const dotColor = isActive ? '#39A2A5' : '#ACADAC';
 
     return (

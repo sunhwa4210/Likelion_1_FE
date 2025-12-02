@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import Globalheader from "../../../../components/atoms/Header/header";
+import React, { useState, useEffect, useCallback } from "react";
+import GlobalHeader from "../../../../components/atoms/header/GlobalHeader";
 import Header from '../../../../components/Header/Header';
 import Profile from './Profile';
 import FieldInter from "./FieldInter";
@@ -7,6 +7,7 @@ import FieldPro from "./FieldPro";
 import Level from "./Level";
 import ModifyButton from "./ModifyButton";
 import { categories } from "../../../../components/Badges/CategoryData";
+import { useAuth } from "../../../../contexts/AuthContext";
 
 
 // 뱃지 라벨 배열을 뱃지 객체 배열 (label, colorKey 포함)로 변환하는 헬퍼 함수
@@ -35,14 +36,19 @@ const areBadgesEqual = (arr1, arr2) => {
 
 
 export default function InformModify() {
+    const { accessToken } = useAuth();
+
     // 모든 컴포넌트의 상태를 통합 관리
     const [isLoading, setIsLoading] = useState(true);
     
-    // ✅ 1. Profile 관련 상태 추가 (name, email도 여기서 관리)
+    // Profile 관련 상태 추가 (name, email도 여기서 관리)
     const [initialName, setInitialName] = useState(null);
     const [initialEmail, setInitialEmail] = useState(null);
     const [initialProfileImageUrl, setInitialProfileImageUrl] = useState(null);
     const [selectedProfileImageUrl, setSelectedProfileImageUrl] = useState(null); 
+    
+    // ✅ provider 상태 추가
+    const [provider, setProvider] = useState(null); 
 
     // Level 상태
     const [initialLevel, setInitialLevel] = useState(null);
@@ -56,58 +62,72 @@ export default function InformModify() {
     const [initialProBadges, setInitialProBadges] = useState([]);
     const [selectedProBadges, setSelectedProBadges] = useState([]);
 
-    // 모든 초기 데이터 로딩 
-    useEffect(() => {
-        const loadAllData = async () => {
-            setIsLoading(true);
+    // 모든 초기 데이터 로딩 (useCallback으로 분리)
+    const loadAllData = useCallback(async () => {
+        if (!accessToken) {
+            console.warn("Access Token이 없어 사용자 정보를 불러올 수 없습니다.");
+            setIsLoading(false); 
+            return;
+        }
 
-            // 1. ✅ GET API 호출
-            try {
-                const response = await fetch('/api/mypage/profile', { // 💡 실제 GET 엔드포인트로 변경
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        // 'Authorization': `Bearer ${yourAuthToken}` // 인증 토큰 필요
-                    },
-                });
+        setIsLoading(true);
 
-                if (!response.ok) {
-                    throw new Error("사용자 정보를 불러오는 데 실패했습니다.");
-                }
+        // 1. GET API 호출
+        try {
+            const response = await fetch('/api/mypage/profile', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${accessToken}`
+                },
+            });
 
-                const realData = await response.json(); // ✅ 서버로부터 받은 실제 데이터
-                
-                // 2. Mock Data 대신 실제 데이터 사용
-                const initialInterBadgesData = mapLabelsToBadges(realData.interestNames); // 필드명 확인
-                const initialProBadgesData = mapLabelsToBadges(realData.expertiseNames); // 필드명 확인
-
-                // Profile 데이터 설정
-                setInitialName(realData.name);
-                setInitialEmail(realData.email);
-                setInitialProfileImageUrl(realData.profileImageUrl);
-                setSelectedProfileImageUrl(realData.profileImageUrl);
-
-                // Level 설정
-                setInitialLevel(realData.curationLevel === 'LEVEL_1' ? 'A' : 'B'); // 💡 서버 값 -> 컴포넌트 값으로 매핑
-                setSelectedLevel(realData.curationLevel === 'LEVEL_1' ? 'A' : 'B');
-                
-                // FieldInter/FieldPro 설정
-                setInitialInterBadges(initialInterBadgesData);
-                setSelectedInterBadges(initialInterBadgesData);
-                setInitialProBadges(initialProBadgesData);
-                setSelectedProBadges(initialProBadgesData);
-
-            } catch (error) {
-                console.error("초기 정보 로딩 오류:", error);
-                alert("초기 사용자 정보를 불러오는 중 오류가 발생했습니다.");
-            } finally {
-                setIsLoading(false);
+            if (!response.ok) {
+                const status = response.status;
+                console.error(`API 응답 실패 상태 코드: ${status}`);
+                throw new Error(`사용자 정보를 불러오는 데 실패했습니다. (상태: ${status})`);
             }
-        };
-        loadAllData();
-    }, []);
 
-    // 수정 여부 판단 
+            // 2. 서버로부터 받은 실제 데이터 (성공 응답)
+            const realData = await response.json();
+            
+            // 3. 데이터 사용
+            const initialInterBadgesData = mapLabelsToBadges(realData.interestNames || []);
+            const initialProBadgesData = mapLabelsToBadges(realData.expertiseNames || []);
+
+            // Profile 데이터 설정
+            setInitialName(realData.name);
+            setInitialEmail(realData.email);
+            setInitialProfileImageUrl(realData.profileImageUrl);
+            setSelectedProfileImageUrl(realData.profileImageUrl);
+            
+            // ✅ provider 상태 설정 (서버 응답에 realData.provider가 포함되어야 함)
+            setProvider(realData.provider || 'LOCAL'); 
+
+            // Level 설정
+            setInitialLevel(realData.curationLevel === 'LEVEL_1' ? 'A' : 'B');
+            setSelectedLevel(realData.curationLevel === 'LEVEL_1' ? 'A' : 'B');
+            
+            // FieldInter/FieldPro 설정
+            setInitialInterBadges(initialInterBadgesData);
+            setSelectedInterBadges(initialInterBadgesData);
+            setInitialProBadges(initialProBadgesData);
+            setSelectedProBadges(initialProBadgesData);
+
+        } catch (error) {
+            console.error("초기 정보 로딩 오류:", error);
+            alert("초기 사용자 정보를 불러오는 중 오류가 발생했습니다."); 
+        } finally {
+            setIsLoading(false);
+        }
+    }, [accessToken]); // accessToken이 변경될 때만 loadAllData 함수를 재생성
+
+    // 초기 로딩 시 loadAllData 호출
+    useEffect(() => {
+        loadAllData();
+    }, [loadAllData]);
+
+    // 수정 여부 판단 
     // Level 수정 여부
     const isLevelModified = selectedLevel !== initialLevel && selectedLevel !== null;
     
@@ -117,42 +137,44 @@ export default function InformModify() {
     // FieldPro 수정 여부
     const isProModified = !areBadgesEqual(selectedProBadges, initialProBadges);
     
-    // ✅ Profile Image 수정 여부
+    // Profile Image 수정 여부
     const isProfileImageModified = selectedProfileImageUrl !== initialProfileImageUrl;
 
     // 최종 수정 여부
     const isModified = isLevelModified || isInterModified || isProModified || isProfileImageModified;
 
     // 최종 저장 함수
-    const handleSave = async () => { // ✅ async 키워드 추가
-        if (!isModified) return;
+    const handleSave = async () => { 
+        if (!isModified || !accessToken) return;
         
         // 1. API로 전송할 데이터 준비 (변경된 모든 필드 포함)
         const updatedData = {
-            // Level: 백엔드 명세에 맞게 매핑
-            curationLevel: selectedLevel === 'A' ? 'LEVEL_1' : 'LEVEL_2', 
-            
-            // Badges
-            interestNames: selectedInterBadges.map(b => b.label),
-            expertiseNames: selectedProBadges.map(b => b.label),
-            
-            // ✅ Profile Image URL 포함
-            profileImageUrl: selectedProfileImageUrl,
-            
-            // ✅ 이름과 이메일은 변경 가능성이 없다고 가정하고 제외하거나 (Profile.jsx에 수정 input이 없으므로)
-            // 명세에 따라 다른 필드도 함께 포함하여 보낼 수 있습니다. (현재 예시에서는 제외)
-        };
+        // 이름과 이메일은 Profile 컴포넌트에서 수정 가능 여부를 제어하지만, 
+        // 여기서 업데이트되는 것이 아니므로 초기값을 그대로 전송
+        name: initialName, 
+        email: initialEmail, 
+
+        // Level: 백엔드 명세에 맞게 매핑
+        curationLevel: selectedLevel === 'A' ? 'LEVEL_1' : 'LEVEL_2', 
+        
+        // Badges
+        interestNames: selectedInterBadges.map(b => b.label),
+        expertiseNames: selectedProBadges.map(b => b.label),
+        
+        // Profile Image URL 포함
+        profileImageUrl: selectedProfileImageUrl,
+    };
         
         console.log("--- 최종 수정하기 클릭 ---");
         console.log("전송 데이터:", updatedData);
         
-        // 2. ✅ API 호출 로직 (PUT /api/mypage/profile)
+        // 2. API 호출 로직 (PUT /api/mypage/profile)
         try {
             const response = await fetch('/api/mypage/profile', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
-                    // 'Authorization': `Bearer ${yourAuthToken}` 
+                    'Authorization': `Bearer ${accessToken}` 
                 },
                 body: JSON.stringify(updatedData),
             });
@@ -164,8 +186,7 @@ export default function InformModify() {
                 setInitialLevel(selectedLevel);
                 setInitialInterBadges(selectedInterBadges);
                 setInitialProBadges(selectedProBadges);
-                setInitialProfileImageUrl(selectedProfileImageUrl); // ✅ 이미지 URL 초기값 업데이트
-
+                setInitialProfileImageUrl(selectedProfileImageUrl);
             } else {
                 const errorText = await response.text();
                 console.error("정보 수정 실패:", response.status, errorText);
@@ -183,41 +204,42 @@ export default function InformModify() {
 
     return (
         <div className="app-wrapper">
-            <Globalheader/>
+            <GlobalHeader/>
             <Header title="정보 수정" />
 
             <main className="content">
-                {/* 2. ✅ Profile 컴포넌트에 Props 전달 */}
+                {/* Profile 컴포넌트에 provider prop 전달 */}
                 <Profile 
-                    name={initialName} // 이름과 이메일은 변경할 수 없다고 가정하고 초기값을 전달
+                    name={initialName} 
                     email={initialEmail}
-                    profileImageUrl={selectedProfileImageUrl} // 현재 선택된 URL 전달
-                    onImageUpdate={setSelectedProfileImageUrl} // 업데이트 함수 전달
+                    profileImageUrl={selectedProfileImageUrl} 
+                    onImageUpdate={setSelectedProfileImageUrl} 
+                    provider={provider} // ✅ provider 전달
                 /> 
 
                 {/* FieldInter - 상태 전달 */}
-                <FieldInter 
-                    selectedBadges={selectedInterBadges} 
+                <FieldInter 
+                    selectedBadges={selectedInterBadges} 
                     onBadgeChange={setSelectedInterBadges}
                 />
                         
                 {/* FieldPro - 상태 전달 */}
-                <FieldPro 
-                    selectedBadges={selectedProBadges} 
+                <FieldPro 
+                    selectedBadges={selectedProBadges} 
                     onBadgeChange={setSelectedProBadges}
                 />
 
                 {/* Level 컴포넌트에 상태와 함수를 props로 전달 */}
-                <Level 
-                    selectedLevel={selectedLevel} 
+                <Level 
+                    selectedLevel={selectedLevel} 
                     handleLevelChange={setSelectedLevel}
                 />
             </main>
 
             {/* 푸터가 필요한 화면에서만 렌더 */}
             <footer className="fixed-footer">
-                <ModifyButton 
-                    isActive={isModified} 
+                <ModifyButton 
+                    isActive={isModified} 
                     onSave={handleSave}
                 />
             </footer>

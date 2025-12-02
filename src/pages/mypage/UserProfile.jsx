@@ -9,7 +9,7 @@ const UserProfile = ({data: profile, onFollowListClick}) => {
     if(!profile) {
         return <p>포로필 정보를 찾을 수 없습니다.</p>;
     }
-
+ 
     return (
     <div className={styles.userProfileContainer}>
         

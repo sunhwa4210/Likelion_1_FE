@@ -4,7 +4,7 @@
 import React from 'react';
 import UserFollowList from './UserFollowList';
 import Header from '../../../components/Header/Header';
-import Globalheader from '../../../components/atoms/Header/header';
+import GlobalHeader from '../../../components/atoms/header/GlobalHeader';
 import { useAuth } from '../../../contexts/AuthContext'; // 🚨 useAuth 추가
 
 export default function UserFollow() {
@@ -13,7 +13,7 @@ export default function UserFollow() {
 
   return (
     <div className="app-wrapper">
-      <Globalheader />
+      <GlobalHeader />
       <Header title="팔로워/팔로잉"/>
 
       {/* 본문 */}

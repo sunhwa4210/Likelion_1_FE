@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './FollowList.module.css'; 
-import DefalutProfileImg from '../../profile/DefalutProfileImg';
+import DefalutProfileImg from '../../component/DefalutProfileImg';
 
 const FollowListItem = ({ user, type, onActionClick }) => {
 
@@ -9,7 +9,7 @@ const FollowListItem = ({ user, type, onActionClick }) => {
       return (
         <button 
             className="action-button cancel" 
-            onClick={() => onActionClick(user.id, user.name)}
+            onClick={() => onActionClick(user.userId, user.name)}
         >
           취소
         </button>

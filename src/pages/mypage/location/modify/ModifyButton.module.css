@@ -1,9 +1,9 @@
 .modifyButton {
-    width: 355px;
-    height: 40px;
+    width: 320px;
+    height: 20px;
     padding: 10px 14px;
     display: block;
-    margin: 0 auto;
+    margin: 20px auto;
     margin-top: 40px;
     border: none;
     border-radius: 6px;

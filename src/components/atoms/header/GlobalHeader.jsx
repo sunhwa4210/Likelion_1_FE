@@ -14,6 +14,13 @@ function GlobalHeader(_, ref) {
     setOpen(false);
   };
 
+  const handleNotificationClick = () => {
+    navigate("/notification");
+    if (open) {
+      setOpen(false);
+    }
+  };
+
   const titleMap = {
     "/curation": "CROSSXNOTE",
     "/balance-game": "BALANCE GAME",
@@ -39,7 +46,11 @@ function GlobalHeader(_, ref) {
           )}
         </h1>
 
-        <button className={styles.headerIcon} aria-label="알림">
+        <button 
+          className={styles.headerIcon} 
+          aria-label="알림"
+          onClick={handleNotificationClick}
+        >
           <Bell size={20} />
         </button>
       </div>

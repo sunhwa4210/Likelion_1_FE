@@ -34,6 +34,7 @@ import InformModify from './pages/mypage/location/modify/informModify';
 import Scrap from './pages/mypage/location/scrap/scrap';
 import WriteCalum from './pages/mypage/location/calum/writeCalum';
 import WriteQnA from './pages/mypage/location/qna/writeQnA';
+import Follow from "./pages/mypage/location/follow/follow";
 
 // 타 사용자 프로필 페이지 
 import UserprofileFollow from './pages/userprofile/userprofileFollow';
@@ -43,13 +44,8 @@ import UserFollow from './pages/userprofile/userfollow/userfollow';
 export default function App() {
   return (
     <ModalProvider>
-<<<<<<< HEAD
-      <div className='app'>
-=======
-
       {/* 레이아웃 기준이 될 최상단 래퍼 */}
       <div className="app">
->>>>>>> main
         <Routes>
           {/* 메인 / 큐레이션 영역 */}
           <Route path="/curation" element={<AllCuration />} />
@@ -78,25 +74,22 @@ export default function App() {
 
           {/* 정보 수정 / 스크랩한 큐레이션 / 내가 작성한 칼럼 / 내가 작성한 QnA */}
           <Route path="/mypage/location/modify" element={<InformModify />} />
-          <Route path="/mypage/location/scrap" element={<Scrap />} />
+          <Route path="/mypage/location/scrap" element={<Scrap />} /> 
           <Route path="/mypage/location/calum" element={<WriteCalum />} />
           <Route path="/mypage/location/qna" element={<WriteQnA />} />
+          <Route path="/mypage/:userId/follow/:type" element={<Follow />} />
+          
 
           {/* 타사용자 프로필 */}
           <Route path="/users/:userId" element={<UserprofileFollow />} /> 
-          <Route path="/user/:userId/:type" element={<UserFollow />} />  
+          <Route path="/user/:userId/:listType" element={<UserFollow />} />  
 
           {/* 기타 */}
           <Route path="/api-test" element={<ApiTestPage />} />
           <Route path="/login/oauth2/code/google" element={<SocialRedirect/>}/> 
           <Route path="/auth/kakao/callback" element={<SocialRedirect />} />
         </Routes>
-<<<<<<< HEAD
-        </div>
-=======
       </div>
-
->>>>>>> main
     </ModalProvider>
   );
 }

@@ -8,9 +8,9 @@
   border: none;
   margin: 0 auto; /* 중앙에 배치 */
   font-feature-settings: 'liga' off, 'clig' off;
-  padding: 0;
+  padding: 34px 20px
 }
-
+ 
 /* 프로필 이미지 */
 .profileIconPlaceholder {
   width: 80px; /* 이미지 크기 */
@@ -55,7 +55,7 @@
 }
 
 /* 팔로워/팔로잉 */
-.Item {
+.item {
   display: flex;
   flex-direction: row;
   align-items: center;

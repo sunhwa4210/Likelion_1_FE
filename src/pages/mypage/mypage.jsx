@@ -1,11 +1,6 @@
-// === 마이 페이지 ===
-// 상위 컴포넌트에서 렌더링 중
-// myPageAPI에서 API 연결 
-// UserProfile, ReportRadar에서 API 연결 
-// ❌ MenuReport에서 로그아웃 처리 필요 
-
 // Mypage.js
 import React, {useState, useEffect} from "react";
+import { useNavigate } from "react-router-dom";
 import UserProfile from "./UserProfile";
 import ReportRadar from "./ReportRadar";
 import MenuReport from "./MenuReport";
@@ -14,12 +9,26 @@ import { useAuth } from '../../contexts/AuthContext';
 import GlobalHeader from "../../components/atoms/header/GlobalHeader";
 
 export default function Mypage() {
-    // 🔑 수정: useAuth 훅을 사용하여 accessToken, logout, authLoading 상태를 가져옵니다.
-    const { accessToken, logout, authLoading } = useAuth(); 
+    // 수정: useAuth 훅을 사용하여 accessToken, logout, authLoading 상태를 가져옴 
+    const navigate = useNavigate();
+    const { accessToken, logout, authLoading, user } = useAuth(); 
 
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+
+    const handleFollowListClick = (type) => {
+        // 🟢 수정: useAuth의 user 대신 API로 가져온 data 객체의 userId를 사용
+        const currentUserId = data?.userId; // 👈 여기에서 숫자 ID를 가져와야 합니다.
+
+        if (currentUserId) {
+            // 이제 숫자 ID가 경로에 포함됩니다.
+            navigate(`/mypage/${currentUserId}/follow/${type}`); 
+        } else {
+            console.error("로그인 사용자 정보를 찾을 수 없습니다. (식별자 부재)"); 
+            // 이 에러는 data가 아직 로딩되지 않았거나 (로딩 중) userId가 없는 경우에만 출력됩니다.
+        }
+    };
 
     useEffect(() => {
         // 1. AuthContext 로딩 중이면 대기
@@ -34,7 +43,7 @@ export default function Mypage() {
 
         const loadMypageData = async () => {
             try {
-                // 🔑 수정: useAuth에서 가져온 accessToken을 인자로 전달
+                // 수정: useAuth에서 가져온 accessToken을 인자로 전달
                 const apiData = await fetchMypageData(accessToken);
                 setData(apiData);
             } catch (err) {
@@ -45,7 +54,7 @@ export default function Mypage() {
             }
         };
         loadMypageData();
-    // 🔑 수정: accessToken 또는 authLoading이 변경될 때마다 재실행
+    // 수정: accessToken 또는 authLoading이 변경될 때마다 재실행
     }, [accessToken, authLoading]); 
 
     // 3. 로딩 상태 처리 (AuthContext 로딩 또는 API 로딩)
@@ -64,7 +73,7 @@ export default function Mypage() {
         profileImageUrl: data.profileImageUrl,
         followers: data.followersCount,
         following: data.followingsCount,
-        email: "정보 없음",
+        email: data.email || "정보 없음",
     };
 
     // ReportRadar 컴포넌트에 맞게 데이터 매핑
@@ -77,9 +86,9 @@ export default function Mypage() {
         <div className="app-wrapper">
             <GlobalHeader/>
             <main className="content">
-                <UserProfile data={userProfileProps} />
+                <UserProfile data={userProfileProps} onFollowListClick={handleFollowListClick} />
                 <ReportRadar {...radarChartProps} />
-                {/* 🔑 수정: MenuReport에 AuthContext의 logout 함수를 onLogout prop으로 전달 */}
+                {/* MenuReport에 AuthContext의 logout 함수를 onLogout prop으로 전달 */}
                 <MenuReport onLogout={logout} /> 
             </main>
         </div>

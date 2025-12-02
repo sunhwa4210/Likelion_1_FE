@@ -7,7 +7,7 @@ import React, {useEffect, useState} from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Header from '../../components/Header/Header';
-import Globalheader from "../../components/atoms/Header/header";
+import GlobalHeader from "../../components/atoms/header/GlobalHeader";
 import UserProfile from '../mypage/UserProfile';
 import CalumItem from "../mypage/location/calum/CalumItem";
 import styles from './userprofileFollow.module.css';
@@ -42,8 +42,8 @@ export default function UserprofileFollow () {
     // 2. 데이터 가져오기 (useEffect)
     useEffect(() => {
         console.log("🔥 useEffect 실행됨", { authLoading, targetUserId });
-  console.log("🔥 targetUserId:", targetUserId);
-  console.log("🔥 authLoading:", authLoading);
+        console.log("🔥 targetUserId:", targetUserId);
+        console.log("🔥 authLoading:", authLoading);
   
 
   if (authLoading || !targetUserId) return;
@@ -184,20 +184,20 @@ export default function UserprofileFollow () {
     // 로딩 및 오류 처리
     if (isLoading || authLoading) { // 👈 수정: authLoading이 true면 무조건 로딩 중으로 표시
         return (
-            <div className="app-wrapper"><Globalheader/><Header title="프로필"/><main className="content"><p>프로필 정보를 불러오는 중입니다...</p></main></div>
+            <div className="app-wrapper"><GlobalHeader/><Header title="프로필"/><main className="content"><p>프로필 정보를 불러오는 중입니다...</p></main></div>
         );
     }
 
     // 5. 오류 및 데이터 없음 처리
     if (error) {
         return (
-             <div className="app-wrapper"><Globalheader/><Header title="프로필"/><main className="content"><p>오류 발생: {error}</p></main></div>
+             <div className="app-wrapper"><GlobalHeader/><Header title="프로필"/><main className="content"><p>오류 발생: {error}</p></main></div>
         );
     }
     
     if (!profileData) {
         return (
-            <div className="app-wrapper"><Globalheader/><Header title="프로필"/><main className="content"><p>프로필 정보를 찾을 수 없습니다.</p></main></div>
+            <div className="app-wrapper"><GlobalHeader/><Header title="프로필"/><main className="content"><p>프로필 정보를 찾을 수 없습니다.</p></main></div>
         );
     }
 
@@ -216,7 +216,7 @@ console.log("🔥 columns 값:", columns);
   return (
     <div className="app-wrapper">
       {/* 헤더 컴포넌트 */}
-      <Globalheader/>
+      <GlobalHeader/>
       <Header title="프로필"/>
 
       {/* 본문 */}

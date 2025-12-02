@@ -1,120 +1,225 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { useNavigate } from "react-router-dom"; // 라우팅
+import { useNavigate } from "react-router-dom";
 import CurationList from "../../../../components/Curation/CurationList";
 import CurationFilter from "../../../../components/Filter/CurationFilter";
 
 import Header from "../../../../components/Header/Header";
-import Globalheader from "../../../../components/atoms/Header/header";
-import SearchBar2 from "../../../../components/Bar/SearchBar2";
+import GlobalHeader from "../../../../components/atoms/header/GlobalHeader";
+import SearchBar2_2 from "../../../../components/Bar/SearchBar2-2";
 import {useModal} from "../../../../components/Modal/ModalProvider";
 import { presets } from "../../../../components/Modal/presets";
+import { useAuth } from "../../../../contexts/AuthContext";
+import styles from "./ScrapCurationDetail.module.css"; 
 
+// 🚨 API 필터링을 위한 매핑 데이터 (AllCuration.js와 일관성을 위해 추가)
+const LABEL_TO_BACKEND_CATEGORY = {
+  "인문사회 전체": "인문사회",
+  "자연과학 전체": "자연과학",
+  "공학·기술 전체": "공학·기술",
+  "경제·경영 전체": "경제·경영",
+  "예술·문화 전체": "예술·문화",
+  "스포츠·라이프스타일 전체": "스포츠·라이프스타일",
+};
+
+const CATEGORY_NAME_TO_ID = {
+  // 최상위
+  "인문사회": 1, "자연과학": 2, "공학·기술": 3, "경제·경영": 4, "예술·문화": 5, "스포츠·라이프스타일": 6,
+  // 하위
+  "철학": 7, "역사": 8, "사회학": 9, "언어": 10, "심리": 11,
+  "수학": 12, "물리": 13, "화학": 14, "생물": 15, "의료": 16,
+  "IT": 17, "AI": 18, "전자": 19, "기계": 20, "산업공학": 21,
+  "경제": 22, "비즈니스": 23, "마케팅": 24,
+  "미술": 25, "음악": 26, "문학": 27, "UI/UX": 28, "건축": 29, "영화": 30,
+  "건강": 31, "스포츠": 32, "여행": 33, "생활": 34, "환경": 35,
+};
+
+const TYPE_LABEL_TO_VALUE = {
+  "베스트칼럼": "BEST_COLUMN", "BEST_COLUMN": "BEST_COLUMN",
+  "인사이트": "INSIGHT", "INSIGHT": "INSIGHT",
+  "크로스노트": "CROSSNOTE", "CROSSNOTE": "CROSSNOTE",
+};
+
+// API 기본 주소를 설정합니다.
+const API_BASE = process.env.REACT_APP_API_BASE_URL || "";
+// 🏆 경로 수정: /curation/scraps -> /api/mypage/scrapped-curations
+const SCRAP_API_ENDPOINT = `${API_BASE}/api/mypage/scrapped-curations`; 
+
+const INITIAL_FILTER_VALUES = {
+    types: [], humanities: [], science: [], tech: [], economy: [], art: [], sport: [],
+};
 
 export default function ScrapCuration () {
     const { open } = useModal();
     const navigate = useNavigate();
+    const { accessToken, logout, refreshAccessToken } = useAuth(); 
     
+    const [inputSearchTerm, setInputSearchTerm] = useState(""); 
+    const [searchTerm, setSearchTerm] = useState(""); 
+    const [sortBy, setSortBy] = useState("latest"); 
+
     const [scrappedCurations, setScrappedCurations] = useState([]);
-    // 기존 필터링 상태: null = 전체, 'INSIGHT', 'BEST_COLUMN', 'CROSSNOTE'
     const [currentBadgeFilter, setCurrentBadgeFilter] = useState(null); 
     
-    // 🏆 1. 새로 추가된 필터 관련 상태
-    const [isFilterOpen, setIsFilterOpen] = useState(false); // 상세 필터 모달/패널 토글 상태
-    const [activeFilters, setActiveFilters] = useState({}); // CurationFilter에서 선택된 실제 필터 값
+    const [isFilterOpen, setIsFilterOpen] = useState(false); 
+    const [activeFilters, setActiveFilters] = useState(INITIAL_FILTER_VALUES);
 
-    // 🏆 2. 필터 토글 핸들러: SearchBar2의 필터 아이콘 클릭 시 호출됨
+    const handleSearchChange = useCallback((value) => {
+        setInputSearchTerm(value);
+    }, []);
+
+    const handleSortChange = useCallback((key) => {
+        setSortBy(key);
+    }, []);
+
     const handleFilterToggle = useCallback(() => {
         setIsFilterOpen(prev => !prev);
     }, []);
 
-    // 🏆 3. CurationFilter에서 필터 값이 변경/적용되었을 때 호출될 함수
-    const handleFilterChange = useCallback((newFilters) => {
-        setActiveFilters(newFilters);
-        // 필터가 적용되면 UI를 닫습니다.
-        setIsFilterOpen(false); 
-        console.log("새로 적용된 필터:", newFilters);
+    const handleCloseFilter = useCallback(() => {
+        setIsFilterOpen(false);
     }, []);
 
-    // 뱃지 필터 변경 핸들러 (기존 로직)
+    const handleFilterChange = useCallback((newFilters) => {
+        setActiveFilters(newFilters);
+    }, []);
+
     const handleBadgeFilterChange = (badgeType) => {
-        setCurrentBadgeFilter(badgeType);
+        // 백엔드 요청을 위해 뱃지 유형을 대문자 문자열로 설정합니다.
+        setCurrentBadgeFilter(badgeType.toUpperCase());
     };
 
-    // 필터링된 스크랩 목록을 가져오는 함수 (API 쿼리 로직 업데이트)
-    const fetchScrapList = useCallback(async () => {
-        // setIsLoading(true);
-        try {
-            // URLSearchParams를 사용하여 모든 필터를 동적으로 구성
-            let queryParams = new URLSearchParams();
+    useEffect(() => {
+        const delaySearch = setTimeout(() => {
+            if (inputSearchTerm !== searchTerm) {
+                setSearchTerm(inputSearchTerm);
+            }
+        }, 500);
 
-            // 1. 뱃지 필터 추가
-            if (currentBadgeFilter) {
-                queryParams.append('badge', currentBadgeFilter);
+        return () => clearTimeout(delaySearch);
+    }, [inputSearchTerm, searchTerm]);
+
+
+    const fetchScrapList = useCallback(async () => {
+        if (!accessToken) {
+            console.log("인증 토큰이 없어 스크랩 목록을 가져오지 않습니다.");
+            return;
+        }
+
+        let params = {}; 
+        
+        try {
+            // 1. 정렬 파라미터 구성
+            let sortParam = "";
+            if (sortBy === "latest") sortParam = "scrapedAt,desc"; 
+            else if (sortBy === "popular") sortParam = "likeCount,desc"; 
+            
+            if (sortParam) {
+                params.sort = sortParam;
             }
 
-            // 2. 🏆 activeFilters 쿼리 파라미터 구성 (새로 추가된 로직)
-            // activeFilters 객체를 순회하며 쿼리 파라미터에 추가합니다.
-            Object.keys(activeFilters).forEach(filterKey => {
-                const values = activeFilters[filterKey];
-                if (Array.isArray(values) && values.length > 0) {
-                    // 서버가 쉼표로 구분된 리스트를 예상한다고 가정하고 값을 추가합니다.
-                    // (예: fields=경제,기술)
-                    queryParams.append(filterKey, values.join(','));
-                }
-            });
-            
-            // 최종 API URL 구성
-            const queryString = queryParams.toString();
-            const querySuffix = queryString ? `?${queryString}` : '';
-            const apiUrl = `/api/mypage/scrapped-curations${querySuffix}`;
+            // 2. 검색어 파라미터 구성
+            if (searchTerm) {
+                params.query = searchTerm;
+            }
 
-            // API 호출
+            // 3. 뱃지 필터 파라미터 구성
+            if (currentBadgeFilter) {
+                params.badge = currentBadgeFilter;
+            }
+            
+            // 4. 상세 필터 (Category ID 및 Curation Type) 파라미터 구성
+            const { humanities, science, tech, economy, art, sport, types } = activeFilters;
+            
+            const selectedCategoryNames = [
+                ...humanities, ...science, ...tech, ...economy, ...art, ...sport,
+            ];
+
+            const backendCategoryNames = selectedCategoryNames.map((label) => {
+                return LABEL_TO_BACKEND_CATEGORY[label] || label; 
+            });
+
+            if (backendCategoryNames.length > 0) {
+                const categoryIds = backendCategoryNames
+                    .map((name) => CATEGORY_NAME_TO_ID[name])
+                    .filter(Boolean);
+
+                if (categoryIds.length > 0) {
+                    params.categoryId = categoryIds.join(","); 
+                }
+            }
+
+            // 큐레이션 유형(types) 매핑
+            if (types && types.length > 0) {
+                const mappedTypes = types
+                    .map((label) => TYPE_LABEL_TO_VALUE[label])
+                    .filter(Boolean);
+
+                if (mappedTypes.length > 0) {
+                    // API 명세에 curationType 필터가 따로 없으므로, categoryId로 통합하거나, 
+                    // 백엔드 명세에 따라 params.curationType으로 전달합니다. (유형을 badge로 처리하는 것으로 가정)
+                    // 현재 로직에서는 badge 파라미터가 이미 큐레이션 유형을 처리하므로, 여기서는 제외합니다.
+                }
+            }
+
+            // 최종 API URL 구성
+            const queryString = new URLSearchParams(params).toString();
+            const querySuffix = queryString ? `?${queryString}` : '';
+            // 🏆 수정된 엔드포인트 사용
+            const apiUrl = `${SCRAP_API_ENDPOINT}${querySuffix}`; 
+
             const response = await fetch(apiUrl, {
                 method: 'GET',
                 headers: {
-                    // 인증 토큰 필요
-                    // 'Authorization': 'Bearer YOUR_AUTH_TOKEN', 
+                    'Authorization': `Bearer ${accessToken}`, 
                     'Content-Type': 'application/json',
                 },
             });
             
             if (!response.ok) {
+                if (response.status === 401) {
+                    try {
+                        await refreshAccessToken(); 
+                    } catch (e) {
+                        console.error("토큰 재발급 실패:", e);
+                    }
+                    logout(); 
+                    return;
+                }
                 throw new Error(`스크랩 목록 로드 실패: ${response.status}`);
             }
             
             const rawData = await response.json();
-            
-            // 응답 데이터 변환 (CurationList 컴포넌트 구조에 맞추기)
-            const transformedData = rawData.map(item => ({
+            // 🏆 응답이 배열 형태이므로 'content' 필드 없이 rawData 자체를 사용합니다.
+            const content = rawData; 
+
+            // 응답 데이터 변환
+            const transformedData = content.map(item => ({
                 id: item.curationId, 
                 imageUrl: item.imageUrl,
                 insightBadge: item.curationType === 'INSIGHT',
                 crossNoteBadge: item.curationType === 'CROSSNOTE',
                 bestCalumBadge: item.curationType === 'BEST_COLUMN',
+                // 🏆 응답 예시에서 'field'를 사용하므로 해당 필드를 사용합니다.
                 fieldBadges: item.field ? [item.field] : [], 
                 content: item.title, 
-                likes: 0, // 임시 값
+                likes: item.likeCount ?? 0, 
                 isBookmarked: true, 
             }));
 
             setScrappedCurations(transformedData);
         } catch (error) {
             console.error("스크랩 목록 로드 실패:", error);
-        } finally {
-            // setIsLoading(false);
-        }
-    }, [currentBadgeFilter, activeFilters]); // 4. 의존성 배열에 activeFilters 추가
+        } 
+    }, [currentBadgeFilter, activeFilters, accessToken, logout, searchTerm, sortBy, refreshAccessToken]); 
 
-    
-    // fetchScrapList의 의존성이 변경될 때마다 데이터를 다시 불러옵니다.
     useEffect(() => {
         fetchScrapList();
-    }, [fetchScrapList]); 
+    }, [fetchScrapList]); 
 
 
     // 상세 페이지 이동 핸들러
     const handleItemClick = (curationId) => {
-        navigate(`./ScrapCurationDetail/${curationId}`); 
+        navigate(`./ScrapCurationDetail/${curationId}`); 
     };
 
     // 북마크 클릭 (스크랩 취소) 핸들러
@@ -123,17 +228,22 @@ export default function ScrapCuration () {
 
         if (res === 'delete') {
             try {
-                // 스크랩 취소 API 호출
-                const response = await fetch(`/api/curations/${curationId}/scrap`, { 
+                // 스크랩 삭제 API는 기존 경로 유지한다고 가정합니다.
+                const response = await fetch(`${API_BASE}/curation/${curationId}/scrap`, { 
                     method: 'DELETE',
-                    headers: { /* 인증 정보 */ },
+                    headers: { 
+                        'Authorization': `Bearer ${accessToken}`, 
+                    },
                 });
                 
                 if (!response.ok) {
-                    throw new Error('스크랩 삭제 실패'); 
+                    if (response.status === 401) {
+                        logout();
+                        return;
+                    }
+                    throw new Error('스크랩 삭제 실패'); 
                 }
                 
-                // API 호출 성공 시 로컬 상태 업데이트
                 setScrappedCurations(prev =>
                     prev.filter(curation => curation.id !== curationId)
                 );
@@ -146,32 +256,39 @@ export default function ScrapCuration () {
 
     return (
         <div className="app-wrapper">
-            <Globalheader />
+            <GlobalHeader />
             <Header title="내가 스크랩한 큐레이션"/>
+            <SearchBar2_2
+                onFilterClick={handleFilterToggle} 
+                onBadgeFilterChange={handleBadgeFilterChange} 
+                onSearchChange={handleSearchChange} 
+                onSortChange={handleSortChange} 
+                searchTerm={inputSearchTerm} 
+                activeSort={sortBy} 
+             />
 
             <main className="content">
                 
-                {/* 5. SearchBar2에 필터 토글 핸들러 연결 */}
-                <SearchBar2 
-                    onFilterClick={handleFilterToggle} // 필터 아이콘 클릭 시 토글
-                    onBadgeFilterChange={handleBadgeFilterChange} // 뱃지 필터 변경 시 호출
-                />
-                
-                {/* 6. CurationFilter를 isFilterOpen 상태에 따라 조건부 렌더링 */}
                 {isFilterOpen && (
-                    <CurationFilter 
-                        value={activeFilters} // 현재 필터 값
-                        onChange={handleFilterChange} // 필터 적용 핸들러
-                        onClose={handleFilterToggle} // (선택 사항) 필터 내부 닫기 버튼 연결
+                    <div
+                        className={styles["curation-filter-backdrop"]} 
+                        onClick={handleCloseFilter} 
                     />
                 )}
 
-                {/* 큐레이션 목록 */}
+                <CurationFilter 
+                    isOpen={isFilterOpen} 
+                    value={activeFilters} 
+                    onChange={handleFilterChange} 
+                    onClose={handleCloseFilter}
+                />
+
                 <CurationList
                     curations={scrappedCurations}
                     onItemClick={handleItemClick}
                     onBookmarkClick={handleBookmarkClick}
                 />
+
             </main>
         </div>
     );

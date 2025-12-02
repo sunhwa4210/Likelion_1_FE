@@ -10,36 +10,40 @@ const FieldInter = ({ selectedBadges, onBadgeChange}) => {
     // 외부 prop 변경 (InformModify에서 상태 변경) 시 내부 상태 갱신
     useEffect(() => {
         const updatedCategories = (selectedBadges || []).map(item => item.label);
-        setSelectedCategories(updatedCategories);
+        // 객체 배열 비교가 아닌 라벨 배열 비교를 통해 불필요한 갱신 방지
+        const currentCategories = selectedCategories.map(label => label).sort();
+        if (updatedCategories.sort().join(',') !== currentCategories.join(',')) {
+             setSelectedCategories(updatedCategories);
+        }
     }, [selectedBadges]);
 
 
     const handleCategoryClick = (clickedLabel) => {
         
         const isSelected = selectedCategories.includes(clickedLabel);
-        
-        let newSelectedCategories;
-        
+    
         if (isSelected) {
-            //이미 선택된 상태라면, 해당 뱃지를 제거(선택 취소)
-            newSelectedCategories = selectedCategories.filter(
+            // 1. 내부 라벨 상태에서 클릭된 라벨을 제외합니다.
+            const newSelectedCategories = selectedCategories.filter(
                 (label) => label !== clickedLabel
             );
+            
+            // 내부 상태 업데이트
+            setSelectedCategories(newSelectedCategories);
+            
+            // 2. 상위 컴포넌트의 객체 배열(selectedBadges)을 필터링하여, 
+            //    새로운 라벨 배열(newSelectedCategories)에 포함된 객체만 남깁니다.
+            const newBadges = selectedBadges.filter(badge => 
+                newSelectedCategories.includes(badge.label)
+            );
+
+            // 3. 상위 컴포넌트 상태 업데이트
+            onBadgeChange(newBadges);
         } else {
-            // 선택되지 않은 상태라면, 추가 (제거 모드에서는 사용되지 않음)
-            newSelectedCategories = [...selectedCategories, clickedLabel];
+            // 이 컴포넌트에서는 추가 플로우가 없으므로 별도 처리하지 않습니다.
+            // console.warn("삭제 모드에서 선택되지 않은 뱃지 클릭됨:", clickedLabel);
         }
-
-        setSelectedCategories(newSelectedCategories);
-        
-        // 남은 라벨 배열을 사용하여, 기존 selectedBadges 객체 배열에서 필터링
-        const newBadges = selectedBadges.filter(badge => 
-            newSelectedCategories.includes(badge.label)
-        );
-
-        // 상위 컴포넌트 (InformModify) 상태 업데이트
-        onBadgeChange(newBadges);
-    };
+    }
 
     return (
         <div style={{ 
@@ -87,10 +91,8 @@ const FieldInter = ({ selectedBadges, onBadgeChange}) => {
                         // 활성화 여부를 내부 상태(제거 로직의 결과)로 판단
                         isSelected={selectedCategories.includes(item.label)} 
                         onClick={() => handleCategoryClick(item.label)}
-                        // colorKey에 해당하는 테마 사용, 없으면 default 사용
                         activeTheme={COLOR_THEMES[item.colorKey] || COLOR_THEMES.default}
-                        // displayMode="removable"로 고정하여 X 버튼이 나오도록 함
-                        displayMode={"removable"} 
+                        displayMode={"removable"}
                     />
                 ))}
                 </div>

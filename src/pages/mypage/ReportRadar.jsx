@@ -78,13 +78,33 @@ const ReportRadar = ({chartData: scores, userName}) => {
       return <div className={styles.radarNoData}>표시할 데이터가 없습니다.</div>;
   }
 
+  const subjectColors = {
+      '인문사회': '#2986E6', 
+      '공학·기술': '#C36839', 
+      '예술·문화': '#73C62F', 
+      '스포츠·라이프스타일': '#FD88D9',
+      '경제·경영': '#9582FF', 
+      '자연과학': '#FE817B', 
+  };
+
+  const subjectOrder = [
+      '인문사회',
+      '공학·기술',
+      '예술·문화',
+      '스포츠·라이프스타일',
+      '경제·경영',
+      '자연과학',
+  ];
+
   // Prop으로 받은 scores 데이터를 Recharts 형식에 맞게 변환
-  const radarData = Object.keys(scores).map(subject => ({
+  const radarData = subjectOrder
+    .filter(subject => scores[subject] !== undefined) // scores에 있는 항목만 포함
+    .map(subject => ({
       subject: subject,
       value: scores[subject],
       fullMark: 50, // API 명세가 없으므로 50으로 임시 고정
-      // 색상 로직은 필요시 추가
-  }));
+      color: subjectColors[subject] || '#000',
+    }));
     
   // 1. 점수와 과목명(subject) 배열 생성
 const scoreEntries = Object.entries(scores).map(([subject, value]) => ({ subject, value }));
@@ -112,11 +132,13 @@ const formatSubjectList = (items) => {
     if (subjects.length === 0) return null;
     if (subjects.length === 1) return subjects[0];
     
-    // 마지막 항목에만 '과' 또는 '와'를 붙여 자연스럽게 연결합니다.
     const lastSubject = subjects.pop();
-    const prefix = lastSubject.slice(-1).match(/[가-힣]/) && (lastSubject.charCodeAt(lastSubject.length - 1) - 0xac00) % 28 !== 0 ? '와' : '과';
+    const mainList = subjects.join(', '); 
 
-    return `${subjects.join(', ')} ${prefix} ${lastSubject}`;
+    const hasJongseong = lastSubject.slice(-1).match(/[가-힣]/) && (lastSubject.charCodeAt(lastSubject.length - 1) - 0xac00) % 28 !== 0;
+    const prefix = hasJongseong ? '과' : '와'; 
+
+    return `${mainList} ${prefix} ${lastSubject}`; 
 };
 
 const mostStudiedList = formatSubjectList(mostStudiedItems);
@@ -183,7 +205,7 @@ if (allScoresEqual) {
           
           <PolarAngleAxis 
             dataKey="subject" 
-            tick={<CustomPolarAngleAxisTick data={radarData} />}
+            tick={<CustomPolarAngleAxisTick data={radarData}/>}
           />
 
           <PolarRadiusAxis 

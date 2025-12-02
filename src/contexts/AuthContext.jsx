@@ -108,6 +108,8 @@ export function AuthProvider({ children }) {
       localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
       localStorage.removeItem("tokenType");
+
+      nav('/login'); // 추가 
     }
   };
 
@@ -156,6 +158,7 @@ export function AuthProvider({ children }) {
     refreshAccessToken,
     fetchMe,
     applyTokensAndFetchUser,
+    API_BASE,
     socialLoginUrls: {
       kakao: `${API_BASE}/auth/login/kakao`,
       google: `${API_BASE}/auth/login/google`,
