@@ -4,7 +4,7 @@ import axios from "axios";
 import styles from "./AllCuration.module.css";
 
 import GlobalHeader from "../../components/atoms/header/GlobalHeader";
-import SearchBar1 from "../../components/Bar/SearchBar1";
+import SearchBar2 from "../../components/Bar/SearchBar2";
 import CurationFilter from "../../components/Filter/CurationFilter";
 import CurationItem from "../../components/Curation/CurationItem";
 import { useAuth } from "../../contexts/AuthContext";
@@ -87,7 +87,7 @@ const API_BASE = process.env.REACT_APP_API_BASE_URL || "";
 
 export default function AllCuration() {
   const navigate = useNavigate();
-  const { accessToken } = useAuth();
+  const { accessToken,refreshAccessToken } = useAuth();
 
   //큐레이션 클릭 시 큐레이션 세부보기 페이지로 이동
   const handleCurationClick = (item) => {
@@ -138,16 +138,16 @@ export default function AllCuration() {
   if (!accessToken) return;
 
   const fetchCurations = async () => {
+
+    let params = {};
     try {
       // 정렬 파라미터 매핑
       let sortParam = "";
       if (sortBy === "latest") sortParam = "createdAt,desc";
       else if (sortBy === "popular") sortParam = "likeCount,desc";
-      // TODO: 댓글순 정렬은 백엔드에서 정해주면 여기 추가
-      else if (sortBy === "comments") sortParam = "하나님께 받으면 이 부분에 추가";
 
       // 쿼리 파라미터 구성
-      const params = {
+      params = {
         ...(searchTerm && { query: searchTerm }), // 검색어
         ...(sortParam && { sort: sortParam }),   // 정렬
       };
@@ -185,7 +185,7 @@ export default function AllCuration() {
           .filter(Boolean);
 
         if (mappedTypes.length > 0) {
-          params.curationType = mappedTypes[0];
+          params.curationType = mappedTypes.join(",");
         }
       }
 
@@ -213,7 +213,7 @@ export default function AllCuration() {
 
         insightBadge: item.curationType === "INSIGHT",
         crossNoteBadge: item.curationType === "CROSSNOTE",
-        bestCalumBadge: item.bestColumn === true,
+        bestColumBadge: item.bestColumn === true,
 
         content: {
           title: item.title,
@@ -221,18 +221,61 @@ export default function AllCuration() {
           sourceUrl: item.sourceUrl,
         },
 
-        likes: item.likeCount ?? 0,
-        isBookmarked: item.scrapped ?? false,
+        likeCount: item.likeCount ?? 0,  
+        liked: item.liked ?? false,      
+        scraped: item.scraped ?? false,
       }));
 
       setCurations(mapped);
     } catch (error) {
-      console.error("전체 큐레이션 불러오기 실패:", error);
+    console.error("전체 큐레이션 불러오기 1차 실패:", error);
+
+    // 401일 때만 refresh 시도
+    if (error.response?.status === 401) {
+      try {
+        const newToken = await refreshAccessToken();
+        if (!newToken) {
+          return;
+        }
+
+        // 새 토큰으로 한 번 더 재요청
+        const retryRes = await axios.get(`${API_BASE}/curation`, {
+          headers: {
+            Authorization: `Bearer ${newToken}`,
+          },
+          params,
+        });
+
+        const retryData = retryRes.data?.content ?? [];
+        const mapped = retryData.map((item) => ({
+          id: item.curationId,
+          imageUrl: item.imageUrl || "",
+          fieldBadges: item.crossCategoryName
+            ? [item.categoryName, item.crossCategoryName]
+            : [item.categoryName],
+          insightBadge: item.curationType === "INSIGHT",
+          crossNoteBadge: item.curationType === "CROSSNOTE",
+          bestColumBadge: item.bestColumn === true,
+          content: {
+            title: item.title,
+            description: item.description,
+            sourceUrl: item.sourceUrl,
+          },
+          likeCount: item.likeCount ?? 0,  
+          liked: item.liked ?? false,      
+          scraped: item.scraped ?? false,
+        }));
+
+        setCurations(mapped);
+      } catch (retryErr) {
+        console.error("토큰 재발급 후 /curation 재시도 실패:", retryErr);
+      }
     }
-  };
+  }
+};
 
   fetchCurations();
-}, [accessToken, searchTerm, sortBy, filterValues]);
+}, [accessToken, searchTerm, sortBy, filterValues,refreshAccessToken]);
 
   
 
@@ -242,7 +285,7 @@ export default function AllCuration() {
     //전체 큐레이션 피드
     <div className="app-wrapper">
         <GlobalHeader/>
-        <SearchBar1         
+        <SearchBar2         
           onFilterClick={handleFilterToggle}
           onSearchChange={handleSearchChange}
           onSortChange={handleSortChange}/>
@@ -263,18 +306,19 @@ export default function AllCuration() {
           {curations.map(item => (
           <CurationItem
             key={item.id} 
+            id={item.id} 
             imageUrl={item.imageUrl}
             
             fieldBadges={item.fieldBadges}
 
             insightBadge={item.insightBadge}
             crossNoteBadge={item.crossNoteBadge}
-            bestCalumBadge={item.bestCalumBadge}
+            bestColumBadge={item.bestColumBadge}
 
             content={item.content}
-            likes={item.likes}
-            isBookmarked={item.isBookmarked}
-
+            likeCount={item.likeCount}
+            liked={item.liked} 
+            scraped={item.scraped} 
             onClick={()=>handleCurationClick(item)}
           />
         ))}

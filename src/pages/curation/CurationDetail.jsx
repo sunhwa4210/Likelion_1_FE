@@ -6,8 +6,8 @@ import axios from "axios";
 import InsightBadge from "../../components/icons/InsightBadge";
 import CrossNoteBadge from "../../components/icons/CrossNoteBadge";
 import BestCalumBadge from "../../components/icons/BestCalumBadge";
-import GoodCountIcon from "../../components/icons/GoodCountIcon";
-import BookmarkIcon from "../../components/icons/BookmarkIcon";
+import CurationLikeButton from "../../components/Curation/CuraionLikeButton";
+import CurationScrapButton from "../../components/Curation/CurationScrapButton";
 import ContentEmbed from "../../components/Curation/ContentEmbed";
 import CategoryXselector from "../../components/Badges/CategoryXselector";
 import { categories } from "../../components/Badges/CategoryData";
@@ -41,10 +41,6 @@ export default function CurationDetail() {
   
   const fromPath = location.state?.from || "/curation";
 
-
-  // 북마크 상태
-  const [isBookmarked, setIsBookmarked] = useState(false);
-
   // 상세 데이터 조회
   useEffect(() => {
     if (!accessToken || !curationId) return;
@@ -71,13 +67,6 @@ export default function CurationDetail() {
 
     fetchDetail();
   }, [curationId, accessToken]);
-
-  // scrapped 초기값 설정
-  useEffect(() => {
-    if (data) {
-      setIsBookmarked(Boolean(data.scrapped));
-    }
-  }, [data]);
 
 
   // 로딩 중
@@ -109,6 +98,7 @@ export default function CurationDetail() {
 
 //데이터 있는 경우
   const {
+    id,
     title,
     description,
     imageUrl,
@@ -119,14 +109,17 @@ export default function CurationDetail() {
     likeCount, //좋아요 개수
     originalColumnId, // 오리지날 칼럼 id
     bestColumn, //베스트 칼럼 여부
-    scrapped, //스크립트 여부
+    scraped, //스크립트 여부
     liked, //좋아요 여부
   } = data;
+
+  console.log("[DETAIL] likeCount, liked:", likeCount, liked, typeof liked);
+
 
   // 타입별 구분
   const isInsight = curationType === "INSIGHT";
   const isCrossNote = curationType === "CROSSNOTE";
-  const isBestColumn = curationType === "BEST_COLUMN";
+  const isBestColumn = bestColumn === true;
 
   // 카테고리 매핑
   const categoryLabels = [categoryName, crossCategoryName].filter(Boolean);
@@ -134,18 +127,11 @@ export default function CurationDetail() {
     categoryLabels.includes(cat.label)
   );
 
-  // 좋아요/임베드 파생값
-  const likes = likeCount ?? 0;
-
-  // 북마크 토글
-  const handleBookmarkClick = () => {
-    setIsBookmarked((prev) => !prev);
-  };
 
   // 원문 칼럼 이동
   const handleGoColumn = () => {
       if (!sourceUrl) return;
-      nav(sourceUrl);nav(sourceUrl);
+      nav(sourceUrl);
   };
   //외부 링크로 이동
   const handleGoExternal = () => {
@@ -162,7 +148,7 @@ export default function CurationDetail() {
       <div className={styles["curation-detail-wrapper"]}>
         {/* 썸네일 + 타입 뱃지 */}
         <div className={styles["curation-image-placeholder"]}>
-          <img src={imageUrl} alt="큐레이션 이미지" />
+          <img src={imageUrl} alt="큐레이션 이미지를 불러오지 못했습니다." />
 
           {isInsight && (
             <div className={styles["insight-badge"]}>
@@ -210,8 +196,11 @@ export default function CurationDetail() {
 
           {/* 푸터 */}
           <div className={styles["curation-footer"]}>
-            <GoodCountIcon initialLikes={likes} initiallyLiked={liked}/>
-
+              <CurationLikeButton
+                curationId={curationId}
+                initialLikeCount={likeCount ?? 0}
+                initialLiked={liked}  
+              />
             {/* 베스트 칼럼 일땐, 내부 라우트 버튼 */}
             {isBestColumn && (
               <button  type="button" onClick={handleGoColumn}>
@@ -256,10 +245,10 @@ export default function CurationDetail() {
               </defs>
             </svg>
         </button>
-        <BookmarkIcon
+        <CurationScrapButton
+          curationId={curationId}
+          initialScrapped={scraped}
           variant="detail"
-          isMarked={isBookmarked}
-          onClick={handleBookmarkClick}
         />
       </div>
     </div>
