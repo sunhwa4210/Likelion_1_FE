@@ -12,7 +12,7 @@ const API_BASE = process.env.REACT_APP_API_BASE_URL || "";
 
 export default function PersonalCuration() {
   // 사용자 정보 가져오기 
-  const { user,accessToken } = useAuth();
+  const { user,accessToken,refreshAccessToken } = useAuth();
   const navigate = useNavigate();
 
   const userName = user?.name ?? "사용자";
@@ -60,14 +60,15 @@ export default function PersonalCuration() {
             : [item.categoryName],
           insightBadge: item.curationType ==="INSIGHT",
           crossNoteBadge: item.curationType ==="CROSSNOTE",
-          bestCalumBadge: item.bestColumn === true,
+          bestColumBadge: item.bestColumn === true,
           content: {
             title: item.title,
             description: item.description,
             sourceUrl: item.sourceUrl,
             },
-            likes: item.likeCount ?? 0,
-            isBookmarked: item.scraped ?? false,
+            likeCount: item.likeCount?? 0, //좋아요 개수
+            liked: item.liked ?? false, //좋아요 여부
+            scraped: item.scraped ?? false,
         }));
         console.log("[DEBUG] mapped curations:", mapped);
 
@@ -75,15 +76,63 @@ export default function PersonalCuration() {
         console.log("개인화 큐레이션 불러오기 끝");
       } catch (err) {
         console.error(err);
-        setError("개인화 큐레이션을 불러오지 못했어요.");
-      }
-      finally { setLoading(false);}
+        setError("개인화 큐레이션 불러오기 1차 실패");
+        //401일 때 refresh 시도
+        if(err.response?.status===401){
+          try{
+            const newToken = await refreshAccessToken();
+            if(!newToken) {return;}
+
+            //새 토큰으로 한 번 더 재요청
+            const headers = newToken
+            ?{Authorization:`Bearer ${newToken}`}
+            :{};
+
+            const res = await axios.get(`${API_BASE}/curation/personal`,{
+              headers,
+            });
+            console.log("[DEBUG] raw personal data:", res.data)
+            
+            const data = res.data || [];
+            
+            const mapped = data.map((item)=>({
+              
+              id: item.curationId,
+              
+              imageUrl: item.imageUrl || "",
+              fieldBadges: item.crossCategoryName
+                ? [item.categoryName, item.crossCategoryName]
+                : [item.categoryName],
+              insightBadge: item.curationType ==="INSIGHT",
+              crossNoteBadge: item.curationType ==="CROSSNOTE",
+              bestColumBadge: item.bestColumn === true,
+              content: {
+                title: item.title,
+                description: item.description,
+                sourceUrl: item.sourceUrl,
+                },
+                liked: item.liked ?? false, //좋아요 여부
+                likeCount: item.likeCount ?? 0,
+                scraped: item.scraped ?? false,
+            }));
+            console.log("[DEBUG] mapped curations:", mapped);
+
+            setCurations(mapped);
+            console.log("개인화 큐레이션 불러오기 끝");
+          } catch(retryErr){
+            console.error("토큰 재발급 후 /curation/paersonal 재시도 실패:", retryErr);
+            setError("개인화 큐레이션을 불러오지 못했어요.");
+          } 
+        } else {
+            setError("개인화 큐레이션을 불러오지 못했어요");
+          }
+        }finally { setLoading(false);}
     };
 
     //로그인 상태에서만 호출 (accessToken 없으면 나감)
-    if (!accessToken) return;
+  if (!accessToken) return;
     fetchPersonalCurations();
-  },[accessToken]);
+  },[accessToken,refreshAccessToken]);
 
   //큐레이션 세부정보 보기
   const handleCurationClick = (item) => {
@@ -120,18 +169,19 @@ export default function PersonalCuration() {
         {curations.map(item => (
         <CurationItem
           key={item.id} 
+          id={item.id} 
           imageUrl={item.imageUrl}
           
           fieldBadges={item.fieldBadges}
 
           insightBadge={item.insightBadge}
           crossNoteBadge={item.crossNoteBadge}
-          bestCalumBadge={item.bestCalumBadge}
+          bestColumBadge={item.bestColumBadge}
 
           content={item.content}
-          likes={item.likes}
-          isBookmarked={item.isBookmarked}
-
+          likeCount={item.likeCount}
+          liked={item.liked}
+          scraped={item.scraped}
           onClick={()=>handleCurationClick(item)}
         />
       ))}

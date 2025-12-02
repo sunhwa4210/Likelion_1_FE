@@ -4,14 +4,12 @@ import React from "react";
 import InsightBadge from "../icons/InsightBadge";
 import CrossNoteBadge from "../icons/CrossNoteBadge";
 import BestCalumBadge from "../icons/BestCalumBadge";
-import GoodCountIcon from "../icons/GoodCountIcon";
-import BookmarkIcon from "../icons/BookmarkIcon";
-
+import CurationLikeButton from "./CuraionLikeButton";
+import CurationScrapButton from "./CurationScrapButton";
 import CategoryXselector from "../Badges/CategoryXselector"
 import { categories } from "../Badges/CategoryData";
 
 import styles from './CurationItem.module.css';
-import { useNavigate } from "react-router-dom";
 
 const findCategoryItem = (label) => {
     // 공백을 제거해 정확히 일치하는 카테고리 찾기 
@@ -25,22 +23,20 @@ const DEFAULT_WIDTH = '347px';
 const DEFAULT_HEIGHT = '265px';
 
 const CurationItem = ({
+    id, //각 큐레이션 id
     imageUrl, // 이미지 
     insightBadge, // 인사이트 뱃지 
     crossNoteBadge, // 크로스 노트 뱃지 
-    bestCalumBadge, // 베스트칼럼 뱃지 (3개 중 하나의 변수를 true로 설정해 사용)
+    bestColumBadge, // 베스트칼럼 뱃지 (3개 중 하나의 변수를 true로 설정해 사용)
     fieldBadges, // 선택한 카테고리 -> 배열로 
     content,           // { title, description, sourceUrl }
-    likes, // 좋아요 수 
-    isBookmarked, // 북마크 
+    likeCount, // 좋아요 수 
+    liked, //좋아요 여부
+    scraped, // 북마크 
     cardWidth = DEFAULT_WIDTH, // 크기 
     cardHeight = DEFAULT_HEIGHT, // 크기
-    onBookmarkClick,
-    onClick, 
-    
+    onClick,
 }) => {
-
-    const navigate = useNavigate();
 
     // Props로 크기 가져오기 
     const cardStyle = { width: cardWidth, height: cardHeight, };
@@ -51,15 +47,7 @@ const CurationItem = ({
         .filter(item => item !== undefined); // 찾지 못한 항목 제외
     
     const title = content?.title??"";
-    const description = content?.description??"";
-    const sourceUrl = content?.sourceUrl??"";
 
-    const handleBookmarkClick = (e) => {
-      e.stopPropagation();
-      if (onBookmarkClick) {
-        onBookmarkClick();
-      }
-    };
 
     return (
     <div   
@@ -85,9 +73,9 @@ const CurationItem = ({
             <CrossNoteBadge type={crossNoteBadge} />
           </div>
         )}
-        {bestCalumBadge && (
-          <div className={styles.bestCalumBadge}> 
-            <BestCalumBadge type={bestCalumBadge} />
+        {bestColumBadge && (
+          <div className={styles.bestColumBadge}> 
+            <BestCalumBadge type={bestColumBadge} />
           </div>
         )}
       </div>
@@ -107,13 +95,11 @@ const CurationItem = ({
           )}
 
           {/* 4. 북마크 버튼 컴포넌트 사용 */}
-          <div 
-            className={styles.bookmarkIconContainer} 
-            onClick={(e) => { 
-              e.stopPropagation(); 
-              onBookmarkClick(); 
-          }}>
-            <BookmarkIcon isMarked={isBookmarked} />
+          <div className={styles.bookmarkIconContainer} >
+             <CurationScrapButton
+              curationId={id}
+              initialScrapped={scraped}
+            />
           </div>
         </div>
 
@@ -123,7 +109,11 @@ const CurationItem = ({
         {/* -- 푸터 영역 -- */}
         <div className={styles.curationFooter}>
           {/* 6. 좋아요 버튼 컴포넌트 사용 */}
-          <GoodCountIcon count={likes} />
+          <CurationLikeButton
+          curationId={id}
+          initialLikeCount={likeCount}
+          initialLiked={liked}
+        />
         </div>
       </div>
     </div>

@@ -22,7 +22,7 @@ function GlobalHeader(_, ref) {
   };
 
   const titleMap = {
-    "/curation": "CROSSXNOTE",
+    "/curation/personal": "CROSSXNOTE",
     "/balance-game": "BALANCE GAME",
     "/column": "COLUMN",
     "/qna": "QnA",
@@ -37,7 +37,7 @@ function GlobalHeader(_, ref) {
         {/* 로고 클릭 시 메뉴 토글 */}
 
         <h1 ref={ref} className={styles.headerLogo} onClick={() => setOpen((v) => !v)}>
-          {location.pathname === "/"||"/curation" ? (
+          {location.pathname === "/"||"/curation/personal" ? (
             <>
               CROSS<span>X</span>NOTE
             </>
@@ -58,7 +58,7 @@ function GlobalHeader(_, ref) {
       {open && (
         <nav className={styles.headerMenu} aria-label="주 메뉴">
           <ul>
-            <li onClick={() => handleNavigate("/curation")}>CROSSXNOTE</li>
+            <li onClick={() => handleNavigate("/curation/personal")}>CROSSXNOTE</li>
             <li onClick={() => handleNavigate("/balance-game")}>BALANCE GAME</li>
             <li onClick={() => handleNavigate("/column")}>COLUMN</li>
             <li onClick={() => handleNavigate("/qna")}>QnA</li>
