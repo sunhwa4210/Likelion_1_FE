@@ -138,7 +138,7 @@ const formatSubjectList = (items) => {
     const hasJongseong = lastSubject.slice(-1).match(/[가-힣]/) && (lastSubject.charCodeAt(lastSubject.length - 1) - 0xac00) % 28 !== 0;
     const prefix = hasJongseong ? '과' : '와'; 
 
-    return `${mainList} ${prefix} ${lastSubject}`; 
+    return `${mainList}${prefix} ${lastSubject}`; 
 };
 
 const mostStudiedList = formatSubjectList(mostStudiedItems);
@@ -163,7 +163,7 @@ if (allScoresEqual) {
     const isDifferent = mostStudiedList !== leastStudiedList;
 
     if (leastStudiedList && isDifferent) {
-        analysis.push(`${leastStudiedList} 분야는 조금 더 탐색해 볼 수 있어요.`);
+        analysis.push(`에서 ${leastStudiedList} 분야는 조금 더 탐색해 볼 수 있어요.`);
     }
 }
 

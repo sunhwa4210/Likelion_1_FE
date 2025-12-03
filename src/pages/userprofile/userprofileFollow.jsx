@@ -8,7 +8,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Header from '../../components/Header/Header';
 import GlobalHeader from "../../components/atoms/header/GlobalHeader";
-import UserProfile from '../mypage/UserProfile';
+import UserProfile2 from "./UserProfile2";
 import CalumItem from "../mypage/location/calum/CalumItem";
 import styles from './userprofileFollow.module.css';
 import { useAuth } from '../../contexts/AuthContext';
@@ -222,7 +222,7 @@ console.log("🔥 columns 값:", columns);
       {/* 본문 */}
       <main className="content">
         {/* 여기에 페이지 콘텐츠 전부 */}
-        <UserProfile 
+        <UserProfile2 
             data={profileData}
             onFollowListClick={handleListClick}
 

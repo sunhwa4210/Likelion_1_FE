@@ -1,3 +1,10 @@
+.curationListContainer { /* CurationList2의 최상위 컨테이너라고 가정 */
+    display: flex;
+    flex-wrap: wrap; /* 카드가 여러 개일 경우 */
+    justify-content: center; /* <--- 내부 항목(카드)들을 중앙 정렬 */
+    width: 100%; /* 부모의 너비를 꽉 채우도록 설정 */
+}
+
 /* 큐레이션 카드 개별 항목 */
 .curationCard {
     background-color: #FFFFFF;
@@ -5,6 +12,8 @@
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08); /* 카드 그림자 */
     overflow: hidden; /* 이미지 둥근 모서리 적용을 위해 */
     position: relative;
+    margin-bottom: 20px;
+    justify-content: center;
 }
 
 /* -- 헤더 영역 --  */

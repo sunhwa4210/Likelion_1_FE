@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import GlobalHeader from "../../../../components/atoms/header/GlobalHeader";
 import Header from '../../../../components/Header/Header';
 import Profile from './Profile';
@@ -36,14 +37,19 @@ const areBadgesEqual = (arr1, arr2) => {
 
 
 export default function InformModify() {
-    const { accessToken } = useAuth();
+    const { accessToken, updateUserProfile } = useAuth();
+    const navigate = useNavigate();
 
     // 모든 컴포넌트의 상태를 통합 관리
     const [isLoading, setIsLoading] = useState(true);
+    const [isSaving, setIsSaving] = useState(false);
     
     // Profile 관련 상태 추가 (name, email도 여기서 관리)
     const [initialName, setInitialName] = useState(null);
     const [initialEmail, setInitialEmail] = useState(null);
+    const [selectedName, setSelectedName] = useState(null); 
+    const [selectedEmail, setSelectedEmail] = useState(null);
+
     const [initialProfileImageUrl, setInitialProfileImageUrl] = useState(null);
     const [selectedProfileImageUrl, setSelectedProfileImageUrl] = useState(null); 
     
@@ -61,6 +67,7 @@ export default function InformModify() {
     // FieldPro 상태
     const [initialProBadges, setInitialProBadges] = useState([]);
     const [selectedProBadges, setSelectedProBadges] = useState([]);
+
 
     // 모든 초기 데이터 로딩 (useCallback으로 분리)
     const loadAllData = useCallback(async () => {
@@ -97,10 +104,12 @@ export default function InformModify() {
 
             // Profile 데이터 설정
             setInitialName(realData.name);
+            setSelectedName(realData.name); // ✅ 선택된 이름 초기화
             setInitialEmail(realData.email);
+            setSelectedEmail(realData.email); // ✅ 선택된 이메일 초기화
             setInitialProfileImageUrl(realData.profileImageUrl);
             setSelectedProfileImageUrl(realData.profileImageUrl);
-            
+
             // ✅ provider 상태 설정 (서버 응답에 realData.provider가 포함되어야 함)
             setProvider(realData.provider || 'LOCAL'); 
 
@@ -128,42 +137,46 @@ export default function InformModify() {
     }, [loadAllData]);
 
     // 수정 여부 판단 
+    // 이름/이메일 수정 여부 (소셜 사용자는 수정이 불가하므로 provider 확인 로직은 Profile 컴포넌트에서 처리)
+    const isNameModified = selectedName !== initialName && selectedName !== null;
+    const isEmailModified = selectedEmail !== initialEmail && selectedEmail !== null;
+    
     // Level 수정 여부
     const isLevelModified = selectedLevel !== initialLevel && selectedLevel !== null;
     
-    // FieldInter 수정 여부
+    // FieldInter/Pro 수정 여부
     const isInterModified = !areBadgesEqual(selectedInterBadges, initialInterBadges);
-
-    // FieldPro 수정 여부
     const isProModified = !areBadgesEqual(selectedProBadges, initialProBadges);
     
     // Profile Image 수정 여부
     const isProfileImageModified = selectedProfileImageUrl !== initialProfileImageUrl;
 
     // 최종 수정 여부
-    const isModified = isLevelModified || isInterModified || isProModified || isProfileImageModified;
+    const isModified = isNameModified || isEmailModified || isLevelModified || isInterModified || isProModified || isProfileImageModified;
 
     // 최종 저장 함수
     const handleSave = async () => { 
         if (!isModified || !accessToken) return;
         
-        // 1. API로 전송할 데이터 준비 (변경된 모든 필드 포함)
-        const updatedData = {
-        // 이름과 이메일은 Profile 컴포넌트에서 수정 가능 여부를 제어하지만, 
-        // 여기서 업데이트되는 것이 아니므로 초기값을 그대로 전송
-        name: initialName, 
-        email: initialEmail, 
+        setIsSaving(true);
 
-        // Level: 백엔드 명세에 맞게 매핑
-        curationLevel: selectedLevel === 'A' ? 'LEVEL_1' : 'LEVEL_2', 
-        
-        // Badges
-        interestNames: selectedInterBadges.map(b => b.label),
-        expertiseNames: selectedProBadges.map(b => b.label),
-        
-        // Profile Image URL 포함
-        profileImageUrl: selectedProfileImageUrl,
-    };
+        const curationLevelValue = selectedLevel === 'A' ? 'LEVEL_1' : 'LEVEL_2'; // 👈 **[수정] 선언 누락 수정**
+
+    // 🔑 뱃지 배열 변환: 뱃지 객체 배열을 레이블 문자열 배열로 변환
+    const interestNamesArray = selectedInterBadges.map(b => b.label);     // 👈 **[수정] 선언 누락 수정**
+    const expertiseNamesArray = selectedProBadges.map(b => b.label);
+
+        // 1. API로 전송할 데이터 준비 (변경된 모든 필드 포함)
+       const updatedData = {
+            // ✅ 수정된 상태 (selectedName, selectedEmail) 전송
+            name: selectedName, 
+            email: selectedEmail, 
+            curationLevel: curationLevelValue, 
+            interestNames: interestNamesArray,
+            expertiseNames: expertiseNamesArray,
+            profileImageUrl: selectedProfileImageUrl,
+            // 명세서에 있지만 현재 화면에 없는 필드는 제외: password, passwordCheck, birthDate
+        };
         
         console.log("--- 최종 수정하기 클릭 ---");
         console.log("전송 데이터:", updatedData);
@@ -180,13 +193,30 @@ export default function InformModify() {
             });
 
             if (response.ok) {
-                alert(`프로필이 성공적으로 수정되었습니다.`);
+                // alert(`프로필이 성공적으로 수정되었습니다.`);
                 
                 // 3. 저장 성공 후 초기값 업데이트 (수정 상태를 리셋)
+                setInitialName(selectedName); // ✅ 초기 이름 업데이트
+                setInitialEmail(selectedEmail); // ✅ 초기 이메일 업데이트
                 setInitialLevel(selectedLevel);
                 setInitialInterBadges(selectedInterBadges);
                 setInitialProBadges(selectedProBadges);
                 setInitialProfileImageUrl(selectedProfileImageUrl);
+
+                if (updateUserProfile) {
+                    updateUserProfile({
+                        name: selectedName, 
+                        email: selectedEmail, 
+                        profileImageUrl: selectedProfileImageUrl, 
+                        // ✅ 수정된 모든 필드를 Context에 업데이트
+                        curationLevel: curationLevelValue,
+                        interestNames: interestNamesArray,
+                        expertiseNames: expertiseNamesArray,
+                    });
+                }
+
+                navigate('/mypage');
+                
             } else {
                 const errorText = await response.text();
                 console.error("정보 수정 실패:", response.status, errorText);
@@ -195,6 +225,8 @@ export default function InformModify() {
         } catch (error) {
             console.error("정보 수정 API 호출 중 네트워크 오류:", error);
             alert("네트워크 오류가 발생했습니다.");
+        } finally {
+            setIsSaving(false); // ✅ 저장 종료
         }
     };
 
@@ -210,11 +242,13 @@ export default function InformModify() {
             <main className="content">
                 {/* Profile 컴포넌트에 provider prop 전달 */}
                 <Profile 
-                    name={initialName} 
-                    email={initialEmail}
+                    name={selectedName} // ✅ 수정 중인 이름 전달
+                    email={selectedEmail} // ✅ 수정 중인 이메일 전달
                     profileImageUrl={selectedProfileImageUrl} 
                     onImageUpdate={setSelectedProfileImageUrl} 
-                    provider={provider} // ✅ provider 전달
+                    provider={provider} 
+                    onNameChange={setSelectedName} // ✅ 이름 변경 핸들러 전달
+                    onEmailChange={setSelectedEmail} // ✅ 이메일 변경 핸들러 전달
                 /> 
 
                 {/* FieldInter - 상태 전달 */}

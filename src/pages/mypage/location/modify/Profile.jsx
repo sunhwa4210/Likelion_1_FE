@@ -2,194 +2,145 @@ import React, { useState, useRef, useEffect } from 'react';
 import styles from './Profile.module.css';
 import DefalutProfileImg from '../../component/DefalutProfileImg';
 import { useAuth } from '../../../../contexts/AuthContext';
- 
-// ✅ Props으로 name과 email도 받도록 수정하고, 불필요한 useEffect를 제거합니다.
-const Profile = ({ profileImageUrl, onImageUpdate, name, email, onProfileUpdate }) => {
+ 
+// ✅ Prop으로 name, email, 그리고 변경 핸들러를 받도록 수정
+const Profile = ({ 
+    profileImageUrl, 
+    onImageUpdate, 
+    name, 
+    email,
+    provider, // InformModify에서 추가된 provider prop 추가
+    onNameChange, // 이름 변경 핸들러 추가
+    onEmailChange // 이메일 변경 핸들러 추가
+}) => {
+    
+    const { accessToken } = useAuth();
+    // ✅ InformModify에서 상태를 관리하므로, Profile 내부의 이름/이메일 상태는 제거하거나 props와 동기화만 합니다.
+    // 여기서는 props을 직접 사용하고, input onChange 시 상위 상태를 업데이트합니다.
+
+    // 파일 업로드/취소 시에만 사용되는 로딩 상태
+    const [loading, setLoading] = useState(false); 
+    
+    // 파일 입력(input type="file")에 접근하기 위한 ref 생성
+    const fileInputRef = useRef(null);
+
+    // "프로필 사진 수정하기" 버튼 클릭 시 숨겨진 파일 입력 필드를 여는 함수
+    const handleEditButtonClick = () => {
+        fileInputRef.current.click(); 
+    };
     
-    const { accessToken } = useAuth();
+    // 소셜 로그인 사용자는 이름/이메일 수정 불가 (Provider가 'LOCAL'이 아닐 경우)
+    const isSocialUser = provider && provider !== 'LOCAL';
 
-    // 파일 업로드/취소 시에만 사용되는 로딩 상태
-    const [loading, setLoading] = useState(false); 
-    // ✅ 이름과 이메일 상태 (입력 필드 관리)
-    const [userName, setUserName] = useState(name);
-    const [userEmail, setUserEmail] = useState(email);
+    // 파일이 선택되었을 때 호출될 함수 (API 호출 로직)
+    const handleFileChange = async (event) => {
+        const selectedFile = event.target.files[0];
 
-    useEffect(() => {
-        setUserName(name);
-        setUserEmail(email);
-    }, [name, email]);
+        if (!selectedFile) return;
 
-    // 파일 입력(input type="file")에 접근하기 위한 ref 생성
-    const fileInputRef = useRef(null);
+        if (!accessToken) { 
+            alert("로그인 정보가 유효하지 않습니다. 다시 로그인해주세요.");
+            return;
+        }
 
-    // "프로필 사진 수정하기" 버튼 클릭 시 숨겨진 파일 입력 필드를 여는 함수
-    const handleEditButtonClick = () => {
-        fileInputRef.current.click(); 
-    };
+        setLoading(true);
 
-    // 파일이 선택되었을 때 호출될 함수 (API 호출 로직)
-    const handleFileChange = async (event) => {
-        const selectedFile = event.target.files[0];
+        try {
+            // 1. FormData 객체 생성
+            const formData = new FormData();
+            formData.append('file', selectedFile); 
 
-        if (!selectedFile) return;
+            // 2. 파일 업로드 API 호출 (Content-Type 수동 설정 없이 Authorization만 추가)
+            const uploadResponse = await fetch('/api/upload/image', { 
+                method: 'POST',
+                headers: { 'Authorization': `Bearer ${accessToken}` },
+                body: formData,
+            });
 
-        if (!accessToken) { // ✅ 토큰 확인
-            alert("로그인 정보가 유효하지 않습니다. 다시 로그인해주세요.");
-            return;
-        }
+            if (!uploadResponse.ok) {
+                const errorText = await uploadResponse.text();
+                console.error('파일 업로드 API 실패 응답:', uploadResponse.status, errorText);
+                throw new Error('파일 업로드에 실패했습니다.');
+            }
 
-        setLoading(true);
+            const result = await uploadResponse.json();
+            
+            // 서버 응답에서 새로운 URL을 추출
+            const newImageUrl = result.profileImageUrl; 
+            
+            // 3. 상위 컴포넌트(InformModify)의 상태를 업데이트 (이미지 변경 감지용)
+            onImageUpdate(newImageUrl); 
+            
+            alert("사진이 임시로 변경되었습니다. 하단 '수정하기' 버튼을 눌러야 최종 저장됩니다.");
 
-        try {
-            // 1. FormData 객체 생성
-            const formData = new FormData();
-            formData.append('file', selectedFile); 
+        } catch (error) {
+            console.error("프로필 사진 업로드에 실패했습니다.", error);
+            alert(`프로필 사진 업로드에 실패했습니다: ${error.message}`);
+        } finally {
+            setLoading(false);
+            event.target.value = null; 
+        }
+    };
 
-            // 2. 파일 업로드 API 호출 (URL만 반환하는 엔드포인트)
-            // TODO: 실제 파일 업로드 API 엔드포인트로 변경하세요.
-            const uploadResponse = await fetch('/api/upload/image', { 
-                method: 'POST',
-                // TODO: 인증 토큰이 필요한 경우 추가
-                headers: { 'Authorization': `Bearer ${accessToken}` },
-                body: formData,
-            });
+    if (loading) {
+        return <p>로딩 중 .. </p>;
+    }
+    
+    return (
+        <div className={styles.userProfileContainer}>
+        
+        {/* 1. 프로필 사진 영역 */}
+            <div className={styles.profileIconPlaceholder}>
+                {profileImageUrl ? (
+                    <img src={profileImageUrl} alt="Profile" className={styles.profileImage}/>
+                ) : (
+                    <DefalutProfileImg/>
+                )}
+            </div>
 
-            if (!uploadResponse.ok) {
-                throw new Error('파일 업로드에 실패했습니다.');
-            }
+            {/* 숨겨진 파일 입력 필드 */}
+            <input 
+                type="file" 
+                ref={fileInputRef} 
+                onChange={handleFileChange} 
+                accept="image/*"
+                style={{ display: 'none' }}
+            />
+        
+        {/* 2. 사용자 정보 및 버튼 영역 */}
+        <div className={styles.statsContainer}>
+    {/* 2-1. 이름 입력 필드 */}
+                <input 
+                    type="text"
+                    className={styles.userNameInput} 
+                    value={name || ''} 
+                    onChange={(e) => onNameChange(e.target.value)}
+                    disabled={isSocialUser}
+                    title={isSocialUser ? "소셜 로그인은 이름 수정 불가" : ""}
+                />
+                
+                {/* 2-2. 이메일 입력 필드 */}
+                <input 
+                    type="email"
+                    className={styles.userEmailInput}
+                    value={email || ''}
+                    onChange={(e) => onEmailChange(e.target.value)}
+                    disabled={isSocialUser}
+                    title={isSocialUser ? "소셜 로그인은 이메일 수정 불가" : ""}
+                />
 
-            const result = await uploadResponse.json();
-            
-            const newImageUrl = result.profileImageUrl; 
-            
-            // 3. 상위 컴포넌트(InformModify)의 상태를 업데이트
-            onImageUpdate(newImageUrl); 
-            
-            alert("사진이 임시로 변경되었습니다. 하단 '수정하기' 버튼을 눌러야 최종 저장됩니다.");
-
-        } catch (error) {
-            console.error("프로필 사진 업로드에 실패했습니다.", error);
-            alert("프로필 사진 업로드에 실패했습니다.");
-        } finally {
-            setLoading(false);
-            event.target.value = null; 
-        }
-    };
-/*
-    const handleUpdateProfile = async () => {
-        if (!accessToken) { // ✅ 토큰 확인
-            alert("로그인 정보가 유효하지 않습니다. 다시 로그인해주세요.");
-            return;
-        }
-        
-        setLoading(true);
-        try {
-            const body = {};
-            
-            // 이름이나 이메일이 변경되었을 경우에만 body에 추가
-            if (userName !== name) {
-                body.name = userName;
-            }
-            if (userEmail !== email) {
-                body.email = userEmail;
-            }
-            
-            // 변경사항이 없으면 API 호출 생략
-            if (Object.keys(body).length === 0) {
-                alert("변경된 정보가 없습니다.");
-                setLoading(false);
-                return;
-            }
-
-            // API 호출 (PUT /api/mypage/profile)
-            const updateResponse = await fetch('/api/mypage/profile', {
-                method: 'PUT',
-                headers: { 
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${accessToken}` // ✅ 인증 토큰 헤더 추가
-                },
-                body: JSON.stringify(body),
-            });
-
-            if (!updateResponse.ok) {
-                const errorData = await updateResponse.json();
-                throw new Error(errorData.message || '프로필 정보 수정에 실패했습니다.');
-            }
-
-            alert("프로필 정보(이름/이메일)가 성공적으로 수정되었습니다.");
-            
-            // 상위 컴포넌트의 데이터 리프레시 (InformModify의 GET 요청 재실행 또는 상태 직접 업데이트)
-            if (onProfileUpdate) {
-                onProfileUpdate({ name: userName, email: userEmail });
-            }
-
-        } catch (error) {
-            console.error("정보 수정 실패:", error);
-            alert(`정보 수정에 실패했습니다: ${error.message}`);
-        } finally {
-            setLoading(false);
-        }
-    };
-*/
-    if (loading) {
-        return <p>로딩 중 .. </p>;
-    }
-    
-    // name, email 정보가 null이더라도 렌더링은 진행 (Props으로 받기 때문)
-
-    return (
-        // ✅ 전체 컨테이너를 가로 배치 (flex-direction: row)
-    <div className={styles.userProfileContainer}>
-        
-        {/* 1. 프로필 사진 영역 */}
-            <div className={styles.profileIconPlaceholder}>
-                {profileImageUrl ? (
-                    <img src={profileImageUrl} alt="Profile" className={styles.profileImage}/>
-                ) : (
-                    <DefalutProfileImg/>
-                )}
-            </div>
-
-            {/* 숨겨진 파일 입력 필드 (위치 변경 없음) */}
-            <input 
-                type="file" 
-                ref={fileInputRef} 
-                onChange={handleFileChange} 
-                accept="image/*"
-                style={{ display: 'none' }}
-            />
-        
-        {/* 2. 사용자 정보 및 버튼 영역 */}
-        {/* ✅ statsContainer 클래스를 사용자 정보 텍스트와 버튼을 포함하도록 사용 */}
-        <div className={styles.statsContainer}>
-
-            <input 
-                    type="text"
-                    className={styles.userNameInput} 
-                    value={userName || ''} 
-                    onChange={(e) => setUserName(e.target.value)} 
-                />
-                
-                {/* ✅ 이메일 입력 필드 */}
-                <input 
-                    type="email"
-                    className={styles.userEmailInput}
-                    value={userEmail || ''}
-                    onChange={(e) => setUserEmail(e.target.value)}
-                />
-
-                {/* 프로필 사진 수정 버튼 */}
-                <div className={styles.editProfileImageButtonContainer}>
-                    <button 
-                        className={styles.editProfileImageButton} 
-                        onClick={handleEditButtonClick}
-                    >
-                        프로필 사진 수정하기
-                    </button>
-            </div>
-            </div>
-        </div>
-    );
+                {/* 2-3. 프로필 사진 수정 버튼 (이제 이메일 아래에 위치함) */}
+                <div className={styles.editProfileImageButtonContainer}>
+                    <button 
+                        className={styles.editProfileImageButton} 
+                        onClick={handleEditButtonClick}
+                    >
+                        프로필 사진 수정하기
+                    </button>
+    </div>
+</div>
+        </div>
+    );
 };
 
-export default Profile; 
+export default Profile;

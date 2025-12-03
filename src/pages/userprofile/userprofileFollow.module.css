@@ -10,8 +10,8 @@
 /* 팔로우 버튼 (팔로우 안 함 상태) */
 .followButton.follow {
     display: flex;
-    width: 347px;
-    height: 32px;
+    width: 315px;
+    height: 20px;
     padding: 6px 14px;
     flex-direction: column;
     justify-content: center;
@@ -35,8 +35,8 @@
 /* 팔로잉 버튼 (팔로우 함 상태) */
 .followButton.following {
     display: flex;
-    width: 347px;
-    height: 32px;
+    width: 315px;
+    height: 20px;
     padding: 6px 14px;
     flex-direction: column;
     justify-content: center;

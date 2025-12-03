@@ -7,10 +7,15 @@ function SortQn({ isActive, onClick, styles }) {
     const dotColor = isActive ? '#39A2A5' : '#ACADAC';
 
     return (
-        <div className={className} onClick={onClick}>
+        // ⭐️ <div>를 <button>으로 변경하고 type="button"을 추가합니다.
+        <button 
+            type="button" 
+            className={className} 
+            onClick={onClick}
+        >
             <DotIcon color={dotColor} />
             나의 질문글
-        </div>
+        </button>
     );
 }
 

@@ -419,16 +419,16 @@ useEffect(() => {
     switch(notif.targetType) {
         case 'COLUMN':
             // 'COLUMN' 타입은 칼럼 상세 페이지로 이동
-            targetPath = `/column/${notif.targetId}`; 
+            targetPath = `/columnread/${notif.targetId}`; 
             break;
         case 'QUESTION':
             // 'QUESTION' 타입은 QnA 질문 상세 페이지로 이동
-            targetPath = `/qna/${notif.targetId}`;
+            targetPath = `/qnadetail/${notif.targetId}`;
             break;
         case 'ANSWER':
             // 'ANSWER' 타입은 QnA 답글이 달린 질문 상세 페이지로 이동하며,
             // 답글에 초점을 맞추기 위해 쿼리 파라미터를 사용합니다.
-            targetPath = `/qna/${notif.targetId}?focus=answer`; 
+            targetPath = `/qnadetail/${notif.targetId}?focus=answer`; 
             break;
         default:
             // 알 수 없는 타입 처리

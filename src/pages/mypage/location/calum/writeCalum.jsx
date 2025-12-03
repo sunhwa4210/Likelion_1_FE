@@ -157,11 +157,20 @@ export default function WriteCalum () {
 
             const queryString = new URLSearchParams(params).toString();
             const API_PATH = `/mypage/my-columns?${queryString}`;
+
+            console.log("➡️ [API 요청] 칼럼 목록 로드 시작");
+            console.log("   Base URL:", API_BASE);
+            console.log("   Endpoint:", API_PATH);
+            console.log("   쿼리 파라미터:", params);
+            console.log("   정렬 기준:", sortBy);
             
             try {
                 const response = await apiClient.get(API_PATH); 
                 const responseData = response.data;
                 const apiCalums = responseData.content || [];
+
+                console.log("✅ [API 성공] 응답 데이터 (일부):", responseData);
+                console.log("   총 페이지 수:", responseData.totalPages || 1);
 
                 setTotalPageCount(responseData.totalPages || 1); 
                 const mappedCalums = apiCalums.map(item => mapApiDataToComponentProps(item, user));

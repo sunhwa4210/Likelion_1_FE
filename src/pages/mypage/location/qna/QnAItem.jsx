@@ -9,7 +9,7 @@ const QnAItem = ({ id, title, previewContent, likes, comments, date }) => {
   
   const handleClick = () => {
     // 다른 팀원이 만든 상세 페이지 경로로 이동 (예: /questions/1)
-    navigate(`/questions/${id}`); 
+    navigate(`/qnadetail/${id}`);
   };
 
   return (

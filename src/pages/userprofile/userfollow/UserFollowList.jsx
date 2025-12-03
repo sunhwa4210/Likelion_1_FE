@@ -123,14 +123,14 @@ const UserFollowList = () => {
                     className={`${styles.tabItem} ${activeTab === TABS.FOLLOWERS ? styles.active : ''}`}
                     onClick={() => handleTabClick(TABS.FOLLOWERS)}
                 >
-                    팔로워 ({followersList.length})
+                    팔로워
                 </div>
                 {/* '팔로잉' 탭 */}
                 <div 
                     className={`${styles.tabItem} ${activeTab === TABS.FOLLOWING ? styles.active : ''}`}
                     onClick={() => handleTabClick(TABS.FOLLOWING)}
                 >
-                    팔로잉 ({followingList.length})
+                    팔로잉 
                 </div>
                 
                 {/* 하단 구분선 */}

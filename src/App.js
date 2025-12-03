@@ -31,7 +31,7 @@ import SocialRedirect from './pages/social/socialRedirect';
 
 // 마이페이지 - 정보 수정 / 스크랩한 큐레이션 / 내가 작성한 칼럼 / 내가 작성한 QnA
 import InformModify from './pages/mypage/location/modify/informModify';
-import Scrap from './pages/mypage/location/scrap/scrap';
+import ScrapCuration from './pages/mypage/location/scrap/ScrapCuration'
 import WriteCalum from './pages/mypage/location/calum/writeCalum';
 import WriteQnA from './pages/mypage/location/qna/writeQnA';
 import Follow from "./pages/mypage/location/follow/follow";
@@ -58,12 +58,12 @@ export default function App() {
           {/* 컬럼 */}
           <Route path="/column" element={<ColumnPage />} />
           <Route path="/columnwrite" element={<ColumnWrite />} />
-          <Route path="/columnread" element={<ColumnRead />} />
+          <Route path="/columnread/:columId" element={<ColumnRead />} />
 
           {/* QnA */}
           <Route path="/qna" element={<QnaPage />} />
           <Route path="/qnawrite" element={<QnaWrite />} />
-          <Route path="/qnadetail" element={<QnaDetail />} />
+          <Route path="/qnadetail/:qnaId" element={<QnaDetail />} />
 
           {/* 유저 / 마이페이지 / 알림 */}
           <Route path="/login" element={<Login />} />
@@ -74,7 +74,7 @@ export default function App() {
 
           {/* 정보 수정 / 스크랩한 큐레이션 / 내가 작성한 칼럼 / 내가 작성한 QnA */}
           <Route path="/mypage/location/modify" element={<InformModify />} />
-          <Route path="/mypage/location/scrap" element={<Scrap />} /> 
+          <Route path="/mypage/location/scrap" element={<ScrapCuration />} /> 
           <Route path="/mypage/location/calum" element={<WriteCalum />} />
           <Route path="/mypage/location/qna" element={<WriteQnA />} />
           <Route path="/mypage/:userId/follow/:type" element={<Follow />} />

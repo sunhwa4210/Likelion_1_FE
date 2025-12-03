@@ -50,6 +50,15 @@ function SearchBar3_3({
         setIsFocused(false);
     };
 
+    const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+        e.preventDefault(); // ⬅️ 핵심! Enter 키의 기본 동작(폼 제출/새로고침) 방지
+        // 추가적으로, 디바운싱을 기다리지 않고 즉시 검색을 실행하고 싶다면
+        // setSearchTerm(searchTerm);
+        // fetchQuestions를 수동으로 트리거하는 함수를 부모로부터 받아 호출할 수도 있습니다.
+    }
+};
+
     return (      
         <div className={styles.searchFilterContainer}
             style={{ maxWidth: maxWidth }} 
@@ -65,6 +74,7 @@ function SearchBar3_3({
                     className={styles.searchInput}
                     onFocus={handleFocus}
                     onBlur={handleBlur}
+                    onKeyDown={handleKeyDown}
                 />
             </div>
 
@@ -89,6 +99,7 @@ function SearchBar3_3({
                 <button
                     onClick={handleFilterClick}
                     className={styles.filterButton}
+                    type="button"
                 >
                 <FilterIcon /> 
                 </button>

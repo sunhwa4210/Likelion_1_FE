@@ -88,27 +88,27 @@
 }
 
 .actionButton {
-  padding: 5px 15px;
+  /* 버튼이 기본적으로 인라인 요소가 되지 않도록 flex를 사용 */
+  display: flex; 
+  align-items: center; /* 텍스트를 수직 중앙 정렬 */
+  justify-content: center; /* 텍스트를 수평 중앙 정렬 */
+  flex-direction: row;
+  width: 36px;
+  height: 20px;
+  padding: 10px 18px; /* 패딩은 공통으로 두는 것이 좋습니다. */
   border: none;
+  
+  /* 폰트 스타일 */
   color: var(--primary-0, #F7FCF8);
-  text-align: justify;
-  font-feature-settings: 'liga' off, 'clig' off;
   font-family: Inter;
   font-size: 14px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: normal;
+  font-weight: 600;
 }
 
-.actionButton.cancel {
-  display: flex;
-  width: 53px;
-  height: 30px;
-  padding: 6px 14px;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 20px;
+
+.cancelButton {
+  /* 취소 버튼만의 고유 스타일만 여기에 정의합니다. */
   border-radius: 6px;
   background: var(--primary-30, #39A2A5);
+  /* flex-direction, width, height 등은 actionButton에서 이미 정의했으므로 제거합니다. */
 }
