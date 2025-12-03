@@ -1,0 +1,23 @@
+.userProfileContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* 모든 요소를 중앙 정렬 */
+  padding: 34px 20px; 
+  background-color: #fff;
+  border: none;
+  max-width: 375px; /* UI 너비 제한 */
+  height: 148px;
+  margin: 20px auto; /* 중앙에 배치 */
+  font-feature-settings: 'liga' off, 'clig' off;
+}
+
+.profileIconPlaceholder {
+  width: 80px; /* 이미지 크기 */
+  height: 80px; /* 이미지 크기 */
+  border-radius: 50%; /* 원형 */
+  background-color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden; /* 이미지가 넘치지 않도록 */
+}

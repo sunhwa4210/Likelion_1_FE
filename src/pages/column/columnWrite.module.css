@@ -1,0 +1,339 @@
+.iconWrapper {
+  width: 80px;
+  height: 80px;
+  background-color: #39A2A5;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50px;
+  position: absolute;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  z-index: 1000;
+  right: 16px;
+  bottom: 24px;
+}
+
+/* 페이지 기본 레이아웃 */
+.page {
+  padding: 0 16px 24px;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.writeContainer {
+  padding: 0 16px 24px;
+  max-width: 520px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* 1. 상단 관심분야 선택 바 */
+.categoryBar {
+  margin-top: 8px;
+  background-color: #f5f5f7;
+  padding: 10px 16px;
+  font-size: 12px;
+  color: #9ea4b3;
+  border-bottom: 1px solid #e5e5ea;
+  cursor: pointer;
+}
+
+.categoryBarText {
+  font-size: 12px;
+}
+
+/* 선택된 태그 요약 뱃지 */
+.selectedTagRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 8px 0 4px;
+}
+
+.selectedTag {
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 11px;
+  border: 1px solid #e5e5ea;
+  background-color: #ffffff;
+}
+
+.selectedTagPrimary {
+  border-color: #007aff;
+  color: #007aff;
+}
+
+.selectedTagSecondary {
+  border-color: #ff5e3a;
+  color: #ff5e3a;
+}
+
+.selectedTagPreview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 8px 0 4px;
+}
+
+.selectedTagChip {
+  padding: 6px 12px;
+  border-radius: 999px;
+  background-color: #e6f0ff;
+  color: #0f60c4;
+  border: 1px solid #cbd8ff;
+  font-size: 12px;
+}
+
+/* 2. 관심 분야 리스트 섹션 */
+.categorySection {
+  padding: 12px 0 4px;
+  border-bottom: 1px solid #f1f1f5;
+}
+
+.categoryGroup {
+  margin-bottom: 10px;
+}
+
+.categoryGroupTitle {
+  font-size: 12px;
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+
+.tagRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tag {
+  border-radius: 999px;
+  border: 1px solid #d3d5db;
+  padding: 6px 10px;
+  font-size: 11px;
+  background-color: #f7f7fa;
+  cursor: pointer;
+}
+
+/* 선택된 태그 색상 */
+.tagPrimary {
+  border-color: #007aff;
+  background-color: #e6f0ff;
+  color: #007aff;
+}
+
+.tagSecondary {
+  border-color: #ff5e3a;
+  background-color: #ffece5;
+  color: #ff5e3a;
+}
+
+/* 3. 제목 / 내용 / 이미지 공통 섹션 */
+.section {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 16px 16px 20px;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.04);
+}
+
+.inputHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+
+.label {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.counter {
+  font-size: 11px;
+  color: #9ea4b3;
+}
+
+.lengthHelper {
+  margin-top: 4px;
+  text-align: right;
+  font-size: 11px;
+  color: #9ea4b3;
+}
+
+.inputBlock {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 14px 14px 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.titleInput {
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid #e1e4ea;
+  padding: 8px 0;
+  font-size: 14px;
+  outline: none;
+}
+
+.contentInput {
+  width: 100%;
+  min-height: 200px;
+  margin-top: 8px;
+  border-radius: 8px;
+  border: 1px solid #e1e4ea;
+  padding: 10px;
+  font-size: 13px;
+  resize: vertical;
+  outline: none;
+}
+
+/* 이미지 업로드 */
+.thumbnailUploadArea {
+  margin-top: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  border: 1px dashed #ccd1dd;
+  padding: 16px;
+  cursor: pointer;
+}
+
+.thumbnailText {
+  font-size: 12px;
+  color: #7a8190;
+}
+
+.fileInput {
+  display: none;
+}
+
+.thumbnailPreviewWrapper {
+  margin-top: 12px;
+}
+
+.thumbnailPreview {
+  width: 100%;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+/* 발행 버튼 */
+.footer {
+  margin-top: 8px;
+}
+
+.submitButton {
+  width: 100%;
+  height: 48px;
+  border-radius: 10px;
+  border: none;
+  font-size: 15px;
+  font-weight: 600;
+  color: #ffffff;
+  background-color: #008fd3;
+  cursor: pointer;
+}
+
+.submitDisabled {
+  background-color: #d2d7e3;
+}
+
+.categoryOverlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.35);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 12px;
+  z-index: 1100;
+}
+
+.categoryPanel {
+  width: 100%;
+  max-width: 520px;
+  max-height: 80vh;
+  overflow-y: auto;
+  background-color: #ffffff;
+  border-radius: 18px 18px 10px 10px;
+  padding: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.categoryPanelHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.closeButton {
+  border: none;
+  background: #eef1f6;
+  color: #5b6373;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.categoryConfirmButton {
+  width: 100%;
+  margin-top: 14px;
+  padding: 12px 0;
+  border: none;
+  border-radius: 12px;
+  background-color: #0d8adf;
+  color: #ffffff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.tagHumanities {
+  border-color: #0d8adf;
+  background-color: #e8f2ff;
+  color: #0d8adf;
+}
+
+.tagScience {
+  border-color: #3dbb6c;
+  background-color: #e5f7eb;
+  color: #2e9d58;
+}
+
+.tagTech {
+  border-color: #4a6dd6;
+  background-color: #e8edff;
+  color: #2c4bb4;
+}
+
+.tagEconomy {
+  border-color: #ff9800;
+  background-color: #fff4e0;
+  color: #e28100;
+}
+
+.tagArt {
+  border-color: #e8578f;
+  background-color: #ffe7f1;
+  color: #d34078;
+}
+
+.tagLife {
+  border-color: #34c759;
+  background-color: #e8f9ed;
+  color: #2fa94d;
+}

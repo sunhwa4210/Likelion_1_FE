@@ -1,0 +1,114 @@
+.tabNavigation {
+  display: flex;
+  position: relative;
+  border-bottom: 1px solid #C6C8C6;
+}
+
+.tabItem {
+  flex-grow: 1;
+  padding: 10px 0;
+  margin-top: 0;
+  padding-top: 5px;
+
+  color: var(--gray-20, #C6C8C6);
+  text-align: center;
+  font-feature-settings: 'liga' off, 'clig' off;
+  font-family: Inter;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 20px; /* 125% */
+  align-self: stretch;
+}
+
+.tabItem.active {
+  color: var(--primary-30, #39A2A5);
+}
+
+/* 탭 하단의 애니메이션 언더라인 */
+.tabUnderlineContainer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+}
+
+.tabUnderline {
+  height: 2px;
+  width: 50%; /* 탭이 2개이므로 50% */
+  background-color: var(--primary-30, #39A2A5);
+  position: absolute;
+}
+
+.tabUnderline.followingActive {
+  transform: translateX(100%); /* 오른쪽 탭 위치로 이동 */
+}
+
+/* FollowListItem.css */
+.followListItem {
+  display: flex;
+  align-items: center;
+  padding: 16px 20px;
+}
+
+.profileIcon {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 26px;
+}
+
+.userInfo {
+  flex-grow: 1;
+}
+
+.userName {
+  color: #000;
+  font-feature-settings: 'liga' off, 'clig' off;
+  font-family: Inter;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+
+.userEmail {
+  color: var(--gray-40, #797A79);
+  font-feature-settings: 'liga' off, 'clig' off;
+  font-family: Inter;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  margin-top: 8px;
+}
+
+.actionButton {
+  /* 버튼이 기본적으로 인라인 요소가 되지 않도록 flex를 사용 */
+  display: flex; 
+  align-items: center; /* 텍스트를 수직 중앙 정렬 */
+  justify-content: center; /* 텍스트를 수평 중앙 정렬 */
+  flex-direction: row;
+  width: 36px;
+  height: 20px;
+  padding: 10px 18px; /* 패딩은 공통으로 두는 것이 좋습니다. */
+  border: none;
+  
+  /* 폰트 스타일 */
+  color: var(--primary-0, #F7FCF8);
+  font-family: Inter;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+
+.cancelButton {
+  /* 취소 버튼만의 고유 스타일만 여기에 정의합니다. */
+  border-radius: 6px;
+  background: var(--primary-30, #39A2A5);
+  /* flex-direction, width, height 등은 actionButton에서 이미 정의했으므로 제거합니다. */
+}

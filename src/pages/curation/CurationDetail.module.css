@@ -1,0 +1,107 @@
+.appWrapper{padding: 30px 14px; display: flex; flex-direction: column; justify-content: flex-start; align-items: center;}
+
+.curation-detail-wrapper{
+    width: 100%;  border-radius: 12px;
+    background: #FFF;
+    box-shadow: 0 0 10px 4px var(--shadow10, rgba(121, 121, 121, 0.10));
+}
+.curation-image-placeholder {
+    width: 100%;
+    height: 160px; /* 이미지 높이 */
+    background-color: #E8E8E8; /* 이미지가 없을 때 */
+    position: relative; /* 뱃지 위치 지정을 위해 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; /* 이미지 넘치는 부분 숨김 */
+    border-top-right-radius:12px;
+    border-top-left-radius: 12px;
+
+}
+
+.curation-image-placeholder img {
+    width: 100%;
+    height: 160px;  
+    object-fit: cover; /* 이미지가 컨테이너를 꽉 채우도록 */
+    border-radius: 12px 12px 0 0; /* 상단 모서리만 둥글게 */
+}
+
+/* 뱃지 위치 (Insight, CrossNote, BestCalum) */
+.curation-image-placeholder .insight-badge,
+.curation-image-placeholder .cross-note-badge,
+.curation-image-placeholder .best-calum-badge {
+    position: absolute;
+    bottom: -10px; 
+    left: 0px;
+    z-index: 10; /* 이미지 위에 오도록 */
+}
+
+/* 텍스트+카테고리+임베드+좋아요 box */
+.curation-detail-box{
+display: flex;
+padding: 20px 12px 40px 12px;
+flex-direction: column;
+align-items: center;
+gap: 18px;
+justify-content: flex-start;
+width: 100%;}
+
+/* 카테고리 뱃지 */
+.badge-group{
+display: flex; justify-content: flex-start; width: 100%;}
+
+/* 콘텐츠 영역 (제목+내용+임베드) */
+.curation-content-box{
+    display: flex; flex-direction: column; 
+    width: 100%; align-items: center;
+}
+
+.curation-content{
+   display: flex; flex-direction: column; gap:20px; padding-bottom:40px; 
+    width: 100%; align-items: center;}
+
+.content-title{ align-self: flex-start;color: #000;
+font-feature-settings: 'liga' off, 'clig' off;
+font-family: 'Inter';
+font-size: 14px;
+font-style: normal;
+font-weight: 600;
+line-height: normal;
+margin:0; }
+
+.content{ align-self:flex-start;color: #000;
+font-feature-settings: 'liga' off, 'clig' off;
+font-family: 'Inter';
+font-size: 14px;
+font-style: normal;
+font-weight: 400;
+line-height: 18px;  }
+
+.curation-footer{
+    display: flex; width: 100%; justify-content: space-between;
+}
+
+.go-colum-btn{
+color: var(--gray-30, #ACADAC);
+font-feature-settings: 'liga' off, 'clig' off;
+font-family: 'Inter';
+font-size: 12px;
+font-style: normal;
+font-weight: 500;
+line-height: normal;
+margin: 0px;
+}
+.go-extarnal-btn{
+color: #39A2A5;
+font-feature-settings: 'liga' off, 'clig' off;
+font-family: 'Inter';
+font-size: 12px;
+font-style: normal;
+font-weight: 600;
+line-height: normal;
+margin: 0px;
+}
+.curation-detail-btn-box{
+padding-top: 50px;
+padding-bottom: 50px;;
+}

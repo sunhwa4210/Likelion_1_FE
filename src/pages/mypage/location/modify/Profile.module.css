@@ -1,0 +1,92 @@
+/* Profile.module.css (수정 및 정리) */
+
+.userProfileContainer {
+    display: flex; /* 가로 배치 */
+    align-items: center; /* 수직 중앙 정렬 */
+    padding: 0;
+    margin-top: -80px;
+    margin-bottom: -70px;
+    
+}
+
+.profileIconPlaceholder {
+    /* 이미지 크기 정의 */
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin-right: 20px; /* 텍스트와의 간격을 이미지에 직접 부여 */
+    margin-bottom: 10px;
+    flex-shrink: 0; /* 공간 부족 시 크기가 줄어드는 것 방지 */
+}
+
+.profileImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.statsContainer {
+    /* 사용자 이름, 이메일, 버튼을 포함하는 컨테이너 */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0px;
+}
+
+/* 이름 입력 필드 */
+.userNameInput {
+    color: #000;
+    font-size: 18px;
+    font-weight: 700;
+    /* line-height를 제거하거나 조정하여 다음 요소와의 간격을 조절 */
+    padding: 0;
+    border: none;
+    outline: none;
+    background: transparent;
+    margin-bottom: -35px;
+}
+
+/* 이메일 입력 필드 */
+.userEmailInput {
+    color: var(--gray-40, #797A79);
+    font-size: 12px;
+    font-weight: 500;
+    margin: 0;
+    padding: 0;
+    border: none;
+    outline: none;
+    background: transparent;
+    margin-bottom: -20px;
+}
+
+/* ✅ 버튼 컨테이너 */
+.editProfileImageButtonContainer {
+    /* 버튼 컨테이너는 statsContainer의 세로 흐름 안에 배치됨 */
+    display: flex;
+    white-space: nowrap; /* 버튼이 줄바꿈되는 것을 방지 */
+    flex-direction: column;
+    justify-content: center;
+    margin: 0;
+}
+
+/* 프로필 사진 수정하기 버튼 */
+.editProfileImageButton {
+    /* 버튼 자체의 스타일 */
+    height: 24px; /* 이미지의 높이와 비슷하게 조정 */
+    padding: 2px 7px; /* 높이와 패딩 조정 */
+    width: 115px;
+    border-radius: 6px;
+    border: 1px solid var(--gray-20, #C6C8C6);
+    background: var(--white, #FFF);
+    color: var(--gray-20, #C6C8C6);
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.5; /* 텍스트 수직 중앙 정렬을 위한 line-height */
+
+    /* 내부 flex 속성 제거 및 버튼 크기 조정 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    margin: 0; /* 마진 초기화 */
+}

@@ -1,0 +1,89 @@
+
+
+/* == 헤더 영역 === */
+.curationThumbnail {
+    position: relative; /* 뱃지 위치 지정을 위해 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; /* 이미지 넘치는 부분 숨김 */
+}
+
+/* 썸네일 이미지 스타일 */
+.curationThumbnail img {
+    width: 100%;
+    height: 160px; /* 고정 높이 또는 원하는 비율로 설정 */
+    object-fit: cover; /* 이미지를 잘라서라도 영역을 채움 */
+}
+
+.curationThumbnail .insight-badge,
+.curationThumbnail .cross-note-badge,
+.curationThumbnail.best-calum-badge {
+    position: absolute;
+    bottom: -10px; 
+    left: -10px;
+    z-index: 10; /* 이미지 위에 오도록 */
+}
+
+/* === 바디 영역 ==== */
+/* 제목 스타일 */
+.content h1 {
+    color: #000;
+    font-feature-settings: 'liga' off, 'clig' off;
+    font-family: Inter;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+/* 뱃지 */
+.flexInfoRow {
+    display: flex;
+    justify-content: space-between; /* 양 끝 정렬 */
+    align-items: center; /* 수직 중앙 정렬 */
+    margin-top: 20px;
+    margin-bottom: 18px;
+}
+
+/* 뱃지 그룹 스타일 */
+.badgeGroup {
+    display: flex;
+    justify-content: space-between;
+}
+
+/*  << 중요 !!! >> 뱃지 가로 정렬 (CategoryXseletor.jsx에서 가져옴)  */
+.fieldBadgeList {
+    display: flex; /* 자식 요소(뱃지 버튼)들을 수평으로 나열 */
+    flex-wrap: wrap; /* 뱃지가 많아지면 줄 바꿈 허용 */
+    gap: 7px; /* 뱃지들 사이의 간격 */
+    width: 100%;
+}
+
+/* 본문 영역 스타일 */
+.detailBody {
+    color: #000;
+    font-feature-settings: 'liga' off, 'clig' off;
+    align-self: stretch;
+    font-family: Inter;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 18px; 
+}
+
+/* 좋아요 스타일 */
+.actionGroup {
+    display: flex;
+    align-items: center;
+}
+
+.fixedFooter {
+    display: flex;
+    padding: 50px 0;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    align-self: stretch;
+}

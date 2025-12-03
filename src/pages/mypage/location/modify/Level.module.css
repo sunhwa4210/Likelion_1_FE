@@ -1,0 +1,85 @@
+/* 메인 컨테이너 */
+.curationContainer {
+    padding: 20px 14px;
+    margin-left: -10px;
+}
+
+/* 선택 옵션들을 담는 컨테이너 */
+.optionsWrapper {
+    display: flex;
+    gap: 40px;
+    margin-bottom: 30px;
+    margin-top: 20px;
+}
+
+/* 개별 선택 옵션 박스 */
+.optionBox {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+}
+
+/* 커스텀 체크박스 기본 스타일 */
+.customCheckbox {
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+    margin-right: 12px;
+    transition: all 0.2s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--white, #FFF);
+    border: 2px solid var(--primary-30, #39A2A5);
+}
+
+/* 선택된 커스텀 체크박스 스타일 */
+.customCheckbox.isSelected {
+    border: 2px solid var(--primary-30, #39A2A5);
+    background: var(--primary-30, #39A2A5);
+}
+
+/* 옵션 텍스트 */
+.optionText {
+    color: var(--gray-60, #191919);
+    text-align: center;
+    font-feature-settings: 'liga' off, 'clig' off;
+    font-family: Inter;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+}
+
+
+/* 상세 설명 항목 */
+.detailItem {
+    display: flex;
+    align-items: flex-start;
+    color: var(--gray-40, #797A79);
+    font-feature-settings: 'liga' off, 'clig' off;
+    font-family: Inter;
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    margin-top: 15px;
+}
+
+/* 상세 설명 항목 내의 체크 아이콘 스타일 조정 */
+.detailItem > svg {
+    flex-shrink: 0;
+    margin-right: 10px;
+}
+
+/* 추천 대상 제목 */
+.recommendationTitle {
+    color: var(--gray-40, #797A79);
+    font-feature-settings: 'liga' off, 'clig' off;
+    font-family: Inter;
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}

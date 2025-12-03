@@ -1,0 +1,327 @@
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import styles from "./AllCuration.module.css";
+import GlobalHeader from "../../components/Header/GlobalHeader";
+import SearchBar2 from "../../components/Bar/SearchBar2";
+import CurationFilter from "../../components/Filter/CurationFilter";
+import CurationItem from "../../components/Curation/CurationItem";
+import { useAuth } from "../../contexts/AuthContext";
+
+const LABEL_TO_BACKEND_CATEGORY = {
+  "인문사회 전체": "인문사회",
+  "자연과학 전체": "자연과학",
+  "공학·기술 전체": "공학·기술",
+  "경제·경영 전체": "경제·경영",
+  "예술·문화 전체": "예술·문화",
+  "스포츠·라이프스타일 전체": "스포츠·라이프스타일",
+};
+
+//Category Name -> Id 매핑
+const CATEGORY_NAME_TO_ID = {
+  // 최상위
+  "인문사회": 1,
+  "자연과학": 2,
+  "공학·기술": 3,
+  "경제·경영": 4,
+  "예술·문화": 5,
+  "스포츠·라이프스타일": 6,
+
+  // 인문사회 하위
+  "철학": 7,
+  "역사": 8,
+  "사회학": 9,
+  "언어": 10,
+  "심리": 11,
+
+  // 자연과학 하위
+  "수학": 12,
+  "물리": 13,
+  "화학": 14,
+  "생물": 15,
+  "의료": 16,
+
+  // 공학·기술 하위
+  "IT": 17,
+  "AI": 18,
+  "전자": 19,
+  "기계": 20,
+  "산업공학": 21,
+
+  // 경제·경영 하위
+  "경제": 22,
+  "비즈니스": 23,
+  "마케팅": 24,
+
+  // 예술·문화 하위
+  "미술": 25,
+  "음악": 26,
+  "문학": 27,
+  "UI/UX": 28,
+  "건축": 29,
+  "영화": 30,
+
+  // 스포츠·라이프스타일 하위
+  "건강": 31,
+  "스포츠": 32,
+  "여행": 33,
+  "생활": 34,
+  "환경": 35,
+};
+
+const TYPE_LABEL_TO_VALUE = {
+  "베스트칼럼": "BEST_COLUMN",
+  "BEST_COLUMN": "BEST_COLUMN",
+
+  "인사이트": "INSIGHT",
+  "INSIGHT": "INSIGHT",
+
+  "크로스노트": "CROSSNOTE",
+  "CROSSNOTE": "CROSSNOTE",
+};
+
+
+//API
+const API_BASE = process.env.REACT_APP_API_BASE_URL || "";
+
+export default function AllCuration() {
+  const navigate = useNavigate();
+  const { accessToken,refreshAccessToken } = useAuth();
+
+  //큐레이션 클릭 시 큐레이션 세부보기 페이지로 이동
+  const handleCurationClick = (item) => {
+    navigate(`/curation/${item.id}`,{state:{from: "/curation",item},});
+    console.log(item.id);
+  };
+ 
+  //큐레이션 필터 open/close
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+
+  //큐레이션 정렬을 위한 정렬 기준들 (검색어, 정렬기준, 필터 선택)
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortBy, setSortBy] = useState("latest") // 'latest' | 'popular' | 'comments'
+  const [filterValues,setFilterValues] = useState({
+    types: [],        // 큐레이션 유형 (칼럼/논문/영상 등)
+    humanities: [],   // 인문사회
+    science: [],      // 자연과학
+    tech: [],         // 공학·기술
+    economy: [],      // 경제·경영
+    art: [],          // 예술·문화
+    sport: [],        // 스포츠·라이프스타일
+  });
+  
+
+  const [curations,setCurations] = useState([]);
+   
+    //SearchBar에서 넘어오는 핸들러들
+    const handleFilterToggle = () => {
+      setIsFilterOpen((prev)=>!prev);
+    }
+
+    const handleSearchChange=(value)=>{
+      setSearchTerm(value);
+    }
+
+    const handleSortChange=(value)=>{
+      setSortBy(value);
+    }
+
+    //큐레이션 필터에서 선택값 변경 시
+    const handleFilterChange=(nextValues)=>{
+      setFilterValues(nextValues);
+    };
+
+//API 요청 보내기 
+ useEffect(() => {
+  // 토큰 없으면 요청 안 보냄
+  if (!accessToken) return;
+
+  const fetchCurations = async () => {
+
+    let params = {};
+    try {
+      // 정렬 파라미터 매핑
+      let sortParam = "";
+      if (sortBy === "latest") sortParam = "createdAt,desc";
+      else if (sortBy === "popular") sortParam = "likeCount,desc";
+
+      // 쿼리 파라미터 구성
+      params = {
+        ...(searchTerm && { query: searchTerm }), // 검색어
+        ...(sortParam && { sort: sortParam }),   // 정렬
+      };
+
+      //필터 카테고리값 -> id 변환, curationType (카테고리 필터값 복수 전송시 형태 답 주시면 수정, 일단 단일 categoryId만 받는다고 가정)
+      const {humanities, science, tech, economy, art, sport, types,} = filterValues;
+      const selectedCategoryNames=[
+        ...humanities,
+        ...science, 
+        ...tech,
+        ...economy,
+        ...art,
+        ...sport,];
+
+
+      //분야
+      const backendCategoryNames = selectedCategoryNames.map((label) => {
+        return LABEL_TO_BACKEND_CATEGORY[label] || label;  // 매핑 없으면 그대로 사용
+      });
+
+      if (backendCategoryNames.length > 0) {
+      const categoryIds = backendCategoryNames
+        .map((name) => CATEGORY_NAME_TO_ID[name])
+        .filter(Boolean);
+
+      if (categoryIds.length > 0) {
+        params.categoryId = categoryIds.join(",");
+      }
+      }
+
+      //큐레이션 유형
+      if (types && types.length > 0) {
+        const mappedTypes = types
+          .map((label) => TYPE_LABEL_TO_VALUE[label])
+          .filter(Boolean);
+
+        if (mappedTypes.length > 0) {
+          params.curationType = mappedTypes.join(",");
+        }
+      }
+
+      // 요청 보내기
+      const res = await axios.get(`${API_BASE}/curation`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        params,
+      });
+
+      console.log("📌 실제 요청 URL:", res.config.url);
+      console.log("📌 실제 요청 params:", res.config.params);
+      console.log("📌 최종 Request:", res.request.responseURL)
+      const data = res.data?.content ?? [];
+
+      // 응답 → CurationItem에서 쓰기 좋은 형태로 매핑
+      const mapped = data.map((item) => ({
+        id: item.curationId,
+
+        imageUrl: item.imageUrl || "",
+        fieldBadges: item.crossCategoryName
+          ? [item.categoryName, item.crossCategoryName]
+          : [item.categoryName],
+
+        insightBadge: item.curationType === "INSIGHT",
+        crossNoteBadge: item.curationType === "CROSSNOTE",
+        bestColumBadge: item.bestColumn === true,
+
+        content: {
+          title: item.title,
+          description: item.description,
+          sourceUrl: item.sourceUrl,
+        },
+
+        likeCount: item.likeCount ?? 0,  
+        liked: item.liked ?? false,      
+        scraped: item.scraped ?? false,
+      }));
+
+      setCurations(mapped);
+    } catch (error) {
+    console.error("전체 큐레이션 불러오기 1차 실패:", error);
+
+    // 401일 때만 refresh 시도
+    if (error.response?.status === 401) {
+      try {
+        const newToken = await refreshAccessToken();
+        if (!newToken) {
+          return;
+        }
+
+        // 새 토큰으로 한 번 더 재요청
+        const retryRes = await axios.get(`${API_BASE}/curation`, {
+          headers: {
+            Authorization: `Bearer ${newToken}`,
+          },
+          params,
+        });
+
+        const retryData = retryRes.data?.content ?? [];
+        const mapped = retryData.map((item) => ({
+          id: item.curationId,
+          imageUrl: item.imageUrl || "",
+          fieldBadges: item.crossCategoryName
+            ? [item.categoryName, item.crossCategoryName]
+            : [item.categoryName],
+          insightBadge: item.curationType === "INSIGHT",
+          crossNoteBadge: item.curationType === "CROSSNOTE",
+          bestColumBadge: item.bestColumn === true,
+          content: {
+            title: item.title,
+            description: item.description,
+            sourceUrl: item.sourceUrl,
+          },
+          likeCount: item.likeCount ?? 0,  
+          liked: item.liked ?? false,      
+          scraped: item.scraped ?? false,
+        }));
+
+        setCurations(mapped);
+      } catch (retryErr) {
+        console.error("토큰 재발급 후 /curation 재시도 실패:", retryErr);
+      }
+    }
+  }
+};
+
+  fetchCurations();
+}, [accessToken, searchTerm, sortBy, filterValues,refreshAccessToken]);
+
+  
+
+
+  return (
+
+    //전체 큐레이션 피드
+    <div className="app-wrapper">
+        <GlobalHeader/>
+        <SearchBar2         
+          onFilterClick={handleFilterToggle}
+          onSearchChange={handleSearchChange}
+          onSortChange={handleSortChange}/>
+        {isFilterOpen && (
+          <div
+            className={styles["curation-filter-backdrop"]}
+            onClick={() => setIsFilterOpen(false)}
+          />
+        )}
+        
+        <CurationFilter
+          isOpen={isFilterOpen}        
+          value={filterValues}         
+          onChange={handleFilterChange} 
+        />
+
+        <div className={styles["curation-box"]}>
+          {curations.map(item => (
+          <CurationItem
+            key={item.id} 
+            id={item.id} 
+            imageUrl={item.imageUrl}
+            
+            fieldBadges={item.fieldBadges}
+
+            insightBadge={item.insightBadge}
+            crossNoteBadge={item.crossNoteBadge}
+            bestColumBadge={item.bestColumBadge}
+
+            content={item.content}
+            likeCount={item.likeCount}
+            liked={item.liked} 
+            scraped={item.scraped} 
+            onClick={()=>handleCurationClick(item)}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}

@@ -1,0 +1,70 @@
+.followContainer {
+    margin: 30px auto;
+}
+
+/* 기본 팔로우 버튼 스타일 */
+.followButton {
+    width: 100%;
+}
+
+/* 팔로우 버튼 (팔로우 안 함 상태) */
+.followButton.follow {
+    display: flex;
+    width: 315px;
+    height: 20px;
+    padding: 6px 14px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    flex-shrink: 0;
+    border-radius: 6px;
+    border: 1px solid var(--primary-30, #39A2A5);
+    background: var(--white, #FFF);
+
+    color: var(--primary-30, #39A2A5);
+    text-align: justify;
+    font-feature-settings: 'liga' off, 'clig' off;
+    font-family: Inter;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+}
+
+/* 팔로잉 버튼 (팔로우 함 상태) */
+.followButton.following {
+    display: flex;
+    width: 315px;
+    height: 20px;
+    padding: 6px 14px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    flex-shrink: 0;
+    border-radius: 6px;
+    background: var(--primary-30, #39A2A5);
+
+    border: none;
+    color: var(--white, #FFF);
+    text-align: justify;
+    font-feature-settings: 'liga' off, 'clig' off;
+    font-family: Inter;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 20px; /* 125% */
+}
+
+/* 칼럼 제목 스타일 */
+.columnTitle {
+    color: #000;
+    font-feature-settings: 'liga' off, 'clig' off;
+    font-family: Inter;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    padding: 0;
+}

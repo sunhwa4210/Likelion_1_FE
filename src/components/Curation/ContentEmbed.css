@@ -1,0 +1,21 @@
+.embed-box {
+  width: 100%;
+  height: 157px;         
+  background: #D9D9D9;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 유튜브 iframe이 영역 꽉 채우도록 */
+.embed-box iframe {
+  width: 100%;
+  height: 100%;
+}
+
+/* 링크 임베드일 때 */
+.link-embed {
+  text-decoration: none;
+  color: inherit;
+}

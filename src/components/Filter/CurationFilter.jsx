@@ -1,0 +1,265 @@
+// 큐레이션 필터 (큐레이션 화면 내의 필터)
+import React,{useState} from 'react';
+import { categories } from '../Badges/CategoryData';
+import CategoryXselector from '../Badges/CategoryXselector';
+import styles from './CurationFilter.module.css';
+import { useEffect } from 'react';
+
+export default function CurationFilter ({value, onChange, isOpen}) {
+    const curationType = categories.filter((item) => item.colorKey === 'type' ); 
+
+
+    const humanities1 = categories.filter((item) => item.colorKey === 'humanities'&& '3'>=item.num ); 
+    const humanities2= categories.filter((item) => item.colorKey === 'humanities'&& item.num >='4');
+
+    const science1 = categories.filter((item) => item.colorKey === 'science'&& '3'>=item.num ); 
+    const science2= categories.filter((item) => item.colorKey === 'science'&& item.num >='4');
+
+    const tech1 = categories.filter((item) => item.colorKey === 'tech'&& '3'>=item.num ); 
+    const tech2 = categories.filter((item) => item.colorKey === 'tech'&& item.num >='4');
+
+    const economy = categories.filter((item) => item.colorKey === 'economy' ); 
+
+    const art1 = categories.filter((item) => item.colorKey === 'art'&& '3'>=item.num );
+    const art2 = categories.filter((item) => item.colorKey === 'art'&& item.num >='4');
+
+    const sport1 =categories.filter((item) => item.colorKey === 'sport'&& '2'>=item.num);
+    const sport2 =categories.filter((item) => item.colorKey === 'sport'&& item.num >='3');
+
+    const [internal, setInternal] = useState({
+        types: value?.types || [],
+
+        humanities1: [],
+        humanities2: [],
+
+        science1: [],
+        science2: [],
+
+        tech1: [],
+        tech2: [],
+
+        economy: value?.economy || [],
+
+        art1: [],
+        art2: [],
+
+        sport1: [],
+        sport2: [],
+    });
+
+  useEffect(() => {
+    if (!onChange) return;
+
+    const nextFilters = {
+      types: internal.types,
+
+      humanities: [
+        ...(internal.humanities1 || []),
+        ...(internal.humanities2 || []),
+      ],
+
+      science: [
+        ...(internal.science1 || []),
+        ...(internal.science2 || []),
+      ],
+
+      tech: [
+        ...(internal.tech1 || []),
+        ...(internal.tech2 || []),
+      ],
+
+      economy: internal.economy || [],
+
+      art: [
+        ...(internal.art1 || []),
+        ...(internal.art2 || []),
+      ],
+
+      sport: [
+        ...(internal.sport1 || []),
+        ...(internal.sport2 || []),
+      ],
+    };
+
+    onChange(nextFilters);
+  }, [internal]);
+
+  const updateInternal = (key, selectedLabels) => {
+    setInternal((prev) => ({
+      ...prev,
+      [key]: selectedLabels,
+    }));
+  };
+
+return (
+
+        <div className={`${styles.filterBoxWrapper} interest ${isOpen ? styles.isOpen : styles.isClosed}`}>
+            <div className={styles.filterBox}>
+                <div className={styles.titleBox}>
+                    <p>유형</p>
+                </div>
+                
+                <div className={styles.categoryBox}>
+                    <CategoryXselector 
+                    categoriesToDisplay={curationType} 
+                    removableMode={true}
+                    fontSize="8px"
+                    onCategoriesChange={(selectedLabels) => 
+                    updateInternal('types', selectedLabels)
+                    }
+                    />  
+                </div> 
+
+            </div>
+
+            <div className={styles.filterBox}>
+                <div className={styles.titleBox}>
+                    <p>인문사회</p>
+                </div>
+                
+                <div className={styles.categoryBox}>
+                    <CategoryXselector 
+                    categoriesToDisplay={humanities1} 
+                    removableMode={true}
+                    fontSize="8px"
+                    onCategoriesChange={(selectedLabels) =>
+                        updateInternal('humanities1', selectedLabels)
+                    }
+                    />  
+                </div> 
+
+                <div className={styles.categoryBox}>
+                    <CategoryXselector 
+                    categoriesToDisplay={humanities2} 
+                    removableMode={true}
+                    fontSize="8px"
+                    onCategoriesChange={(selectedLabels) =>
+                        updateInternal('humanities2', selectedLabels)
+                    }
+                    />  
+                </div> 
+
+            </div>
+
+            <div className={styles.filterBox}>
+                <div className={styles.titleBox}>
+                    <p>자연과학</p>
+                </div>
+                <div className={styles.categoryBox}>
+                
+                    <CategoryXselector 
+                    categoriesToDisplay={science1} 
+                    removableMode={true}
+                    fontSize="8px"
+                    onCategoriesChange={(selectedLabels) =>
+                        updateInternal('science1', selectedLabels)
+                    }
+                    />       
+                    <CategoryXselector 
+                    categoriesToDisplay={science2} 
+                    removableMode={true}
+                    fontSize="8px"
+                    onCategoriesChange={(selectedLabels) =>
+                        updateInternal('science2', selectedLabels)
+                    }
+                    />    
+
+                </div>                    
+            </div>
+            
+            <div className={styles.filterBox}>
+                <div className={styles.titleBox}>
+                    <p>공학·기술</p>
+                </div>      
+                <div className={styles.categoryBox}>
+                
+                    <CategoryXselector 
+                    categoriesToDisplay={tech1} 
+                    removableMode={true}
+                    fontSize="8px"
+                    onCategoriesChange={(selectedLabels) =>
+                        updateInternal('tech1', selectedLabels)
+                    }
+                    />      
+                    <CategoryXselector 
+                    categoriesToDisplay={tech2} 
+                    removableMode={true}
+                    fontSize="8px"
+                    onCategoriesChange={(selectedLabels) =>
+                        updateInternal('tech2', selectedLabels)
+                    }
+                    />      
+                </div>               
+            
+            </div>
+            
+            <div className={styles.filterBox}>
+                <div className={styles.titleBox}>
+                    <p>경제·경영</p>
+                </div> 
+                <div className={styles.categoryBox}>
+                    <CategoryXselector 
+                    categoriesToDisplay={economy} 
+                    removableMode={true}
+                    fontSize="8px"
+                    onCategoriesChange={(selectedLabels) =>
+                        updateInternal('economy', selectedLabels)
+                    }
+                    />      
+                </div>                                            
+            </div>
+
+            <div className={styles.filterBox}>
+                <div className={styles.titleBox}>
+                    <p>예술·문화</p>
+                </div>
+                <div className={styles.categoryBox}>
+                    <CategoryXselector 
+                    categoriesToDisplay={art1} 
+                    removableMode={true}
+                    fontSize="8px"
+                    onCategoriesChange={(selectedLabels) =>
+                        updateInternal('art1', selectedLabels)
+                    }
+                    />      
+                    <CategoryXselector 
+                    categoriesToDisplay={art2} 
+                    removableMode={true}
+                    fontSize="8px"
+                    onCategoriesChange={(selectedLabels) =>
+                        updateInternal('art2', selectedLabels)
+                    }
+                    />  
+            
+                </div>                                                    
+            </div>
+
+            <div className={styles.filterBox}>
+                <div className={styles.titleBox}>
+                    <p>스포츠·라이프스타일</p>
+                </div>     
+                <div className={styles.categoryBox}>
+                    <CategoryXselector 
+                    categoriesToDisplay={sport1} 
+                    removableMode={true}
+                    fontSize="8px"
+                    onCategoriesChange={(selectedLabels) =>
+                        updateInternal('sport1', selectedLabels)
+                    }
+                    />      
+                    <CategoryXselector 
+                    categoriesToDisplay={sport2} 
+                    removableMode={true}
+                    fontSize="8px"
+                    onCategoriesChange={(selectedLabels) =>
+                        updateInternal('sport2', selectedLabels)
+                    }
+                    />  
+        
+                </div>      
+                                                        
+                </div>
+        </div>
+
+);
+}
