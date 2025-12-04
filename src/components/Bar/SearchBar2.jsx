@@ -53,7 +53,7 @@ function SearchBar2({ maxWidth = '347px',onFilterClick, onSearchChange, onSortCh
             type="text"
             placeholder="검색어를 입력하거나, 필터로 원하는 조건을 선택하세요"
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={handleSearchInputChange}
             className={styles.searchInput}
 
             onFocus={handleFocus}

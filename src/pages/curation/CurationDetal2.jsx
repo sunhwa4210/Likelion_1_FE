@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useNavigate, useParams,useLocation } from "react-router-dom";
 import axios from "axios";
 
@@ -7,12 +7,13 @@ import InsightBadge from "../../components/icons/InsightBadge";
 import CrossNoteBadge from "../../components/icons/CrossNoteBadge";
 import BestCalumBadge from "../../components/icons/BestCalumBadge";
 import CurationLikeButton from "../../components/Curation/CuraionLikeButton";
-import CurationScrapButton from "../../components/Curation/CurationScrapButton";
+import CurationScrapButton2 from "../../components/Curation/CurationScrapButton2";
 import ContentEmbed from "../../components/Curation/ContentEmbed";
 import CategoryXselector from "../../components/Badges/CategoryXselector";
 import { categories } from "../../components/Badges/CategoryData";
 import { useAuth } from "../../contexts/AuthContext";
-
+import { useModal } from "../../components/Modal/ModalProvider";
+import { presets } from "../../components/Modal/presets"
 import styles from "./CurationDetail.module.css";
 
 const API_BASE = process.env.REACT_APP_API_BASE_URL || "";
@@ -29,16 +30,18 @@ function isInternalRouter(url){
   return url.startsWith("/");
 }
 
-export default function CurationDetail() {
+export default function CurationDetail2() {
   const { curationId } = useParams();
-  const { accessToken } = useAuth();
+  const { accessToken, logout } = useAuth();
   const nav = useNavigate();
   const location = useLocation();
+  const { open } = useModal();
 
   const [data, setData] = useState(null); // 서버에서 받은 원본 데이터
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  
+  const [isScraped, setIsScraped] = useState(null);
+
   const fromPath = location.state?.from || "/curation";
 
   // 상세 데이터 조회
@@ -57,6 +60,7 @@ export default function CurationDetail() {
         });
 
         setData(res.data);
+        setIsScraped(res.data.scraped);
       } catch (err) {
         console.error("GET /curation/{curationId} 실패:", err);
         setError("큐레이션 상세 정보를 불러오지 못했습니다.");
@@ -68,15 +72,66 @@ export default function CurationDetail() {
     fetchDetail();
   }, [curationId, accessToken]);
 
+  const handleScrapAction = useCallback(async () => {
+      
+      let shouldCallApi = true;
+      let apiSuccessMessage = "스크랩되었습니다!";
+      let apiFailMessage = "스크랩 추가에 실패했습니다.";
+
+      // 1. 현재 스크랩된 상태라면 -> 모달 띄워 취소 의사 확인
+      if (isScraped) {
+          const res = await open(presets.scrapDelete()); 
+
+          if (res === 'delete') {
+              apiSuccessMessage = "스크랩이 취소되었습니다.";
+              apiFailMessage = "스크랩 취소에 실패했습니다.";
+          } else {
+              shouldCallApi = false; // 취소 버튼을 누르면 API 호출하지 않음
+          }
+      } 
+      
+      if (shouldCallApi) {
+          try {
+              // 2. POST 토글 API 호출 (스크랩 유무에 상관없이 동일 엔드포인트 호출)
+              const response = await axios.post(`${API_BASE}/curation/${curationId}/scrap`, null, {
+                  headers: { 'Authorization': `Bearer ${accessToken}` },
+              });
+              
+              // 3. 응답에서 토글 상태 확인
+              if (response.status === 200 || response.status === 201) {
+                  const { toggled } = response.data;
+                  
+                  setIsScraped(toggled); // 서버 응답 값으로 상태 업데이트
+                  alert(apiSuccessMessage);
+                  
+                  // 스크랩 목록 페이지에서 왔고, 취소되었다면 목록으로 돌아가기
+                  if (fromPath === "/mypage/location/scrap" && !toggled) {
+                      nav(fromPath, { replace: true }); 
+                  }
+                  
+              } else {
+                  throw new Error('스크랩 토글 실패');
+              }
+          } catch (error) {
+              console.error("스크랩 토글 API 호출 실패:", error);
+              if (error.response?.status === 401) {
+                  logout();
+              } else {
+                  alert(apiFailMessage);
+              }
+          }
+      }
+  }, [isScraped, curationId, accessToken, nav, open, logout, fromPath]);
+
 
   // 로딩 중
-  if (loading && !data) {
-    return (
-      <div className="app-wrapper">
-        <p>로딩 중입니다...</p>
-      </div>
-    );
-  }
+  if (loading || isScraped === null) {
+    return (
+      <div className="app-wrapper">
+        <p>로딩 중입니다...</p>
+      </div>
+    );
+  }
 
   // 에러
   if (error) {
@@ -109,11 +164,11 @@ export default function CurationDetail() {
     likeCount, //좋아요 개수
     originalColumnId, // 오리지날 칼럼 id
     bestColumn, //베스트 칼럼 여부
-    scraped, //스크립트 여부
+    //scraped, //스크립트 여부
     liked, //좋아요 여부
   } = data;
 
-  console.log("[DETAIL] likeCount, liked:", likeCount, liked, typeof liked);
+  //console.log("[DETAIL] likeCount, liked:", likeCount, liked, typeof liked);
 
 
   // 타입별 구분
@@ -245,9 +300,10 @@ export default function CurationDetail() {
               </defs>
             </svg>
         </button>
-        <CurationScrapButton
+        <CurationScrapButton2
           curationId={curationId}
-          initialScrapped={scraped}
+          initialScrapped={isScraped}
+          onScrapToggle={handleScrapAction}
           variant="detail"
         />
       </div>
