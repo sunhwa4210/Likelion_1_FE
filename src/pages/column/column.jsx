@@ -77,15 +77,17 @@ export default function Column() {
   }, [sort, accessToken, refreshAccessToken]);
 
   // 카드 클릭 시 상세 페이지로 이동
-  const handleCardClick = (item) => {
-    console.log("[칼럼 카드 클릭] 이동할 데이터:", item);
-    navigate("/columnread", {
-      state: {
-        column: item,  // 상세 페이지에서 사용할 데이터
-        columnId: item.columnId, // 상세 조회에 필요한 ID 전달
-      },
-    });
-  };
+const handleCardClick = (item) => {
+  console.log("[칼럼 카드 클릭] 이동할 데이터:", item);
+
+  navigate(`/columnread/${item.columnId}`, {
+    state: {
+      column: item,           // 필요하면 그대로 전달
+      columnId: item.columnId // 없어도 되지만 유지해도 됨
+    },
+  });
+};
+
 
   if (loading) {
     return <div className="app-wrapper">칼럼을 불러오는 중입니다...</div>;

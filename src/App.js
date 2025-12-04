@@ -57,7 +57,8 @@ export default function App() {
           {/* 컬럼 */}
           <Route path="/column" element={<ColumnPage />} />
           <Route path="/columnwrite" element={<ColumnWrite />} />
-          <Route path="/columnread/:columId" element={<ColumnRead />} />
+          <Route path="/columnread/:columnId" element={<ColumnRead />} />
+
 
           {/* QnA */}
           <Route path="/qna" element={<QnaPage />} />

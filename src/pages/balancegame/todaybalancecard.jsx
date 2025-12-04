@@ -6,8 +6,50 @@ export default function TodayBalanceCard({
   title,
   description,
   question,
-  onSelect,
+  type = "OX",
+  options = [],
+  onSelectOx,
+  onSelectOption,
 }) {
+  const renderActions = () => {
+    if (type === "PREFERENCE") {
+      return (
+        <div className={styles.select}>
+          {options.map((opt) => (
+            <button
+              key={opt.id}
+              className={styles.choiceButton}
+              type="button"
+              onClick={() => onSelectOption?.(opt.id)}
+            >
+              {opt.label ?? opt.id}
+            </button>
+          ))}
+        </div>
+      );
+    }
+
+    // 기본 OX 타입
+    return (
+      <div className={styles.select}>
+        <button
+          className={styles.buttonO}
+          type="button"
+          onClick={() => onSelectOx?.("O")}
+        >
+          O
+        </button>
+        <button
+          className={styles.buttonX}
+          type="button"
+          onClick={() => onSelectOx?.("X")}
+        >
+          X
+        </button>
+      </div>
+    );
+  };
+
   return (
     <div className={styles.quizStyle1}>
       <div className={styles.titleContainer}>
@@ -20,22 +62,7 @@ export default function TodayBalanceCard({
 
         <div className={styles.question}>{question}</div>
 
-        <div className={styles.select}>
-          <button
-            className={styles.buttonO}
-            type="button"
-            onClick={() => onSelect("O")}
-          >
-            O
-          </button>
-          <button
-            className={styles.buttonX}
-            type="button"
-            onClick={() => onSelect("X")}
-          >
-            X
-          </button>
-        </div>
+        {renderActions()}
       </div>
     </div>
   );

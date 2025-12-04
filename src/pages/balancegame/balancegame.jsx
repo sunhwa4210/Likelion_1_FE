@@ -16,6 +16,7 @@ import CategoryBalanceCard from "./categorybalancecard";
 const API_BASE =
   `${process.env.REACT_APP_API_BASE_URL || ""}/api`;
 const BALANCE_BASE = `${API_BASE}/balance-games`;
+const MAX_FETCH_RETRIES = 3;
 
 export default function Balancegame() {
   const { open } = useModal();
@@ -46,44 +47,61 @@ export default function Balancegame() {
         return;
       }
 
-      try {
-        const res = await axios.get(`${BALANCE_BASE}/today`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
+      let fetched = false;
+      for (let attempt = 0; attempt < MAX_FETCH_RETRIES; attempt++) {
+        try {
+          const res = await axios.get(`${BALANCE_BASE}/today`, {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          });
 
-        setTodayQuiz(res.data);
-        setTodayPreviousWrong(false);
-      } catch (error) {
-        console.error("오늘의 밸런스 게임 조회 1차 실패:", error);
-
-        if (error.response?.status === 401 && typeof refreshAccessToken === "function") {
-          try {
-            const newToken = await refreshAccessToken();
-            if (!newToken) {
-              setTodayError("로그인이 만료되었습니다. 다시 로그인해 주세요.");
-              return;
-            }
-
-            const retryRes = await axios.get(`${BALANCE_BASE}/today`, {
-              headers: {
-                Authorization: `Bearer ${newToken}`,
-              },
-            });
-
-            setTodayQuiz(retryRes.data);
+          if (res.data?.type === "OX") {
+            setTodayQuiz(res.data);
             setTodayPreviousWrong(false);
-          } catch (retryErr) {
-            console.error("오늘의 밸런스 게임 조회 재시도 실패:", retryErr);
-            setTodayError("오늘의 문제를 불러오지 못했습니다.");
+            fetched = true;
+            break;
           }
-        } else {
-          setTodayError("오늘의 문제를 불러오지 못했습니다.");
+
+          console.warn(`오늘의 밸런스 게임 타입이 OX가 아닙니다. (attempt ${attempt + 1})`);
+        } catch (error) {
+          console.error(`오늘의 밸런스 게임 조회 실패 (attempt ${attempt + 1}):`, error);
+
+          if (error.response?.status === 401 && typeof refreshAccessToken === "function") {
+            try {
+              const newToken = await refreshAccessToken();
+              if (!newToken) {
+                setTodayError("로그인이 만료되었습니다. 다시 로그인해 주세요.");
+                break;
+              }
+
+              const retryRes = await axios.get(`${BALANCE_BASE}/today`, {
+                headers: {
+                  Authorization: `Bearer ${newToken}`,
+                },
+              });
+
+              if (retryRes.data?.type === "OX") {
+                setTodayQuiz(retryRes.data);
+                setTodayPreviousWrong(false);
+                fetched = true;
+                break;
+              }
+
+              console.warn(`오늘의 밸런스 게임 타입이 OX가 아닙니다. (token refresh, attempt ${attempt + 1})`);
+            } catch (retryErr) {
+              console.error("오늘의 밸런스 게임 조회 재시도 실패:", retryErr);
+            }
+          }
         }
-      } finally {
-        setTodayLoading(false);
       }
+
+      if (!fetched) {
+        setTodayError("오늘의 문제를 불러오지 못했습니다. (OX 타입 응답을 받지 못했습니다.)");
+        setTodayQuiz(null);
+      }
+
+      setTodayLoading(false);
     };
 
     fetchTodayQuiz();
@@ -104,46 +122,63 @@ export default function Balancegame() {
       const url = `${BALANCE_BASE}/by-category`;
       const params = { parentName: selectedCategory };
 
-      try {
-        const res = await axios.get(url, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-          params,
-        });
+      let fetched = false;
+      for (let attempt = 0; attempt < MAX_FETCH_RETRIES; attempt++) {
+        try {
+          const res = await axios.get(url, {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+            params,
+          });
 
-        setCategoryQuiz(res.data);
-        setCategoryPreviousWrong(false);
-      } catch (error) {
-        console.error("분야별 밸런스 게임 조회 1차 실패:", error);
-
-        if (error.response?.status === 401 && typeof refreshAccessToken === "function") {
-          try {
-            const newToken = await refreshAccessToken();
-            if (!newToken) {
-              setCategoryError("로그인이 만료되었습니다. 다시 로그인해 주세요.");
-              return;
-            }
-
-            const retryRes = await axios.get(url, {
-              headers: {
-                Authorization: `Bearer ${newToken}`,
-              },
-              params,
-            });
-
-            setCategoryQuiz(retryRes.data);
+          if (res.data?.type === "PREFERENCE") {
+            setCategoryQuiz(res.data);
             setCategoryPreviousWrong(false);
-          } catch (retryErr) {
-            console.error("분야별 밸런스 게임 조회 재시도 실패:", retryErr);
-            setCategoryError("분야별 밸런스 게임을 불러오지 못했습니다.");
+            fetched = true;
+            break;
           }
-        } else {
-          setCategoryError("분야별 밸런스 게임을 불러오지 못했습니다.");
+
+          console.warn(`분야별 밸런스 게임 타입이 PREFERENCE가 아닙니다. (attempt ${attempt + 1})`);
+        } catch (error) {
+          console.error(`분야별 밸런스 게임 조회 실패 (attempt ${attempt + 1}):`, error);
+
+          if (error.response?.status === 401 && typeof refreshAccessToken === "function") {
+            try {
+              const newToken = await refreshAccessToken();
+              if (!newToken) {
+                setCategoryError("로그인이 만료되었습니다. 다시 로그인해 주세요.");
+                break;
+              }
+
+              const retryRes = await axios.get(url, {
+                headers: {
+                  Authorization: `Bearer ${newToken}`,
+                },
+                params,
+              });
+
+              if (retryRes.data?.type === "PREFERENCE") {
+                setCategoryQuiz(retryRes.data);
+                setCategoryPreviousWrong(false);
+                fetched = true;
+                break;
+              }
+
+              console.warn(`분야별 밸런스 게임 타입이 PREFERENCE가 아닙니다. (token refresh, attempt ${attempt + 1})`);
+            } catch (retryErr) {
+              console.error("분야별 밸런스 게임 조회 재시도 실패:", retryErr);
+            }
+          }
         }
-      } finally {
-        setCategoryLoading(false);
       }
+
+      if (!fetched) {
+        setCategoryError("분야별 밸런스 게임을 불러오지 못했습니다. (PREFERENCE 타입 응답을 받지 못했습니다.)");
+        setCategoryQuiz(null);
+      }
+
+      setCategoryLoading(false);
     };
 
     fetchCategoryQuiz();
@@ -275,10 +310,7 @@ export default function Balancegame() {
     }
   };
 
-  // =========================================================
-  // 5. 오늘의 게임 - 선호도 선택 핸들러
-  //    POST /balance-games/{quizId}/answer  (PREFERENCE)
-  // =========================================================
+
   const handleTodayPreferenceSelect = async (optionId) => {
     if (!todayQuiz || !accessToken) return;
 
@@ -498,39 +530,31 @@ export default function Balancegame() {
 
     if (!todayQuiz) return null;
 
-    // OX 퀴즈
-    if (todayQuiz.type === "OX") {
-      return (
-        <TodayBalanceCard
-          badgeLabel="사회학"
-          title="오늘의 밸런스 게임"
-          description="오늘의 밸런스 게임을 통해, 더 넓은 인사이트를 만나보세요"
-          question={todayQuiz.question}
-          onSelect={handleTodayOxSelect}
-        />
-      );
+    const todaySubtitle = "오늘의 밸런스 게임을 통해, 더 넓은 인사이트를 만나보세요";
+    // API에 따라 parentName / categoryName 등이 올 수 있으므로 우선순위로 태그 결정
+    const badgeLabel =
+      todayQuiz.parentName ||
+      todayQuiz.categoryParentName ||
+      todayQuiz.categoryName ||
+      todayQuiz.parentCategoryName ||
+      todayQuiz.category ||
+      "오늘";
+
+    // 오늘 카드는 OX 타입만 렌더링
+    if (todayQuiz.type !== "OX") {
+      return <div>오늘의 밸런스 게임은 OX 타입 문제만 지원합니다.</div>;
     }
 
-    // 선호도 퀴즈 → CategoryBalanceCard 재사용 (카테고리 선택 숨김)
-    if (todayQuiz.type === "PREFERENCE") {
-      const options =
-        todayQuiz.options?.map((opt) => ({
-          id: opt.optionId,
-          label: opt.text,
-        })) ?? [];
-
-      return (
-        <CategoryBalanceCard
-          title="오늘의 밸런스 게임"
-          description={todayQuiz.question}
-          options={options}
-          showCategorySelector={false}
-          onSelectOption={handleTodayPreferenceSelect}
-        />
-      );
-    }
-
-    return null;
+    return (
+      <TodayBalanceCard
+        badgeLabel={badgeLabel}
+        title="오늘의 밸런스 게임"
+        description={todaySubtitle}
+        question={todayQuiz.question}
+        type="OX"
+        onSelectOx={handleTodayOxSelect}
+      />
+    );
   };
 
 
@@ -547,49 +571,28 @@ export default function Balancegame() {
 
     if (!categoryQuiz) return null;
 
-    switch (categoryQuiz.type) {
-      case "PREFERENCE": {
-        const options =
-          categoryQuiz.options?.map((opt) => ({
-            id: opt.optionId,
-            label: opt.label, // A/B 와 같은 라벨
-            text: opt.text,
-          })) ?? [];
-
-        return (
-          <CategoryBalanceCard
-            title="분야별 밸런스 게임"
-            description={categoryQuiz.question}
-            categoryLabel={selectedCategory}
-            options={options}
-            onCategoryChange={setSelectedCategory}
-            onSelectOption={handleCategoryPreferenceSelect}
-          />
-        );
-      }
-
-      case "OX": {
-        const options = [
-          { id: "O", label: "O" },
-          { id: "X", label: "X" },
-        ];
-
-        return (
-          <CategoryBalanceCard
-            title="분야별 밸런스 게임"
-            description={categoryQuiz.question}
-            categoryLabel={selectedCategory}
-            options={options}
-            onCategoryChange={setSelectedCategory}
-            onSelectOption={handleCategoryOxSelect}
-          />
-        );
-      }
-
-      default:
-        console.warn("알 수 없는 카테고리 퀴즈 타입:", categoryQuiz.type);
-        return <div>지원하지 않는 퀴즈 타입입니다: {categoryQuiz.type}</div>;
+    if (categoryQuiz.type !== "PREFERENCE") {
+      return <div>분야별 밸런스 게임은 선호도(PREFERENCE) 타입 문제만 지원합니다.</div>;
     }
+
+    const options =
+      categoryQuiz.options?.map((opt) => ({
+        id: opt.optionId,
+        label: opt.label, // A/B 와 같은 라벨
+        text: opt.text,
+      })) ?? [];
+
+    return (
+      <CategoryBalanceCard
+        title="분야별 밸런스 게임"
+        description="원하는 분야의 퀴즈를 골라보세요"
+        question={categoryQuiz.question}
+        categoryLabel={selectedCategory}
+        options={options}
+        onCategoryChange={setSelectedCategory}
+        onSelectOption={handleCategoryPreferenceSelect}
+      />
+    );
   };
 
   return (

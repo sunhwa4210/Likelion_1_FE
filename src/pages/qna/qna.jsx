@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 import styles from "./qna.module.css";
 import GlobalHeader from "../../components/Header/GlobalHeader";
@@ -15,6 +16,7 @@ const QNA_URL = "https://cross-note.com/question/home";
 
 export default function Qna() {
   const { accessToken, refreshAccessToken } = useAuth();
+  const navigate = useNavigate();
 
   const [searchTerm, setSearchTerm] = useState("");
   const [filterKey, setFilterKey] = useState("latest");
@@ -109,6 +111,11 @@ export default function Qna() {
             content={item.content}
             likeCount={item.likeCount}
             answerCount={item.answerCount}
+            onClick={() =>
+              navigate(`/qnadetail/${item.questionId}`, {
+                state: { question: item },
+              })
+            }
           />
         ))}
 

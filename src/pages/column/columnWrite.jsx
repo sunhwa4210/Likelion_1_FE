@@ -9,7 +9,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 
 // 칼럼 작성 API URL
-const COLUMN_CREATE_URL = "https://cross-note.com/column/";
+const COLUMN_CREATE_URL = "https://cross-note.com/column";
 
 // 카테고리 이름 -> ID 매핑
 const CATEGORY_NAME_TO_ID = {
@@ -135,61 +135,57 @@ export default function ColumnWrite() {
   };
 
   const handleSubmit = async () => {
-    if (!accessToken) {
-      alert("로그인이 필요합니다.");
-      return;
-    }
-    if (!title.trim() || !content.trim()) {
-      alert("제목과 내용을 입력해 주세요.");
-      return;
-    }
+  if (!accessToken) {
+    alert("로그인이 필요합니다.");
+    return;
+  }
+  if (!title.trim() || !content.trim()) {
+    alert("제목과 내용을 입력해 주세요.");
+    return;
+  }
 
-    // 선택된 태그 -> 카테고리 ID 배열
-    const categoryIds = selectedTags
-      .map((tag) => CATEGORY_NAME_TO_ID[tag])
-      .filter((id) => typeof id === "number")
-      .slice(0, 3);
+  // 선택된 태그 -> 카테고리 ID 배열
+  const categoryIds = selectedTags
+    .map((tag) => CATEGORY_NAME_TO_ID[tag])
+    .filter((id) => typeof id === "number")
+    .slice(0, 3);
 
-    try {
-      setIsSubmitting(true);
+  // 서버 스펙에 맞는 JSON 바디 만들기
+  const payload = {
+    title: title.trim(),
+    content: content.trim(),
+    category1: categoryIds[0] ?? null,
+    category2: categoryIds[1] ?? null,
+    category3: categoryIds[2] ?? null,
+    imageUrl: thumbnailPreview ?? null 
 
-      // 여기서부터는 JSON 대신 FormData로 전송
-      const formData = new FormData();
-
-      formData.append("title", title.trim());
-      formData.append("content", content.trim());
-
-      if (categoryIds[0] !== undefined)
-        formData.append("category1", String(categoryIds[0]));
-      if (categoryIds[1] !== undefined)
-        formData.append("category2", String(categoryIds[1]));
-      if (categoryIds[2] !== undefined)
-        formData.append("category3", String(categoryIds[2]));
-
-      if (thumbnailFile) {
-        formData.append("imageurl", thumbnailFile);
-      }
-
-      const res = await axios.post(COLUMN_CREATE_URL, formData, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-
-      console.log("[칼럼 작성 응답]", res.data);
-      alert("칼럼이 성공적으로 등록되었습니다.");
-      navigate("/column");
-    } catch (error) {
-      console.error("[칼럼 작성 에러]", error);
-      if (error.response) {
-        console.error("status:", error.response.status);
-        console.error("body:", error.response.data);
-      }
-      alert("칼럼 등록 중 오류가 발생했습니다.");
-    } finally {
-      setIsSubmitting(false);
-    }
   };
+
+  try {
+    setIsSubmitting(true);
+
+    const res = await axios.post(COLUMN_CREATE_URL, payload, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        // Content-Type은 안 써도 Axios가 application/json으로 자동 설정
+      },
+    });
+
+    console.log("[칼럼 작성 응답]", res.data);
+    alert("칼럼이 성공적으로 등록되었습니다.");
+    navigate("/column");
+  } catch (error) {
+    console.error("[칼럼 작성 에러]", error);
+    if (error.response) {
+      console.error("status:", error.response.status);
+      console.error("body:", error.response.data);
+    }
+    alert("칼럼 등록 중 오류가 발생했습니다.");
+  } finally {
+    setIsSubmitting(false);
+  }
+};
+
 
   return (
     <div className="app-wrapper">

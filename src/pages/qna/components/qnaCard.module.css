@@ -1,0 +1,48 @@
+.card {
+  width: 100%;
+  padding: 14px 12px;
+  border-bottom: 1px solid #e6e8ef;
+  cursor: pointer;
+}
+
+.textBox {
+  margin-bottom: 10px;
+}
+
+.title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #111;
+  margin-bottom: 4px;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 1; /* 한 줄 말줄임 */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.content {
+  font-size: 13px;
+  color: #7a7f8c;
+  line-height: 1.5;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* 두 줄 말줄임 */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.footer {
+  display: flex;
+  gap: 14px;
+  font-size: 13px;
+  color: #7a7f8c;
+}
+
+.iconItem {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}

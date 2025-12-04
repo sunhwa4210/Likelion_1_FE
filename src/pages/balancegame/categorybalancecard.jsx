@@ -5,6 +5,7 @@ import Arrow from "./chevron-down.svg";
 export default function CategoryBalanceCard({
   title,
   description,
+  question,
   options,
   onSelectOption,
   categoryLabel,
@@ -81,6 +82,8 @@ export default function CategoryBalanceCard({
         <p className={styles.categoryDescription}>
           둘 중에 더 관심 가는 선택지를 골라보세요
         </p>
+
+        {question && <div className={styles.question}>{question}</div>}
 
         <div className={styles.select}>
           {options.map((opt) => (

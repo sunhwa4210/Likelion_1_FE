@@ -177,6 +177,33 @@ export default function ColumnRead() {
     }
   };
 
+  // 게시글(칼럼) 삭제
+  const handleDeleteColumn = async () => {
+    if (!accessToken) {
+      alert("로그인이 필요합니다.");
+      return;
+    }
+    if (!columnId) {
+      alert("칼럼 정보가 없습니다.");
+      return;
+    }
+
+    const ok = window.confirm("이 칼럼을 삭제하시겠습니까?");
+    if (!ok) return;
+
+    try {
+      await axios.delete(`https://cross-note.com/column/${columnId}`, {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
+
+      alert("칼럼이 삭제되었습니다.");
+      navigate("/column"); // 목록 페이지로 이동
+    } catch (err) {
+      console.error("[칼럼 삭제 실패]", err);
+      alert("칼럼 삭제에 실패했습니다.");
+    }
+  };
+
   // 댓글 작성
   const handleSubmitComment = async (e) => {
     e.preventDefault();
@@ -400,15 +427,55 @@ export default function ColumnRead() {
             {column.title}
           </h1>
 
-          {/* 작성일 */}
+          {/* 작성일 + 삭제 버튼 */}
           <div
             style={{
-              fontSize: 11,
-              color: "#9aa0b2",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
               marginBottom: 16,
             }}
           >
-            {formatDateTime(column.createdAt)} 작성
+            <div
+              style={{
+                fontSize: 11,
+                color: "#9aa0b2",
+              }}
+            >
+              {formatDateTime(column.createdAt)} 작성
+            </div>
+
+            <div style={{ display: "flex", gap: 8 }}>
+              <button
+                type="button"
+                onClick={() => navigate("/column")}
+                style={{
+                  border: "1px solid #e1e4ea",
+                  background: "#fff",
+                  borderRadius: 999,
+                  padding: "4px 10px",
+                  fontSize: 11,
+                  cursor: "pointer",
+                }}
+              >
+                목록
+              </button>
+              <button
+                type="button"
+                onClick={handleDeleteColumn}
+                style={{
+                  border: "none",
+                  background: "#ff4b5c",
+                  color: "#fff",
+                  borderRadius: 999,
+                  padding: "4px 10px",
+                  fontSize: 11,
+                  cursor: "pointer",
+                }}
+              >
+                글 삭제
+              </button>
+            </div>
           </div>
 
           {/* 본문 */}
@@ -596,17 +663,13 @@ export default function ColumnRead() {
             </div>
           ) : (
             comments.map((c) => {
-              // 백엔드 필드에 맞게 조정
-              const myComment = c.isMine ?? c.mine ?? false;
               const isEditing = c.commentId === editingCommentId;
 
-              // 사용자 식별 정보 (id 우선)
               const userId =
                 c.userId ?? c.memberId ?? c.authorId ?? null;
               const nickname =
                 c.nickname || c.authorNickname || c.authorName || null;
 
-              // "N분 전" 같은 텍스트는 createdAt 기준
               const timeAgo = formatTimeAgo(c.createdAt);
               const updated =
                 c.updatedAt && c.updatedAt !== c.createdAt;
@@ -644,12 +707,11 @@ export default function ColumnRead() {
                         fontWeight: 500,
                       }}
                     >
-                      {/* 디자인상: "김슈니" 같은 텍스트 → 여기서 userId / nickname 선택 */}
                       {nickname || (userId ? `User ${userId}` : "사용자")}
                     </button>
 
-                    {/* 내 댓글일 때만 수정/삭제 노출 */}
-                    {myComment && !isEditing && (
+                    {/* 모든 댓글에 수정/삭제 노출 */}
+                    {!isEditing && (
                       <div
                         style={{
                           display: "flex",
@@ -759,7 +821,7 @@ export default function ColumnRead() {
                     </div>
                   )}
 
-                  {/* 시간 표시: "N분 전 yyyy.MM.dd HH:mm 수정됨" */}
+                  {/* 시간 표시 */}
                   <div
                     style={{
                       fontSize: 11,
