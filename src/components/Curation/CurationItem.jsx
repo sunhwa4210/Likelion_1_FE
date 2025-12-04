@@ -8,6 +8,7 @@ import CurationLikeButton from "./CuraionLikeButton";
 import CurationScrapButton from "./CurationScrapButton";
 import CategoryXselector from "../Badges/CategoryXselector"
 import { categories } from "../Badges/CategoryData";
+import altImg from "./assets/altImg.svg";
 
 import styles from './CurationItem.module.css';
 
@@ -59,7 +60,10 @@ const CurationItem = ({
       {/* -- 헤더 영역 --  */}
       <div className={styles.curationImagePlaceholder}>
         {/* 1. 썸네일 */}
-        <img src={imageUrl || null} alt="큐레이션 이미지" />
+        <img 
+        src={imageUrl && imageUrl.trim() !== "" ? imageUrl : altImg}
+        alt="큐레이션 이미지" 
+      />
 
         {/* 2. 카테고리 뱃지 컴포넌트 사용 */}
         {/* 각 prop이 true일 때만 해당 뱃지를 렌더링 */}

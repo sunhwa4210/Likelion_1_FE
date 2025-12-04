@@ -12,6 +12,7 @@ import ContentEmbed from "../../components/Curation/ContentEmbed";
 import CategoryXselector from "../../components/Badges/CategoryXselector";
 import { categories } from "../../components/Badges/CategoryData";
 import { useAuth } from "../../contexts/AuthContext";
+import altImg from "../../components/Curation/assets/altImg.svg"
 
 import styles from "./CurationDetail.module.css";
 
@@ -148,7 +149,10 @@ export default function CurationDetail() {
       <div className={styles["curation-detail-wrapper"]}>
         {/* 썸네일 + 타입 뱃지 */}
         <div className={styles["curation-image-placeholder"]}>
-          <img src={imageUrl} alt="큐레이션 이미지를 불러오지 못했습니다." />
+          <img 
+          src={imageUrl && imageUrl.trim() !== "" ? imageUrl : altImg}
+          alt="큐레이션 이미지" 
+        />
 
           {isInsight && (
             <div className={styles["insight-badge"]}>

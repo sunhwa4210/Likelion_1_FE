@@ -6,6 +6,7 @@ import GlobalHeader from "../../components/Header/GlobalHeader";
 import CurationItem from "../../components/Curation/CurationItem"
 import Coachmark from "../../components/Coachmark/Coachmark";
 import { useAuth } from "../../contexts/AuthContext";
+import altImg from "../../components/Curation/assets/altImg.svg";
 
 
 const API_BASE = process.env.REACT_APP_API_BASE_URL || "";
