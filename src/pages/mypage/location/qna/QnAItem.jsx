@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './QnAItem.module.css';
-import GoodCountIcon from '../../../../components/icons/GoodCountIcon';
-import CommentCountIcon from '../../../../components/icons/CommentCountIcon';
+import GoodIcon from '../../../../components/icons/GoodIcon';
+import CommentIcon from '../../../../components/icons/CommentIcon';
 import { useNavigate } from 'react-router-dom';
 
 const QnAItem = ({ id, title, previewContent, likes, comments, date }) => {
@@ -14,20 +14,20 @@ const QnAItem = ({ id, title, previewContent, likes, comments, date }) => {
 
   return (
     <div className={styles.questionListItem} onClick={handleClick}>
-
       <div className={styles.itemHeader}>
         <h3 className={styles.itemTitle}>{title}</h3>
-      </div>
-
-      <p className={styles.itemPreview}>{previewContent}</p>
+        <p className={styles.itemPreview}>{previewContent}</p>
+      </div>
 
       <div className={styles.itemFooter}>
         <span className={styles.itemStats}>
-          <GoodCountIcon className={`${styles.icon} ${styles.heartIcon}`} /> {likes}
+          <GoodIcon className={`${styles.icon} ${styles.heartIcon}`} /> 
+          <span className={styles.itemCount}>{likes}</span> {/* 👈 같은 클래스 적용 */}
         </span>
 
         <span className={styles.itemStats}>
-          <CommentCountIcon className={`${styles.icon} ${styles.commentIcon}`} /> {comments}
+          <CommentIcon className={`${styles.icon} ${styles.commentIcon}`} /> 
+          <span className={styles.itemCount}>{comments}</span> {/* 👈 같은 클래스 적용 */}
         </span>
       </div>
     </div>

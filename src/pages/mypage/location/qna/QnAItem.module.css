@@ -1,7 +1,7 @@
 .questionListItem {
-  padding: 10px 14px;
+  padding: 0px 14px;
   border-bottom: 1px solid var(--gray-10, #E6E6E6);
-  
+  margin-top: -30px;
 }
 
 .itemTitle {
@@ -13,7 +13,8 @@
     font-style: normal;
     font-weight: 700;
     line-height: normal;
-    margin-bottom: 5px;
+    padding: 0;
+    margin-bottom: -10px;
 }
 
 .itemPreview {
@@ -29,21 +30,52 @@
     font-style: normal;
     font-weight: 500;
     line-height: normal;
-    margin-top: 0;
-    margin-bottom: 23px;
+    padding: 0;
+    margin: 0;
 }
 
 .itemFooter {
   display: flex;
   align-items: center;
+  justify-content: flex-start;
+  margin-left: -70px;
 }
 
 .itemStats {
-  margin-right: 15px;
   display: flex;
   align-items: center;
+  justify-content: flex-start;
+  margin-right: -50px;
 }
 
 .icon {
-  margin-right: 0px;
+  width: 1rem;
+  height: 1rem;
+  margin-right: -30px;
+}
+
+/* 좋아요 아이콘 (하트 아이콘) */
+.heartIcon {
+  fill: #FFF;
+  stroke: #797A79;
+}
+
+/* 댓글 아이콘 */
+.commentIcon {
+  fill: #FFF;
+  stroke: #797A79;
+
+}
+
+.itemCount {
+  color: var(--gray-40, #797A79);
+font-feature-settings: 'liga' off, 'clig' off;
+/* inter medium/12 */
+font-family: Inter;
+font-size: 12px;
+font-style: normal;
+font-weight: 500;
+line-height: normal;
+display: inline-block; /* 👈 텍스트도 블록처럼 취급하여 정렬 안정화 */
+margin-right: -30px;
 }
