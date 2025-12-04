@@ -184,7 +184,11 @@ export default function ScrapCuration () {
 
     // 상세 페이지 이동 핸들러
     const handleItemClick = (curationId) => {
-        navigate(`/curation/${curationId}`);
+        navigate(`/curation/${curationId}`, { 
+            state: { from: "/mypage/location/scrap" 
+            
+            } 
+        });
     };
 
     // 북마크 클릭 (스크랩 취소) 핸들러
@@ -213,6 +217,9 @@ export default function ScrapCuration () {
                 setScrappedCurations(prev =>
                     prev.filter(curation => curation.id !== curationId)
                 );
+
+                
+
             } catch (error) {
                 console.error("스크랩 삭제 API 호출 실패:", error);
             }
@@ -239,6 +246,8 @@ export default function ScrapCuration () {
         <div className="app-wrapper">
             <GlobalHeader />
             <Header title="내가 스크랩한 큐레이션"/>
+
+        <main className="content">
             <SearchBar2_2
                 onFilterClick={handleFilterToggle} 
                 onBadgeFilterChange={handleBadgeFilterChange} 
@@ -247,7 +256,7 @@ export default function ScrapCuration () {
                 searchTerm={inputSearchTerm} 
                 activeSort={sortBy} 
              />
-               
+
                 {isFilterOpen && (
                     <div
                         className={styles["curation-filter-backdrop"]} 
@@ -268,6 +277,7 @@ export default function ScrapCuration () {
                     onBookmarkClick={handleBookmarkClick}
                 onLikeChange={handleLikeChange}
             />
+            </main>
 
         </div>
     );

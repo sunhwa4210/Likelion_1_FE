@@ -105,7 +105,7 @@ export default function CurationDetail() {
                   alert(apiSuccessMessage);
                   
                   // 스크랩 목록 페이지에서 왔고, 취소되었다면 목록으로 돌아가기
-                  if (fromPath === "/mypage/scrapped-curations" && !toggled) {
+                  if (fromPath === "/mypage/location/scrap" && !toggled) {
                       nav(fromPath, { replace: true }); 
                   }
                   

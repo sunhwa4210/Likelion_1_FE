@@ -4,6 +4,8 @@ import { useNavigate, useLocation } from "react-router-dom";
 import styles from "./GlobalHeader.module.css";
 
 export default function GlobalHeader() {
+  const NOTIFICATION_PATH = "/notification";
+
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -44,7 +46,10 @@ export default function GlobalHeader() {
           )}
         </h1>
 
-        <button className={styles.headerIcon} aria-label="알림">
+        <button className={styles.headerIcon} 
+          aria-label="알림"
+          onClick={() => handleNavigate(NOTIFICATION_PATH)}
+        >
           <Bell size={20} />
         </button>
       </div>

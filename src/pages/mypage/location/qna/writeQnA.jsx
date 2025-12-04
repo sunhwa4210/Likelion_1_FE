@@ -5,8 +5,29 @@ import QnAItem from "../qna/QnAItem";
 import Header from '../../../../components/Header/Header';
 import GlobalHeader from "../../../../components/Header/GlobalHeader";
 import { useAuth } from "../../../../contexts/AuthContext";
-import styles from './writeQnA.module.css';
+import styles from './QnAItem.module.css';
 import CurationFilter2 from "../../../../components/Filter/CurationFilter2";
+
+const DUMMY_QUESTIONS = [
+  {
+    questionId: 101,
+    questionTitle: "리액트에서 useEffect 의존성 배열을 비워두면 왜 위험한가요?",
+    questionContent: "클린업 함수를 사용하지 않고 단순히 의존성 배열을 비워두는 경우 발생할 수 있는 잠재적인 메모리 누수 문제에 대해 알고 싶습니다.",
+    likeCount: 15,
+    answers: [{ id: 1 }, { id: 2 }, { id: 3 }], // 답변 3개
+    questionCreatedAt: "2023-11-20T10:00:00Z",
+    categoryId: 17, // IT
+  },
+  {
+    questionId: 102,
+    questionTitle: "인공지능의 윤리적 딜레마: 자율주행차의 트롤리 문제",
+    questionContent: "자율주행차가 불가피한 사고 상황에서 운전자와 보행자 중 누구를 보호해야 하는지에 대한 철학적, 윤리적 논의를 공유해 주세요.",
+    likeCount: 52,
+    answers: [{ id: 1 }], // 답변 1개
+    questionCreatedAt: "2023-11-25T14:30:00Z",
+    categoryId: 7, // 철학
+  },
+];
 
 // --- [카테고리/타입 매핑 데이터] ---
 const LABEL_TO_BACKEND_CATEGORY = {
@@ -25,6 +46,9 @@ const CATEGORY_NAME_TO_ID = {
 };
 
 const BASE_API_URL = process.env.REACT_APP_API_BASE_URL + "/api/mypage/my-qna"; // API_BASE 변수 사용 가정
+
+// 🔴 테스트 플래그: 이 값을 true로 설정하면 더미 데이터를 사용하고, false로 설정하면 실제 API를 호출합니다.
+const useDummyData = false;
 
 export default function WriteQnA() {
   const { accessToken, refreshAccessToken } = useAuth(); // refreshAccessToken 추가
@@ -112,6 +136,52 @@ const allSelectedLabels = [
         .map(label => CATEGORY_NAME_TO_ID[label])
         .filter(id => id !== undefined);
 
+
+
+// -----------------------------------------------------------
+    // 🌟🌟🌟 더미 데이터 사용 로직 🌟🌟🌟
+    // -----------------------------------------------------------
+    if (useDummyData) {
+      console.log("--- 더미 데이터 사용 ---");
+      // 1. 카테고리 필터링
+      let filteredQuestions = DUMMY_QUESTIONS.filter(q => {
+        if (categoryIds.length === 0) return true;
+        return categoryIds.includes(q.categoryId);
+      });
+      
+      // 2. 검색어 필터링 (제목 또는 내용에 검색어 포함)
+      if (searchTerm) {
+        const lowerSearchTerm = searchTerm.toLowerCase();
+        filteredQuestions = filteredQuestions.filter(q =>
+          q.questionTitle.toLowerCase().includes(lowerSearchTerm) ||
+          q.questionContent.toLowerCase().includes(lowerSearchTerm)
+        );
+      }
+
+      // 3. 정렬 (최신순 또는 답변 수 순)
+      let finalQuestions = [...filteredQuestions];
+      
+      if (sortBy === "Qn") {
+        // 최신순 (questionCreatedAt 내림차순)
+        finalQuestions.sort((a, b) => new Date(b.questionCreatedAt) - new Date(a.questionCreatedAt));
+      } else if (sortBy === "nA") {
+        // 답변 수 순 (내림차순, needsFrontendSort 역할)
+        finalQuestions.sort((a, b) => {
+          const countA = a.answers ? a.answers.length : 0;
+          const countB = b.answers ? b.answers.length : 0;
+          return countB - countA;
+        });
+      }
+      
+      // API 호출 대신 setTimeout으로 로딩 상태 시뮬레이션
+      setTimeout(() => {
+        setQuestions(finalQuestions);
+        setLoading(false);
+      }, 500); // 0.5초 딜레이
+      
+      return; // 더미 데이터를 사용하면 여기서 함수 종료
+    }
+
     // 기본 파라미터 구성
     const params = {
       type: qnaType,
@@ -198,7 +268,9 @@ console.log("--- QnA 요청 정보 ---");
     <div className="app-wrapper">
       <GlobalHeader />
       <Header title="내가 작성한 QnA" />
-      <SearchBar3_3
+
+      <main className="content">
+        <SearchBar3_3
           onFilterClick={handleFilterToggle}
           onSearchChange={handleSearchChange}
           onSortChange={handleSortChange}
@@ -206,7 +278,6 @@ console.log("--- QnA 요청 정보 ---");
           activeSort={sortBy}
         />
 
-      <main className="content">
         {isFilterOpen && (
           <div
             className={styles["curation-filter-backdrop"]}
@@ -220,7 +291,8 @@ console.log("--- QnA 요청 정보 ---");
           onChange={handleFilterChange}
         />
 
-        <div className={styles.qnaList}>
+
+        <div className={styles.questioListContainer}>
           {questions.length > 0 ? (
             questions.map((q) => (
               <QnAItem

@@ -53,7 +53,7 @@ export default function InformModify() {
     const [initialProfileImageUrl, setInitialProfileImageUrl] = useState(null);
     const [selectedProfileImageUrl, setSelectedProfileImageUrl] = useState(null); 
     
-    // ✅ provider 상태 추가
+    // provider 상태 추가
     const [provider, setProvider] = useState(null); 
 
     // Level 상태
@@ -71,6 +71,8 @@ export default function InformModify() {
 
     // 모든 초기 데이터 로딩 (useCallback으로 분리)
     const loadAllData = useCallback(async () => {
+        const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
         if (!accessToken) {
             console.warn("Access Token이 없어 사용자 정보를 불러올 수 없습니다.");
             setIsLoading(false); 
@@ -81,7 +83,7 @@ export default function InformModify() {
 
         // 1. GET API 호출
         try {
-            const response = await fetch('/api/mypage/profile', {
+            const response = await fetch(`${API_BASE_URL}/api/mypage/profile`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -97,7 +99,8 @@ export default function InformModify() {
 
             // 2. 서버로부터 받은 실제 데이터 (성공 응답)
             const realData = await response.json();
-            
+            console.log("✅ 서버에서 받은 실제 데이터:", realData);
+
             // 3. 데이터 사용
             const initialInterBadgesData = mapLabelsToBadges(realData.interestNames || []);
             const initialProBadgesData = mapLabelsToBadges(realData.expertiseNames || []);
@@ -136,6 +139,11 @@ export default function InformModify() {
         loadAllData();
     }, [loadAllData]);
 
+    const handleImageDelete = () => {
+        // selectedProfileImageUrl을 null로 설정하여 디폴트 이미지 표시
+        setSelectedProfileImageUrl(null);
+    };
+
     // 수정 여부 판단 
     // 이름/이메일 수정 여부 (소셜 사용자는 수정이 불가하므로 provider 확인 로직은 Profile 컴포넌트에서 처리)
     const isNameModified = selectedName !== initialName && selectedName !== null;
@@ -156,6 +164,8 @@ export default function InformModify() {
 
     // 최종 저장 함수
     const handleSave = async () => { 
+        const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
         if (!isModified || !accessToken) return;
         
         setIsSaving(true);
@@ -183,7 +193,7 @@ export default function InformModify() {
         
         // 2. API 호출 로직 (PUT /api/mypage/profile)
         try {
-            const response = await fetch('/api/mypage/profile', {
+            const response = await fetch(`${API_BASE_URL}/api/mypage/profile`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -249,6 +259,7 @@ export default function InformModify() {
                     provider={provider} 
                     onNameChange={setSelectedName} // ✅ 이름 변경 핸들러 전달
                     onEmailChange={setSelectedEmail} // ✅ 이메일 변경 핸들러 전달
+                    onImageDelete={handleImageDelete}
                 /> 
 
                 {/* FieldInter - 상태 전달 */}

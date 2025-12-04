@@ -11,18 +11,28 @@ const Profile = ({
     email,
     provider, // InformModify에서 추가된 provider prop 추가
     onNameChange, // 이름 변경 핸들러 추가
-    onEmailChange // 이메일 변경 핸들러 추가
+    onEmailChange, // 이메일 변경 핸들러 추가
+    onImageDelete
 }) => {
     
     const { accessToken } = useAuth();
-    // ✅ InformModify에서 상태를 관리하므로, Profile 내부의 이름/이메일 상태는 제거하거나 props와 동기화만 합니다.
-    // 여기서는 props을 직접 사용하고, input onChange 시 상위 상태를 업데이트합니다.
-
     // 파일 업로드/취소 시에만 사용되는 로딩 상태
     const [loading, setLoading] = useState(false); 
-    
     // 파일 입력(input type="file")에 접근하기 위한 ref 생성
     const fileInputRef = useRef(null);
+
+
+    const handleProfileButtonAction = () => {
+        if (profileImageUrl) {
+            // 1. 이미지가 존재할 경우: 삭제 동작 수행
+            if (window.confirm("프로필 사진을 삭제하고 기본 이미지로 변경하시겠습니까? 최종 저장은 하단 수정하기 버튼을 눌러야 반영됩니다.")) {
+                onImageDelete(); // InformModify의 상태를 null로 업데이트
+            }
+        } else {
+            // 2. 이미지가 없을 경우: 파일 업로드 창 열기 (기존 수정 동작)
+            fileInputRef.current.click(); 
+        }
+    };
 
     // "프로필 사진 수정하기" 버튼 클릭 시 숨겨진 파일 입력 필드를 여는 함수
     const handleEditButtonClick = () => {
@@ -129,13 +139,16 @@ const Profile = ({
                     title={isSocialUser ? "소셜 로그인은 이메일 수정 불가" : ""}
                 />
 
-                {/* 2-3. 프로필 사진 수정 버튼 (이제 이메일 아래에 위치함) */}
+                {/* 2-3. 프로필 사진 수정 버튼  */}
                 <div className={styles.editProfileImageButtonContainer}>
                     <button 
                         className={styles.editProfileImageButton} 
                         onClick={handleEditButtonClick}
                     >
-                        프로필 사진 수정하기
+                        {profileImageUrl 
+                        ? "프로필 사진 삭제하기" 
+                        : "프로필 사진 수정하기"
+                    }
                     </button>
     </div>
 </div>

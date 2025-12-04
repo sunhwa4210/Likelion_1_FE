@@ -13,7 +13,7 @@ import { presets } from '../../components/Modal/presets';
 import { useAuth } from '../../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || "";
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "";
 
 // const useNavigate = () => (path) => { console.log(`[라우팅] ${path} 로 이동 시작.`); };
 
@@ -233,6 +233,9 @@ useEffect(() => {
         if (!accessToken) return;
 
         const sseUrl = `${API_BASE_URL}/notification/subscribe?token=${accessToken}`;
+
+        console.log("최종 SSE 연결 URL:", sseUrl);
+
         // NOTE: EventSource는 브라우저에서만 지원되므로, Canvas 환경에서는 콘솔 로그만 남깁니다.
         const eventSource = new EventSource(sseUrl);
         
@@ -356,27 +359,27 @@ useEffect(() => {
 
     // ❌ 개별 알림 삭제 (DELETE /notification/me/{notificationId} - 임시 가정)
     const handleDelete = async (id) => {
-        try {
-            // [임시] 개별 삭제 API가 DELETE /notification/{id} 라고 가정
-            await apiCall(`/notification/${id}`, 'DELETE'); 
-            console.log(`API: DELETE /notification/${id} 호출`);
+        try {
+            // ✅ 수정: 경로를 /notification/{id} 대신 /notification/{notificationId} 형식으로 사용
+            await apiCall(`/notification/${id}`, 'DELETE'); 
+            console.log(`API: DELETE /notification/${id} 호출`); // 로그 메시지는 그대로 사용 가능
 
-            // 성공 시 Optimistic Update
-            const deletedNotif = notifications.find(notif => notif.id === id);
-            const updatedNotifications = notifications.filter(notif => notif.id !== id);
-            setNotifications(updatedNotifications);
-            setRevealedId(null);
-            setDragOffset({ id: null, offset: 0 });
+            // 성공 시 Optimistic Update
+            const deletedNotif = notifications.find(notif => notif.id === id);
+            const updatedNotifications = notifications.filter(notif => notif.id !== id);
+            setNotifications(updatedNotifications);
+            setRevealedId(null);
+            setDragOffset({ id: null, offset: 0 });
 
-            // 안 읽은 알림이었다면 카운트 감소
-            if (deletedNotif && !deletedNotif.isRead) {
-                setUnreadCount(prev => prev - 1);
-            }
-        } catch (e) {
-            console.error("알림 삭제 중 오류:", e);
-            alert("알림 삭제 중 오류가 발생했습니다."); // Custom Modal Alert 사용 권장? 
-        }
-    };
+            // 안 읽은 알림이었다면 카운트 감소
+            if (deletedNotif && !deletedNotif.isRead) {
+                setUnreadCount(prev => prev - 1);
+            }
+        } catch (e) {
+            console.error("알림 삭제 중 오류:", e);
+            alert("알림 삭제 중 오류가 발생했습니다."); 
+        }
+    };
 
     // ❌ 개별 알림 읽음 처리 (PATCH /notification/read/{notificationId})
     const handleMarkAsRead = async (id) => {
