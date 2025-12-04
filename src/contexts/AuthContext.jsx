@@ -20,37 +20,27 @@ export function AuthProvider({ children }) {
   const fetchMe = async (tokenParam) => {
     const token = tokenParam ?? accessToken;
 
-    // 토큰 없으면 그냥 로그인 안 된 상태로 처리
     if (!token) {
       setUser(null);
-      setAuthLoading(false);
-      nav('/login');
-      return;
+      return false;
     }
 
     try {
       const res = await axios.get(`${API_BASE}/auth/me`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      // 이름, 이메일 유저 정보 저장
       setUser(res.data);
+      return true;
     } catch (err) {
-      // 401이면 "로그아웃 상태"라고 보고 토큰/유저 정보 정리
       if (err.response?.status === 401) {
-        setUser(null);
-        setAccessToken(null);
-        setRefreshToken(null);
-        localStorage.removeItem("accessToken");
-        localStorage.removeItem("refreshToken");
-        localStorage.removeItem("tokenType");
-        // 굳이 콘솔에 에러 안 찍어도 됨 (원하면 아래 한 줄 삭제 가능)
-        console.warn("토큰이 만료되었거나 유효하지 않습니다. 로그아웃 상태로 전환합니다.");
-        nav('/login');
-      } else {
-        console.error("GET /auth/me 실패", err);
-      }
-    } finally {
-      setAuthLoading(false);
+      setUser(null);
+      setAccessToken(null);
+      setRefreshToken(null);
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+      localStorage.removeItem("tokenType");
+  }
+      return false;
     }
   };
 
@@ -62,11 +52,15 @@ export function AuthProvider({ children }) {
     if (storedAccess && storedRefresh) {
       setAccessToken(storedAccess);
       setRefreshToken(storedRefresh);
-      nav('/curation/personal')
-      fetchMe(storedAccess);
+
+      (async () => {
+        const success = await fetchMe(storedAccess);
+        if (success) {
+          nav("/curation/personal", { replace: true });
+        }
+      })();
     } else {
       setAuthLoading(false);
-      nav('login');
     }
   }, []);
 
@@ -137,16 +131,18 @@ export function AuthProvider({ children }) {
 
   //토큰 저장+ 유저 정보 불러오기 공용 함수 (소셜 로그인 시 사용 )
   const applyTokensAndFetchUser = async ({ accessToken, refreshToken }) => {
-  if (!accessToken || !refreshToken) return;
+    if (!accessToken || !refreshToken) return false;
 
-  setAccessToken(accessToken);
-  setRefreshToken(refreshToken);
+    setAccessToken(accessToken);
+    setRefreshToken(refreshToken);
 
-  localStorage.setItem("accessToken", accessToken);
-  localStorage.setItem("refreshToken", refreshToken);
+    localStorage.setItem("accessToken", accessToken);
+    localStorage.setItem("refreshToken", refreshToken);
 
-  await fetchMe(accessToken);
-};
+    const success = await fetchMe(accessToken);
+    return success;
+  };
+
   // 전역에서 사용할 값들
   const value = {
     user,

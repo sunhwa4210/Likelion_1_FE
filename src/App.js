@@ -84,8 +84,9 @@ export default function App() {
           <Route path="/user/:userId/:listType" element={<UserFollow />} />  
 
           {/* 기타 */}
-          <Route path="/login/oauth2/code/google" element={<SocialRedirect/>}/> 
-          <Route path="/auth/kakao/callback" element={<SocialRedirect />} />
+          {/* <Route path="/login/oauth2/code/google" element={<SocialRedirect/>}/> 
+          <Route path="/auth/kakao/callback" element={<SocialRedirect />} /> */}
+          <Route path="/social" element={<SocialRedirect/>}/> 
         </Routes>
       </div>
     </ModalProvider>
