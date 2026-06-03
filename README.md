@@ -62,13 +62,13 @@ LIKELION_1_FE
 ├── node_modules/
 ├── public/
 ├── src/
-│   ├── 📁 components/ # 재사용 가능한 컴포넌트 
-│   ├── 📁 contexts/ # React Context API 관련 전역 상태 관리
-│   ├── 📁 pages/ # 페이지 단위 컴포넌트
+│   ├── 📁 components/   # 재사용 가능한 컴포넌트 
+│   ├── 📁 contexts/     # React Context API 관련 전역 상태 관리
+│   ├── 📁 pages/        # 페이지 단위 컴포넌트
 │   ├── 📁 stories/
-│   ├── 📁 App.css # App 전역 스타일
-│   ├── 📁 App.js # 최상위 App 컴포넌트
-│   ├── 📁 index.css # 전역 CSS 설정
+│   ├── 📁 App.css       # App 전역 스타일
+│   ├── 📁 App.js        # 최상위 App 컴포넌트
+│   ├── 📁 index.css     # 전역 CSS 설정
 │   ├── 📁 index.js
 ├── .env # 환경 변수 파일
 ├── .gitignore
